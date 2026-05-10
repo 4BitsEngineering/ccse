@@ -54,6 +54,7 @@ export const BancoSchema = z.object({
 
 export type Pregunta = z.infer<typeof PreguntaSchema>;
 export type Banco = z.infer<typeof BancoSchema>;
+export type Tarea = 1 | 2 | 3 | 4 | 5;
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 
@@ -65,4 +66,50 @@ export function loadBanco(): Banco {
   const parsed = JSON.parse(raw);
   cached = BancoSchema.parse(parsed);
   return cached;
+}
+
+export function getPreguntasPorTarea(t: Tarea): Pregunta[] {
+  return loadBanco().preguntas.filter((p) => p.tarea === t);
+}
+
+export function getPreguntaPorId(id: string): Pregunta | undefined {
+  return loadBanco().preguntas.find((p) => p.id === id);
+}
+
+export function shuffle<T>(arr: readonly T[]): T[] {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+export function getDemoPreguntas(n = 10): Pregunta[] {
+  return shuffle(loadBanco().preguntas).slice(0, n);
+}
+
+const TEMA_FILES: Record<Tarea, string> = {
+  1: "01_gobierno_legislacion_participacion.md",
+  2: "02_derechos_deberes_fundamentales.md",
+  3: "03_organizacion_territorial_geografia.md",
+  4: "04_cultura_historia_espana.md",
+  5: "05_sociedad_espanola.md",
+};
+
+export function loadTema(t: Tarea): string {
+  return readFileSync(
+    path.join(CONTENT_DIR, "temas", TEMA_FILES[t]),
+    "utf8",
+  );
+}
+
+export function loadSimulacroMarkdown(id: number): string {
+  if (id < 1 || id > 5) throw new Error(`Simulacro inválido: ${id}`);
+  const file = `simulacro_0${id}.md`;
+  return readFileSync(path.join(CONTENT_DIR, "simulacros", file), "utf8");
+}
+
+export function getOptionKeys(p: Pick<Pregunta, "opciones">): string[] {
+  return Object.keys(p.opciones);
 }
