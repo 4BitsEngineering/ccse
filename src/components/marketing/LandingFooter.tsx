@@ -20,9 +20,18 @@ export function LandingFooter() {
           <Link href="/simulacro" className="hover:underline">
             Simulacros
           </Link>
-          <span className="text-zinc-400 dark:text-zinc-600">
-            Privacidad · Condiciones · Cambios (próximamente)
-          </span>
+          <Link href="/cambios" className="hover:underline">
+            Cambios
+          </Link>
+          <Link href="/legal/privacidad" className="hover:underline">
+            Privacidad
+          </Link>
+          <Link href="/legal/condiciones" className="hover:underline">
+            Condiciones
+          </Link>
+          <Link href="/legal/cookies" className="hover:underline">
+            Cookies
+          </Link>
         </nav>
       </div>
     </footer>
