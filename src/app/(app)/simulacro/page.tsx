@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Card } from "@/components/ui/card";
+import { Seal } from "@/components/ui/seal";
+import { Underline } from "@/components/ui/underline";
 
 const SIMULACROS = [1, 2, 3, 4, 5] as const;
 
@@ -9,28 +10,51 @@ export const metadata = {
 
 export default function SimulacrosPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-10">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Simulacros</h1>
-        <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-          Examen completo en formato real: 25 preguntas, 45 minutos, sin
-          penalización. Apruebas con 15 aciertos.
-        </p>
-        <p className="mt-2 text-xs text-zinc-500">
-          Sprint 1: cada simulacro selecciona 25 preguntas del banco oficial
-          siguiendo la distribución 15/10. La selección es estable por id.
-        </p>
+    <main className="mx-auto max-w-2xl px-6 py-10">
+      <header className="flex items-center gap-2.5 mb-8">
+        <Seal size={28} />
+        <Link
+          href="/"
+          className="font-serif text-lg font-medium tracking-wide"
+        >
+          CCSE
+        </Link>
       </header>
-      <ul className="grid gap-3 sm:grid-cols-2">
+
+      <h1 className="font-serif text-4xl sm:text-5xl font-medium leading-[1.05] tracking-tight">
+        <span className="italic text-terracotta-deep">5 simulacros</span>{" "}
+        reales.
+      </h1>
+      <Underline width={180} className="mt-1" />
+      <p className="mt-4 text-sm text-ink-soft">
+        25 preguntas · 45 minutos · sin penalización · aprueba con 15 aciertos.
+        Distribución oficial 15/10 entre los bloques.
+      </p>
+
+      <ul className="mt-8 space-y-3">
         {SIMULACROS.map((n) => (
           <li key={n}>
-            <Link href={`/simulacro/${n}`} className="block">
-              <Card className="p-5 hover:border-zinc-400 dark:hover:border-zinc-600 transition">
-                <h2 className="font-semibold text-lg">Simulacro {n}</h2>
-                <p className="text-sm text-zinc-500 mt-1">
+            <Link
+              href={`/simulacro/${n}`}
+              className="flex items-center gap-4 rounded-2xl border border-rule bg-cream p-5 hover:border-ink/40 transition-colors group"
+            >
+              <span className="w-12 h-12 rounded-xl bg-terracotta text-cream grid place-items-center font-serif italic text-2xl font-medium shrink-0">
+                {n}
+              </span>
+              <div className="flex-1">
+                <p className="font-serif text-xl font-medium tracking-tight leading-snug">
+                  Simulacro {n}
+                </p>
+                <p className="text-xs text-ink-muted mt-0.5">
                   25 preguntas · 45 min
                 </p>
-              </Card>
+              </div>
+              <span
+                aria-hidden
+                className="text-ink-muted group-hover:text-terracotta transition-colors"
+              >
+                →
+              </span>
             </Link>
           </li>
         ))}

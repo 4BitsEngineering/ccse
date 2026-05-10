@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Card } from "@/components/ui/card";
 import { formatDateEs } from "@/lib/entitlement";
 import { getUltimaActividad, type UltimaActividad } from "@/lib/progreso";
 
 const TIPO_LABEL: Record<UltimaActividad["tipo"], string> = {
-  practicar: "Practicar",
-  estudiar: "Estudiar",
+  practicar: "Práctica",
+  estudiar: "Estudio",
   simulacro: "Simulacro",
   repaso: "Repaso",
 };
@@ -25,18 +24,21 @@ export function DashboardContinuar() {
   if (!loaded || !act) return null;
 
   return (
-    <Card className="p-5 mb-6 border-zinc-300 dark:border-zinc-700">
-      <p className="text-xs uppercase tracking-wider text-zinc-500">
-        Continuar donde lo dejaste
+    <div className="mb-8">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted mb-2">
+        Donde lo dejaste
       </p>
-      <Link href={act.href} className="mt-2 block group">
-        <p className="text-lg font-semibold group-hover:underline">
-          {TIPO_LABEL[act.tipo]} · {act.titulo} →
+      <Link
+        href={act.href}
+        className="block rounded-2xl bg-ink text-cream p-5 sm:p-6 hover:bg-ink-soft transition-colors group"
+      >
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta-soft">
+          {TIPO_LABEL[act.tipo]} · {formatDateEs(act.cuandoIso)}
         </p>
-        <p className="text-xs text-zinc-500 mt-1">
-          Última visita el {formatDateEs(act.cuandoIso)}
+        <p className="mt-2 font-serif text-2xl font-medium leading-snug tracking-tight group-hover:underline decoration-terracotta decoration-2 underline-offset-4">
+          {act.titulo} →
         </p>
       </Link>
-    </Card>
+    </div>
   );
 }

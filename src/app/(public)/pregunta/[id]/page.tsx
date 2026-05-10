@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Card } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { loadBanco } from "@/lib/content";
 import { PaywallGate } from "@/components/paywall/PaywallGate";
@@ -33,7 +32,6 @@ export default async function PreguntaPage({ params }: RouteParams) {
   if (!p) notFound();
 
   const opciones = p.opciones as Record<string, string>;
-  // Filtra opciones vacías (las V/F de Tarea 2 dejan c con string vacío).
   const opcionesArr = Object.entries(opciones).filter(
     ([, v]) => v.trim() !== "",
   );
@@ -60,91 +58,120 @@ export default async function PreguntaPage({ params }: RouteParams) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <p className="text-xs uppercase tracking-wider text-zinc-500 mb-3">
-        Pregunta {p.id_oficial} · Tarea {p.tarea} · {p.dificultad} ·
-        Manual {banco.version_manual}
-      </p>
-      <h1 className="text-2xl font-semibold leading-snug mb-6">
+
+      <div className="flex flex-wrap gap-2 mb-4">
+        <span className="px-2.5 py-1 rounded-full bg-paper-warm border border-rule text-[11px] font-medium tracking-wide text-ink-soft">
+          Tarea {p.tarea}
+        </span>
+        <span className="px-2.5 py-1 rounded-full bg-olive/10 text-olive text-[11px] font-medium">
+          {p.dificultad}
+        </span>
+        <span className="ml-auto text-[11px] text-ink-muted self-center">
+          nº {p.id_oficial} · Manual {banco.version_manual}
+        </span>
+      </div>
+
+      <h1 className="font-serif text-3xl sm:text-4xl font-medium leading-[1.15] tracking-tight text-balance">
         {p.enunciado}
       </h1>
 
-      <ol className="space-y-2 list-none">
+      <ol className="mt-7 space-y-2.5 list-none">
         {opcionesArr.map(([k, v]) => {
           const isCorrect = k === p.correcta;
           return (
             <li key={k}>
               <div
                 className={
-                  "flex gap-3 rounded-md border p-3 " +
+                  "flex items-start gap-3.5 rounded-2xl border-[1.5px] p-4 " +
                   (isCorrect
-                    ? "border-green-600 bg-green-50 dark:bg-green-950/40"
-                    : "border-zinc-200 dark:border-zinc-800")
+                    ? "bg-olive/10 border-olive"
+                    : "bg-cream border-rule")
                 }
               >
-                <span className="font-mono font-semibold w-5">
-                  {k.toLowerCase()})
+                <span
+                  className={
+                    "shrink-0 w-8 h-8 rounded-full grid place-items-center font-serif italic text-[15px] font-medium " +
+                    (isCorrect
+                      ? "bg-olive text-cream"
+                      : "bg-paper-warm text-ink")
+                  }
+                >
+                  {isCorrect ? "✓" : k.toLowerCase()}
                 </span>
-                <span className="flex-1">{v}</span>
-                {isCorrect && (
-                  <span className="text-xs font-semibold text-green-700 dark:text-green-400">
-                    correcta
-                  </span>
-                )}
+                <span
+                  className={
+                    "flex-1 font-serif text-[16.5px] leading-snug pt-0.5 " +
+                    (isCorrect ? "text-ink font-semibold" : "text-ink")
+                  }
+                >
+                  {v}
+                </span>
               </div>
             </li>
           );
         })}
       </ol>
 
-      <p className="mt-4 text-sm">
-        <strong>Respuesta correcta:</strong> {p.correcta}) {correcta}
-      </p>
-
       <section className="mt-8">
-        <h2 className="text-lg font-semibold mb-3">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
+          La razón completa
+        </p>
+        <h2 className="mt-1 font-serif text-xl font-medium leading-snug">
           Por qué esta es la correcta
         </h2>
-        <PaywallGate
-          title="Explicación razonada — premium"
-          subtitle="La razón detrás de la respuesta, por qué fallan las otras opciones y la pista mnemotécnica forman parte del acceso completo."
-        >
-          <Card className="p-5 space-y-3 text-sm">
-            <p>{p.explicacion}</p>
-            {p.mnemotecnico && (
-              <p className="italic text-zinc-700 dark:text-zinc-300">
-                Mnemotécnico: {p.mnemotecnico}
+        <div className="mt-3">
+          <PaywallGate
+            title="Explicación razonada — premium"
+            subtitle="La razón detrás de la respuesta, por qué fallan las otras opciones y la pista mnemotécnica forman parte del acceso completo."
+          >
+            <div className="rounded-2xl bg-paper-warm p-5 space-y-3 text-sm">
+              <p className="font-serif text-[16px] leading-relaxed text-ink text-pretty">
+                {p.explicacion}
               </p>
-            )}
-            {p.explicacion_distractores && (
-              <div>
-                <p className="font-semibold mt-2">
-                  Por qué fallan las otras opciones
-                </p>
-                <ul className="mt-1 space-y-1 list-disc list-inside">
-                  {Object.entries(p.explicacion_distractores).map(
-                    ([k, txt]) => (
-                      <li key={k}>
-                        <strong>{k})</strong> {txt as string}
-                      </li>
-                    ),
-                  )}
-                </ul>
-              </div>
-            )}
-          </Card>
-        </PaywallGate>
+              {p.mnemotecnico && (
+                <div className="rounded-xl bg-cream p-3 flex gap-2 items-start">
+                  <span className="font-serif italic text-2xl text-terracotta leading-none">
+                    “
+                  </span>
+                  <span className="font-serif italic text-sm text-ink-soft flex-1 pt-1">
+                    {p.mnemotecnico}
+                  </span>
+                </div>
+              )}
+              {p.explicacion_distractores && (
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wide text-ink-muted mt-2">
+                    Por qué fallan las otras opciones
+                  </p>
+                  <ul className="mt-2 space-y-1.5 text-sm text-ink-soft">
+                    {Object.entries(p.explicacion_distractores).map(
+                      ([k, txt]) => (
+                        <li key={k}>
+                          <strong className="font-sans text-ink">
+                            {k})
+                          </strong>{" "}
+                          {txt as string}
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </PaywallGate>
+        </div>
       </section>
 
-      <footer className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-zinc-200 dark:border-zinc-800 pt-6 text-sm">
+      <footer className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-rule pt-6 text-sm">
         <Link
           href={`/tarea/${p.tarea}/preview`}
-          className="text-zinc-700 dark:text-zinc-300 hover:underline"
+          className="text-ink-soft hover:text-ink"
         >
           ← Tema completo de la Tarea {p.tarea}
         </Link>
         <Link
           href="/demo"
-          className={buttonVariants({ variant: "outline" })}
+          className={buttonVariants({ variant: "ink-outline" }) + " h-10 px-4"}
         >
           Probar 10 preguntas gratis
         </Link>

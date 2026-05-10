@@ -3,8 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Underline } from "@/components/ui/underline";
 import { PreguntaCard } from "@/components/content/PreguntaCard";
 import { cn } from "@/lib/utils";
 import {
@@ -110,21 +109,56 @@ export function SimulacroDeck({
   const timeWarning = secondsLeft <= 5 * 60;
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between text-sm">
-        <span
-          className={cn(
-            "font-mono text-lg tabular-nums",
-            timeWarning && "text-red-600 dark:text-red-400 font-semibold",
-          )}
-        >
-          {mins}:{String(secs).padStart(2, "0")}
-        </span>
-        <span className="text-zinc-500">
-          Pregunta {idx + 1} de {preguntas.length} · {answers.size} respondidas
-        </span>
+    <div className="space-y-7">
+      {/* Header sticky: cronómetro + barra 25 segments */}
+      <div className="pb-4 border-b border-rule">
+        <div className="flex items-center gap-4">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted">
+              Simulacro nº {simulacroId}
+            </p>
+            <p className="mt-0.5 font-serif italic text-[15px] text-ink-soft">
+              pregunta {idx + 1} de {preguntas.length}
+            </p>
+          </div>
+          <span className="flex-1" />
+          <div
+            className={cn(
+              "px-3.5 py-2 rounded-lg font-mono text-lg font-medium tabular-nums tracking-wide",
+              timeWarning
+                ? "bg-terracotta text-cream animate-pulse"
+                : "bg-ink text-cream",
+            )}
+          >
+            {mins}:{String(secs).padStart(2, "0")}
+          </div>
+        </div>
+
+        {/* 25 segments */}
+        <div className="mt-3 flex gap-1">
+          {preguntas.map((q, i) => {
+            const answered = answers.has(q.id);
+            const current = i === idx;
+            return (
+              <button
+                key={q.id}
+                type="button"
+                onClick={() => setIdx(i)}
+                aria-label={`Ir a pregunta ${i + 1}`}
+                className={cn(
+                  "flex-1 h-1.5 rounded-sm transition-colors",
+                  current
+                    ? "bg-terracotta"
+                    : answered
+                      ? "bg-ink"
+                      : "bg-rule hover:bg-ink-muted",
+                )}
+              />
+            );
+          })}
+        </div>
       </div>
-      <Progress value={((idx + 1) / preguntas.length) * 100} />
+
       <PreguntaCard
         key={p.id}
         pregunta={p}
@@ -135,56 +169,45 @@ export function SimulacroDeck({
         }}
       />
 
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <Button
+          variant="ghost"
+          disabled={idx === 0}
+          onClick={() => setIdx((i) => i - 1)}
+          className="h-12 px-4 bg-paper-warm text-ink-soft rounded-xl"
+        >
+          ← anterior
+        </Button>
+        <span className="flex-1" />
+        {isLast ? (
           <Button
-            variant="outline"
-            disabled={idx === 0}
-            onClick={() => setIdx((i) => i - 1)}
+            variant="terracotta"
+            onClick={() => setDone(true)}
+            className="h-12 px-5 rounded-xl text-base"
           >
-            Anterior
+            Terminar simulacro
           </Button>
-          {isLast ? (
-            <Button onClick={() => setDone(true)}>Terminar simulacro</Button>
-          ) : (
-            <Button onClick={() => setIdx((i) => i + 1)}>Siguiente</Button>
-          )}
-        </div>
-        <details className="text-xs">
-          <summary className="cursor-pointer text-zinc-500">
-            Saltar a pregunta
-          </summary>
-          <div className="mt-3 grid grid-cols-5 gap-1.5 sm:grid-cols-10">
-            {preguntas.map((q, i) => {
-              const answered = answers.has(q.id);
-              const current = i === idx;
-              return (
-                <button
-                  key={q.id}
-                  type="button"
-                  onClick={() => setIdx(i)}
-                  className={cn(
-                    "h-8 rounded border text-xs font-mono",
-                    current &&
-                      "bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 dark:border-zinc-100",
-                    !current &&
-                      answered &&
-                      "bg-zinc-100 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700",
-                    !current &&
-                      !answered &&
-                      "bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800",
-                  )}
-                >
-                  {i + 1}
-                </button>
-              );
-            })}
-          </div>
-        </details>
+        ) : (
+          <Button
+            variant="terracotta"
+            onClick={() => setIdx((i) => i + 1)}
+            className="h-12 px-5 rounded-xl text-base"
+          >
+            siguiente →
+          </Button>
+        )}
       </div>
     </div>
   );
 }
+
+const TAREA_LABEL: Record<number, string> = {
+  1: "Gobierno",
+  2: "Derechos",
+  3: "Territorial",
+  4: "Historia",
+  5: "Vida diaria",
+};
 
 function SimulacroResults({
   preguntas,
@@ -199,7 +222,6 @@ function SimulacroResults({
     (p) => answers.get(p.id) === p.correcta,
   ).length;
   const total = preguntas.length;
-  const pct = Math.round((aciertos / total) * 100);
   const aprobado = aciertos >= SIMULACRO_APROBADO_MIN;
 
   const porTarea = ([1, 2, 3, 4, 5] as const)
@@ -217,75 +239,132 @@ function SimulacroResults({
   );
 
   return (
-    <div className="space-y-6">
-      <Card
-        className={cn(
-          "p-6 border-2",
-          aprobado
-            ? "border-green-600 bg-green-50/40 dark:bg-green-950/20"
-            : "border-amber-600 bg-amber-50/40 dark:bg-amber-950/20",
-        )}
-      >
-        <h2 className="text-2xl font-semibold mb-1">
-          Simulacro {simulacroId} —{" "}
-          {aprobado ? "Aprobado ✓" : "No aprobado"}
+    <div className="space-y-8">
+      <header>
+        <p
+          className={cn(
+            "text-[11px] font-bold uppercase tracking-[0.14em]",
+            aprobado ? "text-olive" : "text-terracotta-deep",
+          )}
+        >
+          {aprobado ? "Aprobado" : "No aprobado"}
+        </p>
+        <h2 className="mt-2 font-serif text-3xl sm:text-4xl font-medium leading-[1.1] tracking-tight text-balance">
+          {aprobado ? (
+            <>
+              Si fuera el examen
+              <br />
+              <span className="italic text-terracotta-deep">de verdad, hoy</span>{" "}
+              aprobarías.
+            </>
+          ) : (
+            <>
+              Casi.{" "}
+              <span className="italic text-terracotta-deep">Volvamos</span> a las
+              falladas.
+            </>
+          )}
         </h2>
-        <p className="text-4xl font-mono">
-          {aciertos}
-          <span className="text-zinc-400"> / {total}</span>{" "}
-          <span className="text-base text-zinc-500">({pct} %)</span>
-        </p>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-          En el examen real necesitas {SIMULACRO_APROBADO_MIN} aciertos sobre{" "}
-          {total} (60 %). Sin penalización por error.
-        </p>
-      </Card>
+        <Underline width={180} className="mt-1" />
+      </header>
 
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-3">Desglose por tarea</h3>
-        <table className="w-full text-sm">
-          <tbody>
-            {porTarea.map((t) => (
-              <tr
+      <div className="rounded-2xl bg-cream border border-rule p-6">
+        <div className="flex items-baseline gap-3">
+          <span className="font-serif text-[96px] font-medium leading-none tracking-[-0.04em] text-terracotta">
+            {aciertos}
+          </span>
+          <span className="font-serif italic text-2xl text-ink-muted">
+            / {total}
+          </span>
+        </div>
+        <p className="mt-3 text-sm text-ink-soft">
+          Necesitabas{" "}
+          <strong className="font-sans text-ink">
+            {SIMULACRO_APROBADO_MIN}
+          </strong>{" "}
+          para aprobar (60 % de aciertos, sin penalización por error).
+        </p>
+      </div>
+
+      <section>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted mb-3">
+          Desglose por tarea
+        </p>
+        <ul>
+          {porTarea.map((t) => {
+            const pct = t.correctas / t.total;
+            const allRight = pct === 1;
+            return (
+              <li
                 key={t.tarea}
-                className="border-t border-zinc-200 dark:border-zinc-800"
+                className="flex items-center gap-3 py-3 border-b border-rule first:border-t first:border-t-rule"
               >
-                <td className="py-2">Tarea {t.tarea}</td>
-                <td className="py-2 text-right font-mono">
-                  {t.correctas} / {t.total}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </Card>
+                <span
+                  className={cn(
+                    "w-7 h-7 rounded-lg grid place-items-center font-serif italic text-[13px] text-cream",
+                    allRight ? "bg-olive" : "bg-terracotta-soft",
+                  )}
+                >
+                  {t.tarea}
+                </span>
+                <span className="flex-1 font-sans text-[14.5px] text-ink">
+                  {TAREA_LABEL[t.tarea] ?? `Tarea ${t.tarea}`}
+                </span>
+                <div className="w-20 h-1 rounded-sm bg-rule">
+                  <div
+                    className={cn(
+                      "h-full rounded-sm",
+                      allRight ? "bg-olive" : "bg-terracotta",
+                    )}
+                    style={{ width: `${pct * 100}%` }}
+                  />
+                </div>
+                <span className="font-serif italic text-[14.5px] text-ink w-12 text-right tabular-nums">
+                  {t.correctas}/{t.total}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
 
       {falladas.length > 0 && (
-        <section className="space-y-4">
-          <h3 className="text-lg font-semibold">
-            Preguntas falladas ({falladas.length})
-          </h3>
-          {falladas.map((p) => (
-            <PreguntaCard
-              key={p.id}
-              pregunta={p}
-              mode="exam"
-              revealed
-              initialSelected={answers.get(p.id)}
-            />
-          ))}
+        <section>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta-deep mb-3">
+            {falladas.length} para repasar
+          </p>
+          <div className="space-y-4">
+            {falladas.map((p) => (
+              <PreguntaCard
+                key={p.id}
+                pregunta={p}
+                mode="exam"
+                revealed
+                initialSelected={answers.get(p.id)}
+              />
+            ))}
+          </div>
         </section>
       )}
 
       <div className="flex flex-wrap gap-3">
-        <Link href="/simulacro" className={buttonVariants()}>
-          Otro simulacro
+        <Link
+          href="/simulacro"
+          className={
+            buttonVariants({ variant: "terracotta" }) +
+            " h-12 px-5 rounded-xl text-base"
+          }
+        >
+          Otro simulacro →
         </Link>
         <Link
           href="/dashboard"
-          className={buttonVariants({ variant: "outline" })}
+          className={
+            buttonVariants({ variant: "ink-outline" }) +
+            " h-12 px-5 rounded-xl text-base"
+          }
         >
-          Volver al dashboard
+          Volver al panel
         </Link>
       </div>
     </div>

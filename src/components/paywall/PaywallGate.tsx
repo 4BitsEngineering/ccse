@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Card } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { hasActiveEntitlement } from "@/lib/entitlement";
 
@@ -36,11 +35,11 @@ export function PaywallGate({
   if (state === "loading") {
     return (
       <div
-        className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 p-6 animate-pulse"
+        className="rounded-2xl border border-rule bg-paper-warm p-6 animate-pulse"
         aria-busy="true"
       >
-        <div className="h-4 w-1/3 rounded bg-zinc-200 dark:bg-zinc-800" />
-        <div className="mt-3 h-3 w-2/3 rounded bg-zinc-200 dark:bg-zinc-800" />
+        <div className="h-4 w-1/3 rounded bg-rule" />
+        <div className="mt-3 h-3 w-2/3 rounded bg-rule" />
       </div>
     );
   }
@@ -50,22 +49,36 @@ export function PaywallGate({
   if (fallback) return <>{fallback}</>;
 
   return (
-    <Card className="p-6 border-2 border-amber-500/60 bg-amber-50/40 dark:bg-amber-950/20">
-      <h3 className="text-lg font-semibold">🔒 {title}</h3>
-      <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-300">
+    <div className="rounded-2xl bg-terracotta/[0.07] border border-terracotta/30 p-6">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta-deep">
+        Acceso completo
+      </p>
+      <h3 className="mt-2 font-serif text-xl font-medium leading-snug text-ink">
+        {title}
+      </h3>
+      <p className="mt-2 font-serif text-[15px] leading-relaxed text-ink-soft">
         {subtitle}
       </p>
       <div className="mt-5 flex flex-wrap gap-3">
-        <Link href="/precio" className={buttonVariants()}>
+        <Link
+          href="/precio"
+          className={
+            buttonVariants({ variant: "terracotta" }) +
+            " h-11 px-4 rounded-xl text-sm"
+          }
+        >
           Ver precio
         </Link>
         <Link
           href="/demo"
-          className={buttonVariants({ variant: "outline" })}
+          className={
+            buttonVariants({ variant: "ghost" }) +
+            " h-11 px-4 text-sm text-ink-soft hover:bg-paper-warm"
+          }
         >
-          Probar la demo gratis
+          Probar la demo
         </Link>
       </div>
-    </Card>
+    </div>
   );
 }

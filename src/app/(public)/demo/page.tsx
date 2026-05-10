@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { Seal } from "@/components/ui/seal";
+import { Underline } from "@/components/ui/underline";
 import { getDemoPreguntas } from "@/lib/content";
 import { DemoDeck } from "@/components/practica/DemoDeck";
 
@@ -12,15 +15,33 @@ export const metadata = {
 export default function DemoPage() {
   const preguntas = getDemoPreguntas(10);
   return (
-    <main className="mx-auto max-w-2xl px-6 py-12">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Demo CCSE</h1>
-        <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-          10 preguntas aleatorias del banco oficial 2026. Sin registro.
-          Recibirás la explicación razonada al final.
-        </p>
+    <main className="mx-auto max-w-2xl px-6 py-10">
+      <header className="flex items-center gap-2.5 mb-8">
+        <Seal size={28} />
+        <Link
+          href="/"
+          className="font-serif text-lg font-medium tracking-wide"
+        >
+          CCSE
+        </Link>
       </header>
-      <DemoDeck preguntas={preguntas} />
+
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
+        Sin registro · Sin tarjeta
+      </p>
+      <h1 className="mt-2 font-serif text-4xl sm:text-5xl font-medium leading-[1.05] tracking-tight">
+        Prueba con{" "}
+        <span className="italic text-terracotta-deep">10 preguntas</span>.
+      </h1>
+      <Underline width={150} className="mt-1" />
+      <p className="mt-4 text-sm text-ink-soft">
+        10 preguntas aleatorias del banco oficial CCSE 2026. Al final ves cuáles
+        acertaste y la explicación razonada.
+      </p>
+
+      <div className="mt-8">
+        <DemoDeck preguntas={preguntas} />
+      </div>
     </main>
   );
 }
