@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
+import { BuyButton } from "@/components/paywall/BuyButton";
 
 const INCLUYE = [
   "Las 300 preguntas oficiales del banco 2026 con explicación completa",
@@ -48,27 +49,22 @@ export function Precio() {
             ))}
           </ul>
 
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap gap-3 items-center">
+            <BuyButton />
             <Link
               href="/demo"
-              className={buttonVariants({ size: "lg" }) + " text-base"}
+              className={
+                buttonVariants({ variant: "outline", size: "lg" }) +
+                " text-base"
+              }
             >
               Probar la demo primero
             </Link>
-            <span
-              className={
-                buttonVariants({ variant: "outline", size: "lg" }) +
-                " text-base pointer-events-none opacity-70"
-              }
-              aria-disabled
-            >
-              Comprar — pronto
-            </span>
           </div>
           <p className="mt-3 text-xs text-zinc-500">
-            El pago con Stripe se activa en la próxima entrega. Sin cuenta
-            todavía: cuando habilitemos el registro, podrás recuperar tu
-            progreso.
+            Modo demo: la compra simulada activa el acceso en este
+            navegador durante 365 días, sin pago real. Stripe entra cuando
+            conectemos el backend de cuentas.
           </p>
         </Card>
       </div>
