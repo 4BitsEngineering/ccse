@@ -12,6 +12,12 @@ import {
   SIMULACRO_DURACION_S,
 } from "@/lib/simulacro-config";
 import type { Pregunta } from "@/lib/content";
+import {
+  recordAnswer,
+  registrarSimulacro,
+  setUltimaActividad,
+  type SimulacroResultado,
+} from "@/lib/progreso";
 
 export function SimulacroDeck({
   preguntas,
@@ -25,6 +31,16 @@ export function SimulacroDeck({
   const [done, setDone] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(SIMULACRO_DURACION_S);
   const startedAt = useRef(Date.now());
+  const recorded = useRef(false);
+
+  useEffect(() => {
+    setUltimaActividad({
+      tipo: "simulacro",
+      id: simulacroId,
+      titulo: `Simulacro ${simulacroId}`,
+      href: `/simulacro/${simulacroId}`,
+    });
+  }, [simulacroId]);
 
   useEffect(() => {
     if (done) return;
@@ -41,6 +57,41 @@ export function SimulacroDeck({
     }, 1000);
     return () => clearInterval(timer);
   }, [done]);
+
+  useEffect(() => {
+    if (!done || recorded.current) return;
+    recorded.current = true;
+    const aciertos = preguntas.filter(
+      (p) => answers.get(p.id) === p.correcta,
+    ).length;
+    const porTarea: SimulacroResultado["porTarea"] = {};
+    for (const p of preguntas) {
+      const k = String(p.tarea);
+      if (!porTarea[k]) porTarea[k] = { total: 0, aciertos: 0 };
+      porTarea[k].total++;
+      if (answers.get(p.id) === p.correcta) porTarea[k].aciertos++;
+    }
+    const falladas = preguntas
+      .filter((p) => answers.get(p.id) !== p.correcta)
+      .map((p) => p.id);
+    for (const p of preguntas) {
+      const sel = answers.get(p.id);
+      if (sel === undefined) continue;
+      recordAnswer(p, sel, sel === p.correcta);
+    }
+    registrarSimulacro({
+      simulacroId,
+      fechaIso: new Date().toISOString(),
+      total: preguntas.length,
+      aciertos,
+      porTarea,
+      duracionSegundos: Math.min(
+        SIMULACRO_DURACION_S,
+        Math.floor((Date.now() - startedAt.current) / 1000),
+      ),
+      preguntasFalladas: falladas,
+    });
+  }, [done, answers, preguntas, simulacroId]);
 
   if (done) {
     return (

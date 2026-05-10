@@ -1,18 +1,35 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { PreguntaCard } from "@/components/content/PreguntaCard";
 import { shuffle } from "@/lib/utils";
 import type { Pregunta } from "@/lib/content";
+import { recordAnswer, setUltimaActividad } from "@/lib/progreso";
 
-export function PracticaDeck({ preguntas }: { preguntas: Pregunta[] }) {
+export function PracticaDeck({
+  preguntas,
+  contexto,
+}: {
+  preguntas: Pregunta[];
+  contexto?: { tarea?: number; titulo: string; href: string };
+}) {
   const order = useMemo(() => shuffle(preguntas), [preguntas]);
   const [idx, setIdx] = useState(0);
   const [stats, setStats] = useState({ aciertos: 0, fallos: 0 });
   const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (!contexto) return;
+    setUltimaActividad({
+      tipo: "practicar",
+      id: contexto.tarea ?? "general",
+      titulo: contexto.titulo,
+      href: contexto.href,
+    });
+  }, [contexto]);
 
   const total = order.length;
 
@@ -59,7 +76,8 @@ export function PracticaDeck({ preguntas }: { preguntas: Pregunta[] }) {
         key={p.id}
         pregunta={p}
         mode="instant"
-        onAnswer={(_, correct) => {
+        onAnswer={(selected, correct) => {
+          recordAnswer(p, selected, correct);
           setStats((s) =>
             correct
               ? { ...s, aciertos: s.aciertos + 1 }

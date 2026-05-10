@@ -56,7 +56,14 @@ export default async function PracticarTareaPage({
         title="Practicar es premium"
         subtitle="La práctica con feedback inmediato, explicación razonada de cada distractor y mnemotécnico es lo que diferencia esta plataforma de la app oficial gratuita. Pruébala primero con la demo de 10 preguntas."
       >
-        <PracticaDeck preguntas={preguntas} />
+        <PracticaDeck
+          preguntas={preguntas}
+          contexto={{
+            tarea: t,
+            titulo: `Practicar Tarea ${t}`,
+            href: `/practicar/${t}`,
+          }}
+        />
       </PaywallGate>
     </main>
   );
