@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Card } from "@/components/ui/card";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   clearEntitlement,
@@ -24,31 +23,40 @@ export function CuentaClient() {
 
   if (!loaded) {
     return (
-      <Card className="p-6 animate-pulse">
-        <div className="h-5 w-2/3 rounded bg-zinc-200 dark:bg-zinc-800" />
-        <div className="mt-3 h-3 w-1/2 rounded bg-zinc-200 dark:bg-zinc-800" />
-      </Card>
+      <div
+        className="rounded-2xl border border-rule bg-paper-warm p-6 animate-pulse"
+        aria-busy="true"
+      >
+        <div className="h-5 w-2/3 rounded bg-rule" />
+        <div className="mt-3 h-3 w-1/2 rounded bg-rule" />
+      </div>
     );
   }
 
   if (!ent) {
     return (
-      <Card className="p-6">
-        <h2 className="font-semibold text-lg">Sin acceso activo</h2>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-          Aún no has activado tu acceso. Con 9,99 € desbloqueas la
-          plataforma entera durante 365 días.
+      <div className="rounded-2xl bg-cream border border-rule p-6">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
+          Sin acceso activo
+        </p>
+        <h2 className="mt-2 font-serif text-2xl font-medium leading-snug">
+          Aún no has activado tu acceso.
+        </h2>
+        <p className="mt-2 font-serif text-[15px] leading-relaxed text-ink-soft">
+          Con 9,99 € desbloqueas la plataforma entera durante 365 días.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
-          <BuyButton size="default" />
+          <BuyButton />
           <Link
             href="/demo"
-            className={buttonVariants({ variant: "outline" })}
+            className={
+              buttonVariants({ variant: "ink-outline" }) + " h-12 px-4"
+            }
           >
             Probar la demo
           </Link>
         </div>
-      </Card>
+      </div>
     );
   }
 
@@ -57,65 +65,94 @@ export function CuentaClient() {
   const expirado = dias === 0;
 
   return (
-    <div className="space-y-4">
-      <Card className="p-6">
-        <h2 className="font-semibold text-lg">
-          {expirado
-            ? "Acceso expirado"
-            : `Acceso activo · ${dias} días`}
+    <div className="space-y-5">
+      <div
+        className={
+          "rounded-2xl border p-6 " +
+          (expirado
+            ? "bg-terracotta/[0.07] border-terracotta/30"
+            : "bg-cream border-rule")
+        }
+      >
+        <p
+          className={
+            "text-[11px] font-semibold uppercase tracking-[0.14em] " +
+            (expirado ? "text-terracotta-deep" : "text-olive")
+          }
+        >
+          {expirado ? "Acceso expirado" : "Acceso activo"}
+        </p>
+        <h2 className="mt-2 font-serif text-3xl font-medium leading-tight tracking-tight">
+          {expirado ? (
+            "Renueva para seguir."
+          ) : (
+            <>
+              <span className="italic text-terracotta-deep">{dias}</span> días
+              por delante.
+            </>
+          )}
         </h2>
-        <dl className="mt-4 space-y-2 text-sm">
-          <div className="flex justify-between">
-            <dt className="text-zinc-500">Plan</dt>
-            <dd>Anual {ent.manualVersion}</dd>
+        <dl className="mt-5 space-y-2 text-sm">
+          <div className="flex justify-between py-2 border-t border-rule">
+            <dt className="text-ink-muted">Plan</dt>
+            <dd className="font-medium text-ink">
+              Anual {ent.manualVersion}
+            </dd>
           </div>
-          <div className="flex justify-between">
-            <dt className="text-zinc-500">Activado el</dt>
-            <dd>{formatDateEs(ent.purchaseAt)}</dd>
+          <div className="flex justify-between py-2 border-t border-rule">
+            <dt className="text-ink-muted">Activado el</dt>
+            <dd className="font-medium text-ink">
+              {formatDateEs(ent.purchaseAt)}
+            </dd>
           </div>
-          <div className="flex justify-between">
-            <dt className="text-zinc-500">Expira el</dt>
-            <dd>{formatDateEs(ent.expiresAt)}</dd>
+          <div className="flex justify-between py-2 border-t border-rule">
+            <dt className="text-ink-muted">Expira el</dt>
+            <dd className="font-medium text-ink">
+              {formatDateEs(ent.expiresAt)}
+            </dd>
           </div>
-          <div className="flex justify-between">
-            <dt className="text-zinc-500">Origen</dt>
-            <dd className="text-zinc-500 italic">
+          <div className="flex justify-between py-2 border-t border-rule">
+            <dt className="text-ink-muted">Origen</dt>
+            <dd className="font-serif italic text-ink-soft">
               {ent.source === "mock" ? "modo demo (sin Stripe)" : "Stripe"}
             </dd>
           </div>
         </dl>
         {venceProximo && !expirado && (
-          <p className="mt-4 rounded-md bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800 p-3 text-sm">
+          <p className="mt-4 rounded-xl bg-paper-warm p-3 text-sm text-ink-soft">
             Te quedan menos de 30 días. Renueva cuando quieras.
           </p>
         )}
         <div className="mt-5 flex flex-wrap gap-3">
           {expirado ? (
-            <BuyButton size="default" label="Renovar 9,99 €" />
+            <BuyButton label="Renovar 9,99 €" />
           ) : (
-            <BuyButton size="default" label="Renovar otro año" />
+            <BuyButton label="Renovar otro año" />
           )}
           <Link
             href="/dashboard"
-            className={buttonVariants({ variant: "outline" })}
+            className={
+              buttonVariants({ variant: "ink-outline" }) + " h-12 px-4"
+            }
           >
-            Ir al dashboard
+            Ir al panel
           </Link>
         </div>
-      </Card>
+      </div>
 
-      <details className="text-xs text-zinc-500">
-        <summary className="cursor-pointer">
+      <details className="text-xs text-ink-muted">
+        <summary className="cursor-pointer hover:text-ink">
           Opciones avanzadas (modo demo)
         </summary>
-        <div className="mt-3 space-y-2 rounded-md border border-zinc-200 dark:border-zinc-800 p-4">
+        <div className="mt-3 space-y-2 rounded-xl border border-rule bg-paper-warm p-4">
           <p>
-            Eliminar el entitlement local te devuelve al estado de
-            visitante sin pago. Útil para probar el paywall.
+            Eliminar el entitlement local te devuelve al estado de visitante
+            sin pago. Útil para probar el paywall.
           </p>
           <Button
-            variant="outline"
+            variant="ink-outline"
             size="sm"
+            className="h-8 px-3"
             onClick={() => {
               clearEntitlement();
               setEnt(null);

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PracticaDeck } from "@/components/practica/PracticaDeck";
@@ -55,14 +54,17 @@ export function PracticaWithFilters({
   }, [preguntas, search, dificultad, soloFalladas, estados]);
 
   return (
-    <div className="space-y-6">
-      <Card className="p-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-3">
+    <div className="space-y-7">
+      <div className="rounded-2xl bg-paper-warm p-5">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted mb-3">
           Filtros
         </p>
         <div className="grid gap-3 sm:grid-cols-3">
           <div>
-            <Label htmlFor="search" className="text-xs">
+            <Label
+              htmlFor="search"
+              className="text-[11px] uppercase tracking-wide text-ink-muted"
+            >
               Buscar texto
             </Label>
             <Input
@@ -71,17 +73,21 @@ export function PracticaWithFilters({
               placeholder="enunciado, opciones..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              className="mt-1 bg-cream"
             />
           </div>
           <div>
-            <Label htmlFor="dif" className="text-xs">
+            <Label
+              htmlFor="dif"
+              className="text-[11px] uppercase tracking-wide text-ink-muted"
+            >
               Dificultad
             </Label>
             <select
               id="dif"
               value={dificultad}
               onChange={(e) => setDificultad(e.target.value as Dificultad)}
-              className="mt-1 h-8 w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-background px-2 text-sm"
+              className="mt-1 h-8 w-full rounded-md border border-rule bg-cream px-2 text-sm text-ink"
             >
               <option value="todas">todas</option>
               <option value="facil">fácil</option>
@@ -95,25 +101,25 @@ export function PracticaWithFilters({
               type="checkbox"
               checked={soloFalladas}
               onChange={(e) => setSoloFalladas(e.target.checked)}
-              className="h-4 w-4 mb-2"
+              className="h-4 w-4 mb-2 accent-terracotta"
             />
-            <Label htmlFor="falladas" className="text-sm mb-1">
+            <Label htmlFor="falladas" className="text-sm mb-1 text-ink">
               Solo falladas
             </Label>
           </div>
         </div>
-        <p className="mt-3 text-xs text-zinc-500">
+        <p className="mt-3 text-xs text-ink-muted">
           {filtradas.length} de {preguntas.length} preguntas
         </p>
-      </Card>
+      </div>
 
       {filtradas.length === 0 ? (
-        <Card className="p-6">
-          <p className="text-sm text-zinc-700 dark:text-zinc-300">
+        <div className="rounded-2xl bg-cream border border-rule p-5">
+          <p className="font-serif text-[15px] leading-relaxed text-ink-soft">
             Ninguna pregunta encaja con esos filtros. Limpia algún filtro o
             cambia los términos de búsqueda.
           </p>
-        </Card>
+        </div>
       ) : (
         <PracticaDeck
           key={`${search}|${dificultad}|${soloFalladas}|${filtradas.length}`}

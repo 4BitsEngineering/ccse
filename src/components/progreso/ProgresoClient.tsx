@@ -2,11 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import {
-  formatDateEs,
-} from "@/lib/entitlement";
+import { formatDateEs } from "@/lib/entitlement";
 import {
   readEstados,
   readSimulacros,
@@ -14,14 +11,15 @@ import {
   type SimulacroResultado,
   type StatsTarea,
 } from "@/lib/progreso";
+import { SIMULACRO_APROBADO_MIN } from "@/lib/simulacro-config";
 import type { Pregunta } from "@/lib/content";
 
 const TAREA_TITULO: Record<number, string> = {
-  1: "Gobierno, legislación y participación",
-  2: "Derechos y deberes fundamentales",
-  3: "Organización territorial y geografía",
+  1: "Gobierno",
+  2: "Derechos",
+  3: "Territorial",
   4: "Cultura e historia",
-  5: "Sociedad española",
+  5: "Sociedad",
 };
 
 export function ProgresoClient({ banco }: { banco: Pregunta[] }) {
@@ -38,9 +36,12 @@ export function ProgresoClient({ banco }: { banco: Pregunta[] }) {
 
   if (!loaded) {
     return (
-      <Card className="p-6 animate-pulse" aria-busy="true">
-        <div className="h-4 w-1/3 rounded bg-zinc-200 dark:bg-zinc-800" />
-      </Card>
+      <div
+        className="rounded-2xl border border-rule bg-paper-warm p-6 animate-pulse"
+        aria-busy="true"
+      >
+        <div className="h-4 w-1/3 rounded bg-rule" />
+      </div>
     );
   }
 
@@ -50,95 +51,144 @@ export function ProgresoClient({ banco }: { banco: Pregunta[] }) {
     (acc, s) => acc + s.acertada + s.fallada + s.dominada + s.vista,
     0,
   );
-  const pctDominado =
-    totalPreguntas > 0
-      ? Math.round((totalDominadas / totalPreguntas) * 100)
-      : 0;
+  const simulacrosAprobados = historial.filter(
+    (r) => r.aciertos >= SIMULACRO_APROBADO_MIN,
+  ).length;
+  const mediaSimulacros =
+    historial.length > 0
+      ? Math.round(
+          (historial.reduce((a, r) => a + r.aciertos, 0) / historial.length) *
+            10,
+        ) / 10
+      : null;
 
   return (
     <div className="space-y-8">
-      <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-1">Resumen</h2>
-        <div className="flex items-baseline gap-6 mt-3 flex-wrap">
-          <div>
-            <p className="text-3xl font-mono">{pctDominado} %</p>
-            <p className="text-xs text-zinc-500">dominadas del banco</p>
-          </div>
-          <div>
-            <p className="text-2xl font-mono">{totalVistas}</p>
-            <p className="text-xs text-zinc-500">preguntas vistas</p>
-          </div>
-          <div>
-            <p className="text-2xl font-mono">{historial.length}</p>
-            <p className="text-xs text-zinc-500">simulacros realizados</p>
+      {/* KPI cards */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-2xl bg-cream border border-rule p-5">
+          <p className="font-serif text-4xl font-medium leading-none tracking-[-0.02em] text-ink">
+            {totalDominadas}
+          </p>
+          <p className="text-xs text-ink-muted mt-2 leading-tight">
+            de {totalPreguntas} preguntas dominadas
+          </p>
+          <div className="h-1 bg-rule rounded-sm mt-3 overflow-hidden">
+            <div
+              className="h-full bg-terracotta"
+              style={{
+                width: `${totalPreguntas > 0 ? (totalDominadas / totalPreguntas) * 100 : 0}%`,
+              }}
+            />
           </div>
         </div>
-      </Card>
+        <div className="rounded-2xl bg-terracotta text-cream p-5">
+          <p className="font-serif text-4xl font-medium leading-none">
+            {simulacrosAprobados}
+            <span className="text-2xl opacity-70">
+              /{historial.length || "—"}
+            </span>
+          </p>
+          <p className="text-xs mt-2 leading-tight opacity-90">
+            simulacros aprobados
+          </p>
+          {mediaSimulacros !== null && (
+            <p className="font-serif italic text-sm mt-2 opacity-95">
+              media: {mediaSimulacros}/25
+            </p>
+          )}
+        </div>
+      </div>
 
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-2xl bg-paper-warm p-5">
+          <p className="font-serif text-3xl font-medium leading-none text-ink">
+            {totalVistas}
+          </p>
+          <p className="text-xs text-ink-muted mt-2 leading-tight">
+            preguntas vistas
+          </p>
+        </div>
+        <div className="rounded-2xl bg-paper-warm p-5">
+          <p className="font-serif text-3xl font-medium leading-none text-ink">
+            {historial.length}
+          </p>
+          <p className="text-xs text-ink-muted mt-2 leading-tight">
+            simulacros realizados
+          </p>
+        </div>
+      </div>
+
+      {/* Dominio por tarea */}
       <section>
-        <h2 className="text-lg font-semibold mb-3">Por tarea</h2>
-        <div className="space-y-3">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted mb-3">
+          Dominio por tarea
+        </p>
+        <ul>
           {stats.map((s) => (
             <BarraTarea key={s.tarea} s={s} />
           ))}
-        </div>
+        </ul>
       </section>
 
+      {/* Historial */}
       <section>
-        <h2 className="text-lg font-semibold mb-3">Historial de simulacros</h2>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted mb-3">
+          Historial de simulacros
+        </p>
         {historial.length === 0 ? (
-          <Card className="p-6">
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              Aún no has hecho ningún simulacro. Cuando termines uno,
-              aparecerá aquí con la nota y el desglose por tarea.
+          <div className="rounded-2xl bg-cream border border-rule p-5">
+            <p className="font-serif text-[16px] leading-relaxed text-ink-soft">
+              Aún no has hecho ningún simulacro. Cuando termines uno, aparecerá
+              aquí con la nota y el desglose por tarea.
             </p>
             <Link
               href="/simulacro"
-              className="mt-3 inline-block text-sm font-medium hover:underline"
+              className="mt-3 inline-block text-sm font-medium text-terracotta-deep hover:underline"
             >
               Ir a simulacros →
             </Link>
-          </Card>
+          </div>
         ) : (
           <ul className="space-y-2">
             {[...historial].reverse().map((r, i) => {
-              const aprobado = r.aciertos >= 15;
+              const aprobado = r.aciertos >= SIMULACRO_APROBADO_MIN;
               return (
                 <li key={`${r.fechaIso}-${i}`}>
-                  <Card className="p-4 flex items-center justify-between flex-wrap gap-3">
-                    <div>
-                      <p className="font-medium">
-                        Simulacro {r.simulacroId} ·{" "}
-                        <span className="text-zinc-500">
-                          {formatDateEs(r.fechaIso)}
+                  <div className="flex items-center gap-4 rounded-2xl border border-rule bg-cream p-4">
+                    <div className="flex-1 min-w-0">
+                      <p className="font-sans font-medium text-ink">
+                        Simulacro {r.simulacroId}{" "}
+                        <span className="font-serif italic text-ink-muted font-normal">
+                          · {formatDateEs(r.fechaIso)}
                         </span>
                       </p>
-                      <p className="text-xs text-zinc-500 mt-1">
+                      <p className="text-[11px] text-ink-muted mt-1 font-mono tabular-nums">
                         {Object.entries(r.porTarea)
                           .sort(([a], [b]) => Number(a) - Number(b))
                           .map(
-                            ([t, v]) =>
-                              `T${t} ${v.aciertos}/${v.total}`,
+                            ([t, v]) => `T${t} ${v.aciertos}/${v.total}`,
                           )
-                          .join(" · ")}
+                          .join("  ·  ")}
                       </p>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right shrink-0">
                       <p
                         className={cn(
-                          "font-mono text-lg",
-                          aprobado
-                            ? "text-green-700 dark:text-green-400"
-                            : "text-amber-700 dark:text-amber-400",
+                          "font-serif text-2xl font-medium leading-none tabular-nums",
+                          aprobado ? "text-olive" : "text-terracotta-deep",
                         )}
                       >
-                        {r.aciertos}/{r.total}
+                        {r.aciertos}
+                        <span className="text-ink-muted text-base">
+                          /{r.total}
+                        </span>
                       </p>
-                      <p className="text-xs text-zinc-500">
+                      <p className="text-[10px] uppercase tracking-wide text-ink-muted mt-1 font-semibold">
                         {aprobado ? "aprobado" : "no aprobado"}
                       </p>
                     </div>
-                  </Card>
+                  </div>
                 </li>
               );
             })}
@@ -150,50 +200,50 @@ export function ProgresoClient({ banco }: { banco: Pregunta[] }) {
 }
 
 function BarraTarea({ s }: { s: StatsTarea }) {
-  const pct = s.total === 0 ? 0 : (s.dominada / s.total) * 100;
+  const pct = s.total === 0 ? 0 : s.dominada / s.total;
   return (
-    <Card className="p-4">
-      <div className="flex justify-between items-baseline mb-2">
-        <p className="font-medium">
+    <li className="py-3 border-b border-rule first:border-t first:border-t-rule">
+      <div className="flex items-baseline justify-between">
+        <span className="font-sans text-[14.5px] text-ink">
           Tarea {s.tarea}{" "}
-          <span className="text-zinc-500 font-normal text-sm">
-            — {TAREA_TITULO[s.tarea]}
+          <span className="text-ink-muted font-normal text-[13px]">
+            — {TAREA_TITULO[s.tarea] ?? ""}
           </span>
-        </p>
-        <p className="font-mono text-sm">
-          {s.dominada}/{s.total} dominadas
-        </p>
+        </span>
+        <span className="font-serif italic text-[13.5px] text-ink-soft tabular-nums">
+          {Math.round(pct * 100)}%
+        </span>
       </div>
-      <div className="h-2 w-full rounded-full overflow-hidden flex bg-zinc-100 dark:bg-zinc-800">
+      <div className="mt-2 h-1.5 w-full rounded-sm overflow-hidden bg-rule flex">
         {s.dominada > 0 && (
           <span
-            className="bg-green-500"
+            className="bg-olive"
             style={{ width: `${(s.dominada / s.total) * 100}%` }}
           />
         )}
         {s.acertada > 0 && (
           <span
-            className="bg-emerald-300 dark:bg-emerald-700"
+            className="bg-olive-soft"
             style={{ width: `${(s.acertada / s.total) * 100}%` }}
           />
         )}
         {s.fallada > 0 && (
           <span
-            className="bg-red-400"
+            className="bg-terracotta"
             style={{ width: `${(s.fallada / s.total) * 100}%` }}
           />
         )}
         {s.vista > 0 && (
           <span
-            className="bg-zinc-400"
+            className="bg-terracotta-soft"
             style={{ width: `${(s.vista / s.total) * 100}%` }}
           />
         )}
       </div>
-      <p className="mt-2 text-xs text-zinc-500">
-        Dominada {s.dominada} · Acertada {s.acertada} · Fallada{" "}
-        {s.fallada} · No vista {s.no_vista}
+      <p className="mt-1.5 text-[11px] text-ink-muted">
+        Dominada {s.dominada} · Acertada {s.acertada} · Fallada {s.fallada} ·
+        No vista {s.no_vista}
       </p>
-    </Card>
+    </li>
   );
 }
