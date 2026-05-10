@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Card } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { BuyButton } from "@/components/paywall/BuyButton";
 
@@ -14,59 +13,62 @@ const INCLUYE = [
 
 export function Precio() {
   return (
-    <section
-      id="precio"
-      className="border-b border-zinc-200 dark:border-zinc-800"
-    >
-      <div className="mx-auto max-w-3xl px-6 py-16 sm:py-20">
+    <section id="precio" className="bg-paper-warm border-b border-rule">
+      <div className="mx-auto max-w-2xl px-6 py-16 sm:py-20">
         <header className="mb-8 text-center">
-          <h2 className="text-3xl font-bold tracking-tight">
-            Un solo pago, un año entero
-          </h2>
-          <p className="mt-3 text-zinc-600 dark:text-zinc-400">
-            Sin suscripción, sin renovación automática, sin sorpresas.
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-terracotta">
+            Pago único
           </p>
+          <h2 className="mt-2 font-serif text-3xl sm:text-4xl font-medium leading-[1.1] tracking-tight">
+            Un solo pago,
+            <br />
+            <span className="italic text-terracotta-deep">un año entero</span>.
+          </h2>
         </header>
 
-        <Card className="p-8">
-          <div className="flex items-baseline gap-2">
-            <span className="text-5xl font-bold tracking-tight">9,99 €</span>
-            <span className="text-zinc-500">una vez · 365 días</span>
+        <div className="rounded-2xl bg-cream border border-rule p-8">
+          <div className="flex items-baseline gap-3">
+            <span className="font-serif text-6xl font-medium tracking-tight leading-none text-ink">
+              9,99 €
+            </span>
+            <span className="font-serif italic text-ink-muted text-lg">
+              / 365 días
+            </span>
           </div>
-          <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-            Pago único. No es suscripción. Si pasado el año quieres seguir,
+          <p className="mt-3 text-sm text-ink-soft">
+            No es suscripción, no se renueva. Si pasado el año quieres seguir,
             decides tú si vuelves a comprar.
           </p>
 
-          <ul className="mt-6 space-y-2 text-sm">
+          <ul className="mt-6 space-y-2.5 text-sm">
             {INCLUYE.map((item) => (
-              <li key={item} className="flex gap-2">
-                <span aria-hidden className="text-green-600 dark:text-green-400">
+              <li key={item} className="flex gap-2.5">
+                <span aria-hidden className="text-olive font-semibold pt-0.5">
                   ✓
                 </span>
-                <span>{item}</span>
+                <span className="text-ink">{item}</span>
               </li>
             ))}
           </ul>
 
-          <div className="mt-8 flex flex-wrap gap-3 items-center">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <BuyButton />
             <Link
               href="/demo"
               className={
-                buttonVariants({ variant: "outline", size: "lg" }) +
-                " text-base"
+                buttonVariants({ variant: "ghost", size: "lg" }) +
+                " h-12 px-5 text-base text-ink-soft hover:bg-paper-warm"
               }
             >
               Probar la demo primero
             </Link>
           </div>
-          <p className="mt-3 text-xs text-zinc-500">
-            Modo demo: la compra simulada activa el acceso en este
-            navegador durante 365 días, sin pago real. Stripe entra cuando
-            conectemos el backend de cuentas.
+          <p className="mt-3 text-xs text-ink-muted">
+            Modo demo: la compra simulada activa el acceso en este navegador
+            durante 365 días, sin pago real. Stripe entra cuando conectemos el
+            backend de cuentas.
           </p>
-        </Card>
+        </div>
       </div>
     </section>
   );

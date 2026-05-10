@@ -44,8 +44,9 @@ export function BuyButton({
   return (
     <>
       <Button
+        variant="terracotta"
         size={size}
-        className={cn("text-base", className)}
+        className={cn("h-12 px-5 text-base rounded-xl", className)}
         onClick={() => setOpen(true)}
       >
         {label}

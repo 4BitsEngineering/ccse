@@ -1,62 +1,67 @@
-import { Card } from "@/components/ui/card";
-
 const PILARES = [
   {
-    titulo: "Apuntes claros en español B1 + PDF descargable",
+    titulo: "Apuntes claros en español B1",
     cuerpo:
-      "5 temas escritos en español sencillo, con tablas y ejemplos. Léelos en el navegador o descárgalos en PDF para repasar sin internet, en el metro o en la cola del médico.",
+      "5 temas escritos en español sencillo, con tablas y ejemplos. Léelos en web o descárgalos en PDF para repasar sin internet.",
   },
   {
     titulo: "Cada pregunta, razonada",
     cuerpo:
-      "No solo cuál es la correcta. También por qué fallan las otras dos opciones, una pista mnemotécnica para no olvidar y la página del manual donde aparece la información.",
+      "Por qué es la correcta. Y por qué fallan las otras dos. Con pista mnemotécnica y página del manual donde aparece.",
   },
   {
-    titulo: "Simulacros reales con cronómetro",
+    titulo: "Simulacros con cronómetro real",
     cuerpo:
-      "25 preguntas, 45 minutos, distribución 60 / 40 entre bloques, sin penalización. Igual que el examen oficial. Al terminar ves dónde fallaste y por qué.",
+      "25 preguntas. 45 minutos. Distribución oficial. Igual que el examen — al terminar ves dónde fallaste y por qué.",
   },
   {
     titulo: "Repaso de lo que fallas",
     cuerpo:
-      "La plataforma recuerda qué preguntas has fallado y te las muestra otra vez, espaciadas en el tiempo. Así no se olvidan antes del examen.",
-  },
-  {
-    titulo: "Tu progreso, siempre a mano",
-    cuerpo:
-      "Ves cuántas preguntas dominas de cada tarea, cuántos simulacros has aprobado y cuánto te falta. Sin necesidad de hacer cuentas en una libreta.",
+      "Espaciado en el tiempo. La plataforma te trae de vuelta lo que fallaste hasta que lo dominas. No se olvida antes del examen.",
   },
 ];
 
 export function Pilares() {
   return (
-    <section className="border-b border-zinc-200 dark:border-zinc-800">
-      <div className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
-        <header className="mb-10">
-          <h2 className="text-3xl font-bold tracking-tight">
-            Por qué pagar 9,99 € si la app oficial es gratis
-          </h2>
-          <p className="mt-3 text-zinc-600 dark:text-zinc-400 max-w-2xl">
-            La app oficial del Cervantes te da las preguntas. Aquí tienes
-            cinco ventajas concretas que sí marcan la diferencia el día del
-            examen.
-          </p>
-        </header>
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <section className="bg-paper-warm border-b border-rule">
+      <div className="mx-auto max-w-2xl px-6 py-16 sm:py-20">
+        <h2 className="font-serif text-3xl sm:text-4xl font-medium leading-[1.15] tracking-tight text-balance">
+          Cuatro cosas que <span className="italic">sí</span> marcan la
+          diferencia.
+        </h2>
+        <ul className="mt-10">
           {PILARES.map((p, i) => (
-            <li key={p.titulo}>
-              <Card className="h-full p-6">
-                <p className="text-xs font-mono text-zinc-400 mb-2">
-                  {String(i + 1).padStart(2, "0")}
+            <li
+              key={p.titulo}
+              className={
+                "flex gap-4 py-4 " +
+                (i === 0 ? "" : "border-t border-rule")
+              }
+            >
+              <span className="font-serif italic text-2xl leading-none text-terracotta pt-1 w-8 shrink-0">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <p className="font-sans text-base font-semibold leading-snug">
+                  {p.titulo}
                 </p>
-                <h3 className="text-lg font-semibold mb-2">{p.titulo}</h3>
-                <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                <p className="mt-1 font-serif text-[15px] leading-relaxed text-ink-soft">
                   {p.cuerpo}
                 </p>
-              </Card>
+              </div>
             </li>
           ))}
         </ul>
+
+        <blockquote className="mt-12 text-center">
+          <p className="font-serif italic text-xl leading-relaxed text-ink text-pretty">
+            “Llevaba dos años con la app oficial sin enterarme.
+            <br className="hidden sm:block" /> Aprobé al primer simulacro.”
+          </p>
+          <p className="mt-3 text-xs uppercase tracking-[0.14em] text-ink-muted">
+            Daniela · Quito → Madrid
+          </p>
+        </blockquote>
       </div>
     </section>
   );

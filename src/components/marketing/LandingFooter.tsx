@@ -1,35 +1,39 @@
 import Link from "next/link";
+import { Seal } from "@/components/ui/seal";
 
 export function LandingFooter() {
   return (
-    <footer className="border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950">
-      <div className="mx-auto max-w-5xl px-6 py-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+    <footer className="bg-paper-warm border-t border-rule">
+      <div className="mx-auto max-w-2xl px-6 py-12 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="font-semibold tracking-tight">CCSE</p>
-          <p className="text-sm text-zinc-500 mt-1">
-            4Bits Engineering · Manual CCSE 2026 del Instituto Cervantes
+          <div className="flex items-center gap-2.5">
+            <Seal size={26} />
+            <p className="font-serif text-lg font-medium tracking-wide">CCSE</p>
+          </div>
+          <p className="text-sm text-ink-muted mt-2">
+            4Bits Engineering · Manual CCSE 2026 del Instituto Cervantes.
           </p>
         </div>
-        <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-700 dark:text-zinc-300">
-          <Link href="/demo" className="hover:underline">
+        <nav className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-ink-soft sm:flex sm:flex-col sm:items-end">
+          <Link href="/demo" className="hover:text-ink">
             Demo
           </Link>
-          <Link href="/dashboard" className="hover:underline">
+          <Link href="/dashboard" className="hover:text-ink">
             Estudiar
           </Link>
-          <Link href="/simulacro" className="hover:underline">
+          <Link href="/simulacro" className="hover:text-ink">
             Simulacros
           </Link>
-          <Link href="/cambios" className="hover:underline">
+          <Link href="/cambios" className="hover:text-ink">
             Cambios
           </Link>
-          <Link href="/legal/privacidad" className="hover:underline">
+          <Link href="/legal/privacidad" className="hover:text-ink">
             Privacidad
           </Link>
-          <Link href="/legal/condiciones" className="hover:underline">
+          <Link href="/legal/condiciones" className="hover:text-ink">
             Condiciones
           </Link>
-          <Link href="/legal/cookies" className="hover:underline">
+          <Link href="/legal/cookies" className="hover:text-ink">
             Cookies
           </Link>
         </nav>

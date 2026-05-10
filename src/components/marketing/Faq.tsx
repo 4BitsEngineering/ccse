@@ -35,27 +35,29 @@ const FAQS = [
 
 export function Faq() {
   return (
-    <section className="border-b border-zinc-200 dark:border-zinc-800">
-      <div className="mx-auto max-w-3xl px-6 py-16 sm:py-20">
+    <section className="border-b border-rule">
+      <div className="mx-auto max-w-2xl px-6 py-16 sm:py-20">
         <header className="mb-8">
-          <h2 className="text-3xl font-bold tracking-tight">
-            Preguntas frecuentes
+          <h2 className="font-serif text-3xl sm:text-4xl font-medium leading-[1.15] tracking-tight">
+            Preguntas <span className="italic text-terracotta-deep">frecuentes</span>.
           </h2>
         </header>
-        <ul className="divide-y divide-zinc-200 dark:divide-zinc-800">
+        <ul className="divide-y divide-rule">
           {FAQS.map((f) => (
             <li key={f.q}>
-              <details className="group py-4">
-                <summary className="flex items-center justify-between cursor-pointer list-none">
-                  <span className="font-medium pr-4">{f.q}</span>
+              <details className="group py-5">
+                <summary className="flex items-center justify-between gap-4 cursor-pointer list-none">
+                  <span className="font-serif text-[17px] leading-snug text-ink">
+                    {f.q}
+                  </span>
                   <span
                     aria-hidden
-                    className="shrink-0 text-zinc-400 transition group-open:rotate-45 text-2xl leading-none"
+                    className="shrink-0 text-terracotta transition group-open:rotate-45 text-2xl leading-none"
                   >
                     +
                   </span>
                 </summary>
-                <p className="mt-3 text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                <p className="mt-3 text-sm text-ink-soft leading-relaxed">
                   {f.a}
                 </p>
               </details>
