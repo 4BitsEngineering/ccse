@@ -1,6 +1,8 @@
 # ADR 0002 — Clerk como stub de auth, migración futura a instancia central
 
-**Estado**: aceptada · **Fecha**: 2026-05-10
+**Estado**: SUPERSEDED · **Fecha**: 2026-05-10 · **Sustituido por**: [ADR 0007](0007-auth-supabase-edge-functions.md)
+
+> ⚠️ Esta decisión fue revertida durante Sprint 1 antes de cablearse. Auth y entitlement irán contra **Supabase + Edge Functions**, no contra Clerk. Ver ADR 0007 para el contexto y el plan.
 
 ## Contexto
 

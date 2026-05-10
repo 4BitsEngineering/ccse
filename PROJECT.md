@@ -44,16 +44,16 @@ Detalle en [`docs/adr/0003-stripe-one-shot-365.md`](docs/adr/0003-stripe-one-sho
 
 | Capa | Elección |
 |---|---|
-| Framework | **Next.js 15 (App Router)** + TypeScript estricto |
+| Framework | **Next.js 16 (App Router, Turbopack)** + TypeScript estricto |
 | Hosting | **Vercel** |
-| Estilos | Tailwind CSS + **shadcn/ui** (componentes accesibles base) |
+| Estilos | Tailwind CSS v4 + **shadcn/ui** (componentes accesibles base) |
 | Render markdown | `react-markdown` + `remark-gfm` (no MDX — no necesitamos JSX en los temas) |
 | Validación | Zod (sobre `banco_300.json` en el build) |
-| Auth | **Clerk** como stub. Migración prevista a la instancia central de 4Bits cuando esté disponible |
-| Pago | **Stripe Checkout** con webhook que marca `entitlement.expiresAt` en `clerkClient.publicMetadata` |
-| Persistencia progreso | **localStorage** en el MVP, con interfaz `ProgresoStore` lista para swap a backend |
-| Analítica | Vercel Analytics + Speed Insights + Plausible |
-| Tipografía | `next/font` con Inter o IBM Plex |
+| Auth | **Supabase Auth + Edge Functions** ([ADR 0007](docs/adr/0007-auth-supabase-edge-functions.md)). Hasta que esté cableado, paywall mockeado en `localStorage` |
+| Pago | **Stripe Checkout** con webhook que marca `entitlement.expires_at` en una tabla de Supabase |
+| Persistencia progreso | **localStorage** en el MVP, mismo módulo `lib/progreso.ts` se reescribirá contra Supabase cuando llegue auth |
+| Analítica | Vercel Analytics + Speed Insights + Plausible (pendiente) |
+| Tipografía | `next/font` con Geist Sans / Mono (default Next 16) |
 
 ADRs detallados en `docs/adr/`.
 
