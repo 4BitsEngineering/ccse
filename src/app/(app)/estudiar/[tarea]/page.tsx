@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { loadTema, type Tarea } from "@/lib/content";
 import { extractToc } from "@/lib/markdown";
+import { TEMA_PDF } from "@/lib/pdfs";
 import { TemaRenderer } from "@/components/content/TemaRenderer";
 import { TemaToc } from "@/components/content/TemaToc";
 
@@ -41,6 +42,18 @@ export default async function EstudiarTareaPage({
         <TemaToc items={toc} />
       </aside>
       <main className="flex-1 min-w-0">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-md border border-zinc-200 dark:border-zinc-800 px-4 py-3 text-sm">
+          <span className="text-zinc-600 dark:text-zinc-400">
+            ¿Prefieres leer offline o imprimir?
+          </span>
+          <a
+            href={TEMA_PDF[t]}
+            download
+            className="font-medium hover:underline"
+          >
+            Descargar este tema en PDF ↓
+          </a>
+        </div>
         <TemaRenderer md={md} />
         <footer className="mt-12 flex items-center justify-between border-t border-zinc-200 dark:border-zinc-800 pt-6 text-sm">
           <Link

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { loadBanco } from "@/lib/content";
+import { TEMA_PDF, MANUAL_OFICIAL_PDF } from "@/lib/pdfs";
 
 const TAREAS = [
   { n: 1, titulo: "Gobierno, legislación y participación" },
@@ -77,6 +78,52 @@ export default function DashboardPage() {
             </Link>
           </div>
         </Card>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-xl font-semibold mb-3">Descargas</h2>
+        <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
+          Los 5 temas en PDF para leer offline o imprimir, más el manual
+          oficial del Instituto Cervantes.
+        </p>
+        <ul className="grid gap-2 sm:grid-cols-2">
+          {conteoPorTarea.map((t) => (
+            <li key={`pdf-${t.n}`}>
+              <a
+                href={TEMA_PDF[t.n as 1 | 2 | 3 | 4 | 5]}
+                download
+                className="flex items-center justify-between rounded-md border border-zinc-200 dark:border-zinc-800 px-4 py-3 text-sm hover:border-zinc-400 dark:hover:border-zinc-600 transition"
+              >
+                <span>
+                  <span className="font-medium">Tarea {t.n}</span>{" "}
+                  <span className="text-zinc-500">— {t.titulo}</span>
+                </span>
+                <span aria-hidden className="text-zinc-400">
+                  ↓ PDF
+                </span>
+              </a>
+            </li>
+          ))}
+          <li className="sm:col-span-2">
+            <a
+              href={MANUAL_OFICIAL_PDF}
+              download
+              className="flex items-center justify-between rounded-md border border-zinc-200 dark:border-zinc-800 px-4 py-3 text-sm hover:border-zinc-400 dark:hover:border-zinc-600 transition"
+            >
+              <span>
+                <span className="font-medium">
+                  Manual oficial CCSE 2026
+                </span>{" "}
+                <span className="text-zinc-500">
+                  — Instituto Cervantes (dominio público, 2,8 MB)
+                </span>
+              </span>
+              <span aria-hidden className="text-zinc-400">
+                ↓ PDF
+              </span>
+            </a>
+          </li>
+        </ul>
       </section>
     </main>
   );

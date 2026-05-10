@@ -60,6 +60,27 @@ function main() {
     /^simulacro_0[1-5]\.md$/,
   );
 
+  // PDFs de los temas → public/pdfs/ (servidos como estáticos)
+  const pdfsDst = path.join(process.cwd(), "public", "pdfs");
+  const pdfsTema = copyMatching(
+    path.join(SOURCE, "pdfs"),
+    pdfsDst,
+    /^0[1-5]_.+\.pdf$/,
+  );
+
+  // Manual oficial del Cervantes (dominio público)
+  const manualSrc = path.join(
+    SOURCE,
+    "00_fuente_oficial",
+    "manual-ccse-2026-def.pdf",
+  );
+  let manualCopied = false;
+  if (existsSync(manualSrc)) {
+    ensureDir(pdfsDst);
+    copyFileSync(manualSrc, path.join(pdfsDst, "manual-ccse-2026.pdf"));
+    manualCopied = true;
+  }
+
   // Validación Zod
   const json = JSON.parse(readFileSync(bancoDst, "utf8"));
   const result = BancoSchema.safeParse(json);
@@ -81,6 +102,12 @@ function main() {
   console.log(`  preguntas:  ${banco.preguntas.length}`);
   console.log(`  temas:      ${temas.length}  (${temas.join(", ")})`);
   console.log(`  simulacros: ${simulacros.length}  (${simulacros.join(", ")})`);
+  console.log(
+    `  pdfs tema:  ${pdfsTema.length}  (${pdfsTema.join(", ") || "—"})`,
+  );
+  console.log(
+    `  pdf manual: ${manualCopied ? "manual-ccse-2026.pdf" : "no encontrado"}`,
+  );
 }
 
 main();
