@@ -1,0 +1,3 @@
+export const SIMULACRO_DURACION_S = 45 * 60;
+export const SIMULACRO_PREGUNTAS = 25;
+export const SIMULACRO_APROBADO_MIN = 15;

@@ -67,7 +67,15 @@ export default function DashboardPage() {
           <p className="text-sm text-zinc-600 dark:text-zinc-400">
             5 exámenes completos en formato real (45 min, 25 preguntas).
           </p>
-          <p className="mt-3 text-xs text-zinc-500">Pendiente Sprint 1</p>
+          <p className="mt-3 text-xs text-zinc-500">15 aciertos para aprobar</p>
+          <div className="mt-4 text-sm">
+            <Link
+              href="/simulacro"
+              className="font-medium hover:underline"
+            >
+              Ver simulacros →
+            </Link>
+          </div>
         </Card>
       </section>
     </main>

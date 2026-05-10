@@ -27,6 +27,12 @@ export default function AppLayout({
             >
               Dashboard
             </Link>
+            <Link
+              href="/simulacro"
+              className="text-zinc-700 dark:text-zinc-300 hover:underline"
+            >
+              Simulacros
+            </Link>
             <span className="text-zinc-300 dark:text-zinc-700">|</span>
             {TAREAS.map((t) => (
               <Link
