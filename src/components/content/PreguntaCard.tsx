@@ -31,7 +31,11 @@ export function PreguntaCard({
     initialSelected ?? null,
   );
   const opciones = pregunta.opciones as Record<string, string>;
-  const keys = Object.keys(opciones);
+  // El banco usa {a, b, c} para todo, pero las preguntas V/F de Tarea 2
+  // dejan c vacío. Filtramos para no renderizar opciones en blanco.
+  const keys = Object.keys(opciones).filter(
+    (k) => (opciones[k] ?? "").trim() !== "",
+  );
   const showFeedback =
     mode === "instant" ? selected !== null : revealed === true;
   const locked =

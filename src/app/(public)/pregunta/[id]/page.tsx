@@ -33,7 +33,10 @@ export default async function PreguntaPage({ params }: RouteParams) {
   if (!p) notFound();
 
   const opciones = p.opciones as Record<string, string>;
-  const opcionesArr = Object.entries(opciones);
+  // Filtra opciones vacías (las V/F de Tarea 2 dejan c con string vacío).
+  const opcionesArr = Object.entries(opciones).filter(
+    ([, v]) => v.trim() !== "",
+  );
   const correcta = opciones[p.correcta];
 
   const jsonLd = {

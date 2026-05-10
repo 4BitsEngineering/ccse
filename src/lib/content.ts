@@ -17,17 +17,17 @@ export const DificultadSchema = z.enum([
   "difícil",
 ]);
 
-export const PreguntaSchema = z.object({
+const PreguntaSchemaBase = z.object({
   id: z.string(),
   id_oficial: z.string(),
   tarea: z.number().int().min(1).max(5),
   tarea_titulo: z.string(),
-  enunciado: z.string(),
+  enunciado: z.string().min(1, "enunciado vacío"),
   opciones: OpcionesSchema,
   correcta: z.enum(["a", "b", "c"]),
   fuente_manual_pagina: z.number().int().nullable().optional(),
   pagina_manual: z.number().int().nullable().optional(),
-  explicacion: z.string(),
+  explicacion: z.string().min(1, "explicación vacía"),
   novedad_2026: z.string().nullable().optional(),
   etiquetas: z.array(z.string()).optional(),
   explicacion_distractores: z.record(z.string(), z.string()).optional(),
@@ -35,6 +35,27 @@ export const PreguntaSchema = z.object({
   dificultad: DificultadSchema,
   bloque_tema: z.string().optional(),
 });
+
+/**
+ * PreguntaSchema con validaciones derivadas:
+ * - al menos 2 opciones con texto (las V/F de Tarea 2 dejan c="")
+ * - la opción marcada como correcta no puede tener texto vacío
+ *
+ * Estas refines se ejecutan en sync-content + en cualquier loadBanco,
+ * así que un banco mal formado revienta en build/import, no al
+ * renderizar.
+ */
+export const PreguntaSchema = PreguntaSchemaBase.refine(
+  (p) =>
+    Object.values(p.opciones).filter((v) => v.trim() !== "").length >= 2,
+  { message: "Una pregunta debe tener al menos 2 opciones con texto" },
+).refine(
+  (p) => {
+    const valor = (p.opciones as Record<string, string>)[p.correcta];
+    return typeof valor === "string" && valor.trim() !== "";
+  },
+  { message: "La opción marcada como correcta tiene texto vacío" },
+);
 
 export const BancoSchema = z.object({
   version_manual: z.string(),
