@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPreguntasPorTarea, type Tarea } from "@/lib/content";
 import { PracticaDeck } from "@/components/practica/PracticaDeck";
+import { PaywallGate } from "@/components/paywall/PaywallGate";
 
 const VALID: Tarea[] = [1, 2, 3, 4, 5];
 
@@ -51,7 +52,12 @@ export default async function PracticarTareaPage({
           </Link>
         </p>
       </header>
-      <PracticaDeck preguntas={preguntas} />
+      <PaywallGate
+        title="Practicar es premium"
+        subtitle="La práctica con feedback inmediato, explicación razonada de cada distractor y mnemotécnico es lo que diferencia esta plataforma de la app oficial gratuita. Pruébala primero con la demo de 10 preguntas."
+      >
+        <PracticaDeck preguntas={preguntas} />
+      </PaywallGate>
     </main>
   );
 }

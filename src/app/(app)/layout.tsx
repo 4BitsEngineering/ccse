@@ -33,6 +33,12 @@ export default function AppLayout({
             >
               Simulacros
             </Link>
+            <Link
+              href="/cuenta"
+              className="text-zinc-700 dark:text-zinc-300 hover:underline"
+            >
+              Cuenta
+            </Link>
             <span className="text-zinc-300 dark:text-zinc-700">|</span>
             {TAREAS.map((t) => (
               <Link
