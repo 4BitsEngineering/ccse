@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPreguntasPorTarea, type Tarea } from "@/lib/content";
-import { PracticaDeck } from "@/components/practica/PracticaDeck";
+import { PracticaWithFilters } from "@/components/practica/PracticaWithFilters";
 import { PaywallGate } from "@/components/paywall/PaywallGate";
 
 const VALID: Tarea[] = [1, 2, 3, 4, 5];
@@ -56,7 +56,7 @@ export default async function PracticarTareaPage({
         title="Practicar es premium"
         subtitle="La práctica con feedback inmediato, explicación razonada de cada distractor y mnemotécnico es lo que diferencia esta plataforma de la app oficial gratuita. Pruébala primero con la demo de 10 preguntas."
       >
-        <PracticaDeck
+        <PracticaWithFilters
           preguntas={preguntas}
           contexto={{
             tarea: t,

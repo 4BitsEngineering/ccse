@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { loadBanco } from "@/lib/content";
 import { TEMA_PDF, MANUAL_OFICIAL_PDF } from "@/lib/pdfs";
 import { PaywallGate } from "@/components/paywall/PaywallGate";
+import { DashboardContinuar } from "@/components/progreso/DashboardContinuar";
 
 const TAREAS = [
   { n: 1, titulo: "Gobierno, legislación y participación" },
@@ -31,11 +32,9 @@ export default function DashboardPage() {
           Manual {banco.version_manual} · {banco.preguntas.length} preguntas
           oficiales · 5 simulacros.
         </p>
-        <p className="mt-2 text-xs text-zinc-500">
-          Tracking de progreso pendiente (Sprint 3). Por ahora cada práctica
-          empieza desde cero.
-        </p>
       </header>
+
+      <DashboardContinuar />
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {conteoPorTarea.map((t) => (

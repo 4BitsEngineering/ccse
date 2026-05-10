@@ -5,6 +5,7 @@ import { extractToc } from "@/lib/markdown";
 import { TEMA_PDF } from "@/lib/pdfs";
 import { TemaRenderer } from "@/components/content/TemaRenderer";
 import { TemaToc } from "@/components/content/TemaToc";
+import { EstudiarTracker } from "@/components/content/EstudiarTracker";
 import { PaywallGate } from "@/components/paywall/PaywallGate";
 
 const VALID: Tarea[] = [1, 2, 3, 4, 5];
@@ -37,6 +38,8 @@ export default async function EstudiarTareaPage({
   const md = loadTema(t);
   const toc = extractToc(md);
   const isFree = t === 1;
+  // Solo trackeamos cuando el contenido es accesible (gratis o desbloqueado).
+  // El tracker es no-op si no hay window, así que es seguro montarlo siempre.
 
   const body = (
     <>
@@ -76,6 +79,7 @@ export default async function EstudiarTareaPage({
         {isFree && <TemaToc items={toc} />}
       </aside>
       <main className="flex-1 min-w-0">
+        <EstudiarTracker tarea={t} />
         {isFree ? (
           body
         ) : (
