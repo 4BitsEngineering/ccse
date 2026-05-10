@@ -2,9 +2,9 @@ import { Card } from "@/components/ui/card";
 
 const PILARES = [
   {
-    titulo: "Apuntes claros en español B1",
+    titulo: "Apuntes claros en español B1 + PDF descargable",
     cuerpo:
-      "No tienes que ser un experto en política para entenderlos. Los 5 temas están escritos en español sencillo, con tablas y ejemplos. Listos para leer desde el móvil en ratos sueltos.",
+      "5 temas escritos en español sencillo, con tablas y ejemplos. Léelos en el navegador o descárgalos en PDF para repasar sin internet, en el metro o en la cola del médico.",
   },
   {
     titulo: "Cada pregunta, razonada",

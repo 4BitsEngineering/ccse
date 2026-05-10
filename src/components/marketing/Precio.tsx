@@ -4,7 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 
 const INCLUYE = [
   "Las 300 preguntas oficiales del banco 2026 con explicación completa",
-  "Los 5 temas del manual en español B1, con tablas y ejemplos",
+  "Los 5 temas en español B1, en web y también en PDF para leer offline o imprimir",
   "5 simulacros con cronómetro y desglose por tarea",
   "Repaso espaciado de las preguntas que fallaste",
   "Actualización automática al manual vigente del Cervantes",
