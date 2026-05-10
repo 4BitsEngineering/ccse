@@ -34,6 +34,18 @@ export default function AppLayout({
               Simulacros
             </Link>
             <Link
+              href="/repaso"
+              className="text-zinc-700 dark:text-zinc-300 hover:underline"
+            >
+              Repaso
+            </Link>
+            <Link
+              href="/progreso"
+              className="text-zinc-700 dark:text-zinc-300 hover:underline"
+            >
+              Progreso
+            </Link>
+            <Link
               href="/cuenta"
               className="text-zinc-700 dark:text-zinc-300 hover:underline"
             >
