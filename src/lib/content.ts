@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { z } from "zod";
+import { shuffle } from "@/lib/utils";
 
 export const OpcionesSchema = z.object({
   a: z.string(),
@@ -74,15 +75,6 @@ export function getPreguntasPorTarea(t: Tarea): Pregunta[] {
 
 export function getPreguntaPorId(id: string): Pregunta | undefined {
   return loadBanco().preguntas.find((p) => p.id === id);
-}
-
-export function shuffle<T>(arr: readonly T[]): T[] {
-  const a = arr.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
 }
 
 export function getDemoPreguntas(n = 10): Pregunta[] {

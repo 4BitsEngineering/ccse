@@ -1,0 +1,62 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { loadTema, type Tarea } from "@/lib/content";
+import { extractToc } from "@/lib/markdown";
+import { TemaRenderer } from "@/components/content/TemaRenderer";
+import { TemaToc } from "@/components/content/TemaToc";
+
+const VALID: Tarea[] = [1, 2, 3, 4, 5];
+
+export function generateStaticParams() {
+  return VALID.map((n) => ({ tarea: String(n) }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ tarea: string }>;
+}) {
+  const { tarea } = await params;
+  return {
+    title: `Estudiar Tarea ${tarea} — CCSE`,
+    description: `Apuntes en castellano B1 de la Tarea ${tarea} del manual CCSE 2026.`,
+  };
+}
+
+export default async function EstudiarTareaPage({
+  params,
+}: {
+  params: Promise<{ tarea: string }>;
+}) {
+  const { tarea } = await params;
+  const t = Number(tarea) as Tarea;
+  if (!VALID.includes(t)) notFound();
+
+  const md = loadTema(t);
+  const toc = extractToc(md);
+
+  return (
+    <div className="mx-auto max-w-7xl px-6 py-10 lg:flex lg:gap-10">
+      <aside className="lg:sticky lg:top-10 lg:self-start lg:w-64 lg:shrink-0 mb-8 lg:mb-0">
+        <TemaToc items={toc} />
+      </aside>
+      <main className="flex-1 min-w-0">
+        <TemaRenderer md={md} />
+        <footer className="mt-12 flex items-center justify-between border-t border-zinc-200 dark:border-zinc-800 pt-6 text-sm">
+          <Link
+            href="/dashboard"
+            className="text-zinc-700 dark:text-zinc-300 hover:underline"
+          >
+            ← Dashboard
+          </Link>
+          <Link
+            href={`/practicar/${t}`}
+            className="font-medium hover:underline"
+          >
+            Practicar Tarea {t} →
+          </Link>
+        </footer>
+      </main>
+    </div>
+  );
+}
