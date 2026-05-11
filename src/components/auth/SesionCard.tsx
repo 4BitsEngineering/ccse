@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { signOut } from "@/lib/supabase/actions";
+import { buttonVariants } from "@/components/ui/button";
+import { SignOutButton } from "@/components/auth/SignOutButton";
 
 /**
  * Bloque "Sesión" para /cuenta. Server Component: lee el user del
@@ -50,16 +50,9 @@ export function SesionCard({ email }: { email: string | null }) {
         Tu cuenta:{" "}
         <span className="font-medium text-ink break-all">{email}</span>
       </p>
-      <form action={signOut} className="mt-4">
-        <Button
-          type="submit"
-          variant="ink-outline"
-          size="sm"
-          className="h-10 px-4 rounded-xl"
-        >
-          Cerrar sesión
-        </Button>
-      </form>
+      <div className="mt-4">
+        <SignOutButton />
+      </div>
     </div>
   );
 }

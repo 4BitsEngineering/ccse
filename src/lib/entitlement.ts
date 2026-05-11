@@ -49,7 +49,7 @@ function setEntitlement(e: Entitlement): void {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(e));
 }
 
-function forgetEntitlement(): void {
+export function forgetEntitlement(): void {
   if (!isBrowser()) return;
   window.localStorage.removeItem(STORAGE_KEY);
 }
