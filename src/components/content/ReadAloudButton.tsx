@@ -131,7 +131,7 @@ export function ReadAloudButton({ text }: { text: string }) {
         aria-label="Velocidad de lectura"
         className="flex items-center gap-1 text-xs"
       >
-        {[1, 1.25, 1.5].map((r) => (
+        {[1, 1.5, 2].map((r) => (
           <button
             key={r}
             type="button"
