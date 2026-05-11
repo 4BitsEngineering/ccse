@@ -59,15 +59,22 @@ export default async function PreguntaPage({ params }: RouteParams) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta mb-3">
+        <Link
+          href={`/tarea/${p.tarea}/preview`}
+          className="hover:text-terracotta-deep"
+        >
+          ← Tarea {p.tarea}
+        </Link>{" "}
+        · Pregunta {p.id_oficial} · Manual {banco.version_manual}
+      </p>
+
       <div className="flex flex-wrap gap-2 mb-4">
         <span className="px-2.5 py-1 rounded-full bg-paper-warm border border-rule text-[11px] font-medium tracking-wide text-ink-soft">
           Tarea {p.tarea}
         </span>
         <span className="px-2.5 py-1 rounded-full bg-olive/10 text-olive text-[11px] font-medium">
           {p.dificultad}
-        </span>
-        <span className="ml-auto text-[11px] text-ink-muted self-center">
-          nº {p.id_oficial} · Manual {banco.version_manual}
         </span>
       </div>
 

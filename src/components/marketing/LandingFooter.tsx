@@ -1,10 +1,24 @@
 import Link from "next/link";
 import { Seal } from "@/components/ui/seal";
 
+const PRODUCTO = [
+  { href: "/demo", label: "Demo gratis" },
+  { href: "/precio", label: "Precio" },
+  { href: "/dashboard", label: "Panel" },
+  { href: "/cuenta", label: "Tu cuenta" },
+];
+
+const LEGAL = [
+  { href: "/cambios", label: "Cambios" },
+  { href: "/legal/privacidad", label: "Privacidad" },
+  { href: "/legal/condiciones", label: "Condiciones" },
+  { href: "/legal/cookies", label: "Cookies" },
+];
+
 export function LandingFooter() {
   return (
     <footer className="bg-paper-warm border-t border-rule">
-      <div className="mx-auto max-w-2xl px-6 py-12 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+      <div className="mx-auto max-w-2xl px-6 py-12 grid gap-8 sm:grid-cols-[1fr_auto_auto]">
         <div>
           <div className="flex items-center gap-2.5">
             <Seal size={26} />
@@ -14,28 +28,35 @@ export function LandingFooter() {
             4Bits Engineering · Manual CCSE 2026 del Instituto Cervantes.
           </p>
         </div>
-        <nav className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-ink-soft sm:flex sm:flex-col sm:items-end">
-          <Link href="/demo" className="hover:text-ink">
-            Demo
-          </Link>
-          <Link href="/dashboard" className="hover:text-ink">
-            Estudiar
-          </Link>
-          <Link href="/simulacro" className="hover:text-ink">
-            Simulacros
-          </Link>
-          <Link href="/cambios" className="hover:text-ink">
-            Cambios
-          </Link>
-          <Link href="/legal/privacidad" className="hover:text-ink">
-            Privacidad
-          </Link>
-          <Link href="/legal/condiciones" className="hover:text-ink">
-            Condiciones
-          </Link>
-          <Link href="/legal/cookies" className="hover:text-ink">
-            Cookies
-          </Link>
+
+        <nav>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted mb-3">
+            Producto
+          </p>
+          <ul className="space-y-1.5 text-sm text-ink-soft">
+            {PRODUCTO.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="hover:text-ink">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted mb-3">
+            Legal
+          </p>
+          <ul className="space-y-1.5 text-sm text-ink-soft">
+            {LEGAL.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="hover:text-ink">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
       </div>
     </footer>

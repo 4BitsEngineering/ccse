@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { PreguntaCard } from "@/components/content/PreguntaCard";
 import { Underline } from "@/components/ui/underline";
 import type { Pregunta } from "@/lib/content";
@@ -115,6 +116,35 @@ function DemoResults({
         <p className="mt-3 text-sm text-ink-soft">{tagline}</p>
       </div>
 
+      {/* CTA conversión: la demo termina aquí, llévate al precio */}
+      <div className="rounded-2xl bg-terracotta text-cream p-6">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] opacity-90">
+          Acceso completo
+        </p>
+        <h3 className="mt-2 font-serif text-2xl font-medium leading-tight tracking-tight">
+          Las{" "}
+          <span className="italic">otras 290 preguntas</span> con explicación,
+          5 simulacros y los apuntes.
+        </h3>
+        <p className="mt-3 text-sm opacity-90">
+          4,99 € una sola vez · 365 días de acceso. Sin suscripción.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link
+            href="/precio"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-cream text-terracotta-deep px-4 h-11 text-sm font-semibold hover:bg-paper-warm"
+          >
+            Ver precio →
+          </Link>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 px-4 h-11 text-sm font-medium text-cream/90 hover:text-cream"
+          >
+            Volver al inicio
+          </Link>
+        </div>
+      </div>
+
       <section>
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted mb-3">
           Revisa cada respuesta
@@ -131,6 +161,27 @@ function DemoResults({
           ))}
         </div>
       </section>
+
+      <div className="pt-4 flex flex-wrap gap-3">
+        <Link
+          href="/precio"
+          className={
+            buttonVariants({ variant: "terracotta" }) +
+            " h-12 px-5 rounded-xl text-base"
+          }
+        >
+          Activar acceso 4,99 € →
+        </Link>
+        <Link
+          href="/demo"
+          className={
+            buttonVariants({ variant: "ink-outline" }) +
+            " h-12 px-5 rounded-xl text-base"
+          }
+        >
+          Otra ronda de 10 preguntas
+        </Link>
+      </div>
     </div>
   );
 }

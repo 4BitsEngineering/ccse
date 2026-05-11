@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { Seal } from "@/components/ui/seal";
 import { Underline } from "@/components/ui/underline";
 import { getDemoPreguntas } from "@/lib/content";
 import { DemoDeck } from "@/components/practica/DemoDeck";
@@ -16,16 +14,6 @@ export default function DemoPage() {
   const preguntas = getDemoPreguntas(10);
   return (
     <main className="mx-auto max-w-2xl px-6 py-10">
-      <header className="flex items-center gap-2.5 mb-8">
-        <Seal size={28} />
-        <Link
-          href="/"
-          className="font-serif text-lg font-medium tracking-wide"
-        >
-          CCSE
-        </Link>
-      </header>
-
       <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
         Sin registro · Sin tarjeta
       </p>

@@ -59,7 +59,7 @@ export function RepasoClient({ banco }: { banco: Pregunta[] }) {
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
-            href="/practicar/1"
+            href="/practicar"
             className={
               buttonVariants({ variant: "terracotta" }) +
               " h-11 px-4 rounded-xl"

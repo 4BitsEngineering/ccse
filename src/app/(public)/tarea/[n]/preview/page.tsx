@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Seal } from "@/components/ui/seal";
 import { Underline } from "@/components/ui/underline";
 import { loadTema, type Tarea } from "@/lib/content";
 import { extractToc, splitMdAtMidpoint } from "@/lib/markdown";
@@ -61,16 +60,6 @@ export default async function TareaPreviewPage({
         <TemaToc items={toc} />
       </aside>
       <main className="flex-1 min-w-0">
-        <div className="flex items-center gap-2.5 mb-8">
-          <Seal size={28} />
-          <Link
-            href="/"
-            className="font-serif text-lg font-medium tracking-wide"
-          >
-            CCSE
-          </Link>
-        </div>
-
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
           {isFree ? "Tarea muestra · gratis" : "Vista previa pública"}
         </p>

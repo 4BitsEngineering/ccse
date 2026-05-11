@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Underline } from "@/components/ui/underline";
 
 export const metadata = {
   title: "Cambios — CCSE",
@@ -21,15 +21,12 @@ const TIPO_LABEL: Record<Cambio["tipo"], string> = {
   legal: "Legal",
 };
 
-const TIPO_COLOR: Record<Cambio["tipo"], string> = {
-  lanzamiento:
-    "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
-  contenido:
-    "bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300",
-  errata: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
-  funcionalidad:
-    "bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300",
-  legal: "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200",
+const TIPO_STYLE: Record<Cambio["tipo"], string> = {
+  lanzamiento: "bg-olive/15 text-olive",
+  contenido: "bg-paper-warm text-ink-soft border border-rule",
+  errata: "bg-terracotta-soft/30 text-terracotta-deep",
+  funcionalidad: "bg-terracotta/[0.12] text-terracotta-deep",
+  legal: "bg-paper-warm text-ink-soft border border-rule",
 };
 
 const CAMBIOS: Cambio[] = [
@@ -44,47 +41,44 @@ const CAMBIOS: Cambio[] = [
 
 export default function CambiosPage() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-12">
-      <header className="mb-8">
-        <Link href="/" className="text-sm text-zinc-500 hover:underline">
-          ← Inicio
-        </Link>
-        <h1 className="mt-3 text-3xl font-bold tracking-tight">Cambios</h1>
-        <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-          Registro público de actualizaciones del banco, erratas
-          corregidas y novedades de la plataforma.
-        </p>
-        <p className="mt-2 text-xs text-zinc-500">
-          Cuando publiquemos el manual nuevo del Cervantes (esperado en
-          diciembre), las preguntas afectadas aparecerán aquí.
-        </p>
-      </header>
+    <main className="mx-auto max-w-2xl px-6 py-10">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
+        Registro público
+      </p>
+      <h1 className="mt-2 font-serif text-4xl sm:text-5xl font-medium leading-[1.05] tracking-tight">
+        <span className="italic text-terracotta-deep">Cambios</span> de la
+        plataforma.
+      </h1>
+      <Underline width={170} className="mt-1" />
+      <p className="mt-4 text-sm text-ink-soft">
+        Actualizaciones del banco, erratas corregidas y novedades. Cuando el
+        Cervantes publique manual nuevo, las preguntas afectadas aparecen aquí.
+      </p>
 
-      <ol className="space-y-6">
+      <ol className="mt-8 space-y-6">
         {CAMBIOS.map((c, i) => (
-          <li
-            key={i}
-            className="border-l-2 border-zinc-200 dark:border-zinc-800 pl-4"
-          >
+          <li key={i} className="border-l-2 border-rule pl-4">
             <div className="flex flex-wrap items-center gap-2 text-sm">
               <time
                 dateTime={c.fecha}
-                className="font-mono text-zinc-500"
+                className="font-mono text-ink-muted tabular-nums"
               >
                 {c.fecha}
               </time>
               <span
                 className={
-                  "rounded px-2 py-0.5 text-xs font-medium " +
-                  TIPO_COLOR[c.tipo]
+                  "rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide " +
+                  TIPO_STYLE[c.tipo]
                 }
               >
                 {TIPO_LABEL[c.tipo]}
               </span>
             </div>
-            <h2 className="mt-1 font-semibold">{c.titulo}</h2>
+            <h2 className="mt-1.5 font-sans font-semibold text-ink">
+              {c.titulo}
+            </h2>
             {c.detalle && (
-              <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-300">
+              <p className="mt-1 font-serif text-[15px] leading-relaxed text-ink-soft">
                 {c.detalle}
               </p>
             )}

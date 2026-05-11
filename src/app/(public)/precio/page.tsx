@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { Seal } from "@/components/ui/seal";
 import { Precio } from "@/components/marketing/Precio";
 
 export const metadata = {
@@ -34,18 +32,6 @@ const REASSURANCES = [
 export default function PrecioPage() {
   return (
     <>
-      <header className="border-b border-rule">
-        <div className="mx-auto max-w-2xl px-6 py-4 flex items-center gap-3">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 font-serif text-lg font-medium tracking-wide"
-          >
-            <Seal size={28} />
-            <span>CCSE</span>
-          </Link>
-        </div>
-      </header>
-
       <Precio />
 
       <section className="border-b border-rule">

@@ -39,43 +39,36 @@ export default function PracticarIndexPage() {
 
       <ul className="mt-8 space-y-3">
         {conteo.map((t) => (
-          <li key={t.n}>
+          <li
+            key={t.n}
+            className="flex items-center gap-4 rounded-2xl border border-rule bg-cream p-5 hover:border-ink/40 transition-colors"
+          >
+            <span className="w-12 h-12 rounded-xl bg-paper-warm border border-rule grid place-items-center font-serif italic text-2xl font-medium text-ink-soft shrink-0">
+              {t.n}
+            </span>
+            <div className="flex-1 min-w-0">
+              <p className="font-serif text-xl font-medium tracking-tight leading-snug">
+                Tarea {t.n}
+              </p>
+              <p className="text-xs text-ink-muted mt-0.5">
+                {t.titulo} · {t.total} preguntas
+              </p>
+            </div>
+            <Link
+              href={`/estudiar/${t.n}`}
+              className="text-xs text-ink-soft hover:text-ink px-2.5 py-1.5 rounded-full hover:bg-paper-warm"
+            >
+              Apuntes
+            </Link>
             <Link
               href={`/practicar/${t.n}`}
-              className="flex items-center gap-4 rounded-2xl border border-rule bg-cream p-5 hover:border-ink/40 transition-colors group"
+              className="text-xs font-semibold text-cream bg-terracotta hover:bg-terracotta-deep px-3 py-1.5 rounded-full"
             >
-              <span className="w-12 h-12 rounded-xl bg-paper-warm border border-rule grid place-items-center font-serif italic text-2xl font-medium text-ink-soft shrink-0">
-                {t.n}
-              </span>
-              <div className="flex-1 min-w-0">
-                <p className="font-serif text-xl font-medium tracking-tight leading-snug">
-                  Tarea {t.n}
-                </p>
-                <p className="text-xs text-ink-muted mt-0.5">
-                  {t.titulo} · {t.total} preguntas
-                </p>
-              </div>
-              <span
-                aria-hidden
-                className="text-ink-muted group-hover:text-terracotta transition-colors"
-              >
-                →
-              </span>
+              Practicar →
             </Link>
           </li>
         ))}
       </ul>
-
-      <p className="mt-8 text-sm text-ink-soft">
-        ¿Prefieres leer el tema antes? Cada tarea tiene sus{" "}
-        <Link
-          href="/dashboard"
-          className="text-ink underline decoration-terracotta underline-offset-2"
-        >
-          apuntes en el panel
-        </Link>
-        .
-      </p>
     </main>
   );
 }
