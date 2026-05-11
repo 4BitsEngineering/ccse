@@ -8,7 +8,7 @@ export function EstudiarTracker({ tarea }: { tarea: number }) {
     setUltimaActividad({
       tipo: "estudiar",
       id: tarea,
-      titulo: `Estudiar Tarea ${tarea}`,
+      titulo: `Estudiar Tema ${tarea}`,
       href: `/estudiar/${tarea}`,
     });
   }, [tarea]);

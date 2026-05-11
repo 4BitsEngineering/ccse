@@ -44,7 +44,7 @@ export function PracticaDeck({
               (aprobaria ? "text-olive" : "text-terracotta-deep")
             }
           >
-            Tarea completada
+            Práctica completada
           </p>
           <h2 className="mt-2 font-serif text-3xl sm:text-4xl font-medium leading-[1.1] tracking-tight">
             {aprobaria ? "Buen ritmo." : "A seguir."}{" "}

@@ -60,7 +60,7 @@ export function PreguntaCard({
       {/* Chips */}
       <div className="flex flex-wrap gap-2 mb-4">
         <span className="px-2.5 py-1 rounded-full bg-paper-warm border border-rule text-[11px] font-medium tracking-wide text-ink-soft">
-          Tarea {pregunta.tarea}
+          Tema {pregunta.tarea}
         </span>
         <span className="px-2.5 py-1 rounded-full bg-olive/10 text-olive text-[11px] font-medium">
           {DIFICULTAD_LABEL[pregunta.dificultad] ?? pregunta.dificultad}

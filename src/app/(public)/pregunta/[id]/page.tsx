@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: RouteParams) {
   const titulo = p.enunciado.replace(/\.$/, "");
   return {
     title: `${titulo} — Pregunta ${p.id_oficial} CCSE`,
-    description: `Pregunta ${p.id_oficial} del banco oficial CCSE 2026 (Tarea ${p.tarea}). Enunciado, opciones y respuesta correcta. Explicación razonada con acceso completo.`,
+    description: `Pregunta ${p.id_oficial} del banco oficial CCSE 2026 (Tema ${p.tarea}). Enunciado, opciones y respuesta correcta. Explicación razonada con acceso completo.`,
     alternates: { canonical: `/pregunta/${p.id_oficial}` },
   };
 }
@@ -64,14 +64,14 @@ export default async function PreguntaPage({ params }: RouteParams) {
           href={`/tarea/${p.tarea}/preview`}
           className="hover:text-terracotta-deep"
         >
-          ← Tarea {p.tarea}
+          ← Tema {p.tarea}
         </Link>{" "}
         · Pregunta {p.id_oficial} · Manual {banco.version_manual}
       </p>
 
       <div className="flex flex-wrap gap-2 mb-4">
         <span className="px-2.5 py-1 rounded-full bg-paper-warm border border-rule text-[11px] font-medium tracking-wide text-ink-soft">
-          Tarea {p.tarea}
+          Tema {p.tarea}
         </span>
         <span className="px-2.5 py-1 rounded-full bg-olive/10 text-olive text-[11px] font-medium">
           {p.dificultad}
@@ -174,7 +174,7 @@ export default async function PreguntaPage({ params }: RouteParams) {
           href={`/tarea/${p.tarea}/preview`}
           className="text-ink-soft hover:text-ink"
         >
-          ← Tema completo de la Tarea {p.tarea}
+          ← Volver al Tema {p.tarea}
         </Link>
         <Link
           href="/demo"

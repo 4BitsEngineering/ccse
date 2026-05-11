@@ -308,7 +308,7 @@ function SimulacroResults({
                   {t.tarea}
                 </span>
                 <span className="flex-1 font-sans text-[14.5px] text-ink">
-                  {TAREA_LABEL[t.tarea] ?? `Tarea ${t.tarea}`}
+                  {TAREA_LABEL[t.tarea] ?? `Tema ${t.tarea}`}
                 </span>
                 <div className="w-20 h-1 rounded-sm bg-rule">
                   <div

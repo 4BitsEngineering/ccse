@@ -26,8 +26,8 @@ export async function generateMetadata({
 }) {
   const { tarea } = await params;
   return {
-    title: `Practicar Tarea ${tarea} — CCSE`,
-    description: `Practica las preguntas oficiales de la Tarea ${tarea} con feedback inmediato y razonamiento.`,
+    title: `Practicar Tema ${tarea} — CCSE`,
+    description: `Practica las preguntas oficiales del Tema ${tarea} con feedback inmediato y razonamiento.`,
   };
 }
 
@@ -51,7 +51,7 @@ export default async function PracticarTareaPage({
         >
           ← Practicar
         </Link>{" "}
-        · Tarea {t} · {preguntas.length} preguntas
+        · Tema {t} · {preguntas.length} preguntas
       </p>
       <h1 className="mt-2 font-serif text-3xl sm:text-4xl font-medium leading-[1.1] tracking-tight text-balance">
         {TITULO_TAREA[t]}
@@ -77,7 +77,7 @@ export default async function PracticarTareaPage({
             preguntas={preguntas}
             contexto={{
               tarea: t,
-              titulo: `Practicar Tarea ${t}`,
+              titulo: `Practicar Tema ${t}`,
               href: `/practicar/${t}`,
             }}
           />

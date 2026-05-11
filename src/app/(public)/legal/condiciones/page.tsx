@@ -75,7 +75,7 @@ export default function CondicionesPage() {
         </li>
         <li>
           Para evitar dudas antes de pagar, ofrecemos una demo gratuita
-          de 10 preguntas y la Tarea 1 entera abiertas sin registro.
+          de 10 preguntas y el Tema 1 entero abierto sin registro.
         </li>
       </ul>
       <p>

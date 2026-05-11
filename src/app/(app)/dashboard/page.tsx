@@ -120,7 +120,7 @@ export default function DashboardPage() {
               className="flex items-center justify-between rounded-xl border border-rule bg-cream px-4 py-3.5 text-sm hover:border-ink/40 transition-colors"
             >
               <span>
-                <span className="font-medium text-ink">Tarea 1</span>{" "}
+                <span className="font-medium text-ink">Tema 1</span>{" "}
                 <span className="text-ink-muted">
                   — {conteoPorTarea[0].titulo}
                 </span>
@@ -138,7 +138,7 @@ export default function DashboardPage() {
         <div className="mt-3">
           <PaywallGate
             title="Resto de descargas — premium"
-            subtitle="Las Tareas 2-5 en PDF y el manual oficial completo del Cervantes están incluidos en el acceso anual de 4,99 €."
+            subtitle="Los Temas 2-5 en PDF y el manual oficial completo del Cervantes están incluidos en el acceso anual de 4,99 €."
           >
             <ul className="space-y-2">
               {conteoPorTarea
@@ -152,7 +152,7 @@ export default function DashboardPage() {
                     >
                       <span>
                         <span className="font-medium text-ink">
-                          Tarea {t.n}
+                          Tema {t.n}
                         </span>{" "}
                         <span className="text-ink-muted">— {t.titulo}</span>
                       </span>

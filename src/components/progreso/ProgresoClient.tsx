@@ -205,7 +205,7 @@ function BarraTarea({ s }: { s: StatsTarea }) {
     <li className="py-3 border-b border-rule first:border-t first:border-t-rule">
       <div className="flex items-baseline justify-between">
         <span className="font-sans text-[14.5px] text-ink">
-          Tarea {s.tarea}{" "}
+          Tema {s.tarea}{" "}
           <span className="text-ink-muted font-normal text-[13px]">
             — {TAREA_TITULO[s.tarea] ?? ""}
           </span>

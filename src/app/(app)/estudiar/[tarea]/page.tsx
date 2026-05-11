@@ -31,8 +31,8 @@ export async function generateMetadata({
 }) {
   const { tarea } = await params;
   return {
-    title: `Estudiar Tarea ${tarea} — CCSE`,
-    description: `Apuntes en castellano B1 de la Tarea ${tarea} del manual CCSE 2026.`,
+    title: `Estudiar Tema ${tarea} — CCSE`,
+    description: `Apuntes en castellano B1 del Tema ${tarea} del manual CCSE 2026.`,
   };
 }
 
@@ -78,7 +78,7 @@ export default async function EstudiarTareaPage({
             " h-11 px-4 rounded-xl"
           }
         >
-          Practicar Tarea {t} →
+          Practicar Tema {t} →
         </Link>
       </footer>
     </>
@@ -96,7 +96,7 @@ export default async function EstudiarTareaPage({
           <Link href="/estudiar" className="hover:text-terracotta-deep">
             ← Estudiar
           </Link>{" "}
-          · Tarea {t}
+          · Tema {t}
         </p>
         <h1 className="mt-2 font-serif text-4xl sm:text-5xl font-medium leading-[1.05] tracking-tight text-balance">
           {TITULO_TAREA[t]}
@@ -108,7 +108,7 @@ export default async function EstudiarTareaPage({
         ) : (
           <PaywallGate
             title={`Tema ${t} — contenido premium`}
-            subtitle={`La Tarea 1 está abierta como muestra. Para leer el resto de los temas, activar la práctica con razonamientos y descargar los PDFs, activa tu acceso por 4,99 €.`}
+            subtitle={`El Tema 1 está abierto como muestra. Para leer el resto de los temas, activar la práctica con razonamientos y descargar los PDFs, activa tu acceso por 4,99 €.`}
           >
             {body}
           </PaywallGate>

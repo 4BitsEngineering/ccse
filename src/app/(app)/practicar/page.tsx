@@ -48,7 +48,7 @@ export default function PracticarIndexPage() {
             </span>
             <div className="flex-1 min-w-0">
               <p className="font-serif text-xl font-medium tracking-tight leading-snug">
-                Tarea {t.n}
+                Tema {t.n}
               </p>
               <p className="text-xs text-ink-muted mt-0.5">
                 {t.titulo} · {t.total} preguntas

@@ -31,8 +31,8 @@ export async function generateMetadata({
   if (!VALID.includes(t)) return {};
   const titulo = TAREA_TITULO[t];
   return {
-    title: `Tarea ${t} CCSE — ${titulo}`,
-    description: `Apuntes en castellano B1 para la Tarea ${t} del manual oficial CCSE 2026 del Instituto Cervantes: ${titulo.toLowerCase()}.`,
+    title: `Tema ${t} CCSE — ${titulo}`,
+    description: `Apuntes en castellano B1 para el Tema ${t} del manual oficial CCSE 2026 del Instituto Cervantes: ${titulo.toLowerCase()}.`,
     alternates: { canonical: `/tarea/${t}/preview` },
   };
 }
@@ -61,7 +61,7 @@ export default async function TareaPreviewPage({
       </aside>
       <main className="flex-1 min-w-0">
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
-          {isFree ? "Tarea muestra · gratis" : "Vista previa pública"}
+          {isFree ? "Tema muestra · gratis" : "Vista previa pública"}
         </p>
         <h1 className="mt-2 font-serif text-4xl sm:text-5xl font-medium leading-[1.05] tracking-tight text-balance">
           {TAREA_TITULO[t]}
@@ -79,7 +79,7 @@ export default async function TareaPreviewPage({
               Sigue leyendo el tema completo.
             </h2>
             <p className="mt-2 font-serif text-[15px] leading-relaxed text-ink-soft">
-              Esta es la primera mitad de la Tarea {t}. La segunda mitad, las
+              Esta es la primera mitad del Tema {t}. La segunda mitad, las
               explicaciones razonadas de las preguntas oficiales, los
               simulacros y el repaso espaciado están en el acceso completo.
             </p>
