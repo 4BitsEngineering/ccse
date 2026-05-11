@@ -15,8 +15,11 @@ export interface Entitlement {
   purchaseAt: string; // ISO
   expiresAt: string; // ISO 365 días después de purchaseAt
   manualVersion: string;
-  /** "mock" hasta Sprint Stripe-real */
+  /** "stripe" cuando lo escribió el webhook tras un Checkout; "mock"
+   *  para filas seed creadas a mano vía admin (test users). */
   source: "mock" | "stripe";
+  /** true si la fila tiene stripe_customer_id (el Portal lo necesita). */
+  hasStripeCustomer?: boolean;
 }
 
 const STORAGE_KEY = "ccse:v1:entitlement";
@@ -104,26 +107,3 @@ export async function syncEntitlementFromServer(): Promise<MeResponse["user"]> {
   }
 }
 
-/**
- * Compra mock contra el servidor: escribe la fila en la tabla
- * entitlements vía /api/comprar-mock. Requiere sesión. Cuando llegue
- * Stripe real, la fila la escribirá la Edge Function del webhook y
- * esta función desaparece.
- */
-export async function purchaseRemoteMock(): Promise<Entitlement | null> {
-  if (!isBrowser()) return null;
-  try {
-    const res = await fetch("/api/comprar-mock", {
-      method: "POST",
-      credentials: "same-origin",
-    });
-    if (!res.ok) return null;
-    const json = (await res.json()) as { entitlement?: Entitlement };
-    if (!json.entitlement) return null;
-    setEntitlement(json.entitlement);
-    window.dispatchEvent(new CustomEvent("ccse:entitlement-changed"));
-    return json.entitlement;
-  } catch {
-    return null;
-  }
-}

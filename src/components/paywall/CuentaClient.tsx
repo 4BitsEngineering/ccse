@@ -11,6 +11,7 @@ import {
   type Entitlement,
 } from "@/lib/entitlement";
 import { BuyButton } from "@/components/paywall/BuyButton";
+import { ReciboButton } from "@/components/paywall/ReciboButton";
 
 export function CuentaClient() {
   const [ent, setEnt] = useState<Entitlement | null>(null);
@@ -141,6 +142,7 @@ export function CuentaClient() {
             >
               Ir al panel
             </Link>
+            {ent.hasStripeCustomer && <ReciboButton />}
           </div>
         </div>
       )}

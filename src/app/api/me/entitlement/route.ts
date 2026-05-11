@@ -18,6 +18,7 @@ interface EntitlementRow {
   manual_version: string;
   purchased_at: string;
   expires_at: string;
+  stripe_customer_id: string | null;
 }
 
 export async function GET() {
@@ -33,7 +34,9 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from("entitlements")
-    .select("user_id, plan, source, manual_version, purchased_at, expires_at")
+    .select(
+      "user_id, plan, source, manual_version, purchased_at, expires_at, stripe_customer_id",
+    )
     .eq("user_id", user.id)
     .maybeSingle<EntitlementRow>();
 
@@ -51,6 +54,7 @@ export async function GET() {
         expiresAt: data.expires_at,
         manualVersion: data.manual_version,
         source: data.source === "stripe" ? "stripe" : "mock",
+        hasStripeCustomer: !!data.stripe_customer_id,
       }
     : null;
 

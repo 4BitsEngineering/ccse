@@ -2,26 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { purchaseRemoteMock } from "@/lib/entitlement";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 /**
- * Botón "Comprar 9,99 €". Mock hasta Stripe real: la compra escribe
- * directamente la fila en la tabla entitlements vía /api/comprar-mock.
+ * Botón "Comprar 9,99 €" → Stripe Checkout.
  *
- * Requiere sesión. Si el usuario no está logueado, redirige a
- * /registro?next=/cuenta — la fila necesita user_id sí o sí. Cuando
- * llegue Stripe este componente se sustituye por uno que llame a
- * /api/stripe/checkout y redirija a la sesión de Stripe Checkout.
+ * Llama a /api/stripe/checkout (que requiere sesión) y redirige a la
+ * URL hosted que devuelve. Si el usuario no tiene sesión, redirige a
+ * /registro?next=/cuenta — la compra necesita user_id en metadata.
  */
 export function BuyButton({
   size = "lg",
@@ -32,7 +21,6 @@ export function BuyButton({
   className?: string;
   label?: string;
 }) {
-  const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -40,84 +28,48 @@ export function BuyButton({
   const onClick = async () => {
     setError(null);
     setBusy(true);
-    const res = await fetch("/api/me/entitlement", {
+    const res = await fetch("/api/stripe/checkout", {
+      method: "POST",
       credentials: "same-origin",
-      cache: "no-store",
     });
-    const json = (await res.json().catch(() => ({}))) as {
-      user?: { id: string } | null;
-    };
-    setBusy(false);
-    if (!json.user) {
+    if (res.status === 401) {
       router.push("/registro?next=/cuenta");
       return;
     }
-    setOpen(true);
-  };
-
-  const confirm = async () => {
-    setError(null);
-    setBusy(true);
-    const remote = await purchaseRemoteMock();
-    setBusy(false);
-    if (!remote) {
-      setError("No se pudo activar el acceso. Inténtalo en un momento.");
+    const json = (await res.json().catch(() => ({}))) as {
+      url?: string;
+      error?: string;
+    };
+    if (!res.ok || !json.url) {
+      setBusy(false);
+      setError(json.error ?? "No se pudo iniciar el pago.");
       return;
     }
-    setOpen(false);
-    router.push("/cuenta");
-    router.refresh();
+    // No setBusy(false): vamos a navegar fuera, el botón queda en estado
+    // "Redirigiendo…" hasta que la página cambie.
+    window.location.href = json.url;
   };
 
   return (
-    <>
+    <div className="flex flex-col gap-2">
       <Button
+        type="button"
         variant="terracotta"
         size={size}
         className={cn("h-12 px-5 text-base rounded-xl", className)}
         onClick={onClick}
         disabled={busy}
       >
-        {busy && !open ? "…" : label}
+        {busy ? "Redirigiendo…" : label}
       </Button>
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Modo demo · sin pago real</DialogTitle>
-            <DialogDescription className="text-left">
-              Stripe aún no está conectado. Si confirmas, se activa un
-              acceso de prueba durante 365 días asociado a tu cuenta. En
-              producción esto será una sesión real de Stripe Checkout.
-            </DialogDescription>
-          </DialogHeader>
-          {error && (
-            <p
-              role="alert"
-              className="text-sm text-terracotta-deep bg-terracotta-soft/50 rounded-lg px-3 py-2"
-            >
-              {error}
-            </p>
-          )}
-          <DialogFooter className="flex flex-row gap-2 justify-end">
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className={buttonVariants({ variant: "outline" })}
-            >
-              Cancelar
-            </button>
-            <button
-              type="button"
-              onClick={confirm}
-              disabled={busy}
-              className={buttonVariants()}
-            >
-              {busy ? "Activando…" : "Activar acceso de prueba"}
-            </button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+      {error && (
+        <p
+          role="alert"
+          className="text-sm text-terracotta-deep bg-terracotta-soft/50 rounded-lg px-3 py-2"
+        >
+          {error}
+        </p>
+      )}
+    </div>
   );
 }
