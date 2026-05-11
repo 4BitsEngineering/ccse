@@ -3,6 +3,7 @@ import { Seal } from "@/components/ui/seal";
 
 const NAV = [
   { href: "/dashboard", label: "Panel" },
+  { href: "/estudiar", label: "Estudiar" },
   { href: "/practicar", label: "Practicar" },
   { href: "/simulacro", label: "Examen" },
   { href: "/progreso", label: "Progreso" },
@@ -18,8 +19,9 @@ export default function AppLayout({
       <header className="border-b border-rule">
         <div className="mx-auto max-w-6xl px-6 py-4 flex items-center gap-6">
           <Link
-            href="/dashboard"
+            href="/"
             className="flex items-center gap-2.5 font-serif text-lg font-medium tracking-wide"
+            aria-label="CCSE — volver al inicio"
           >
             <Seal size={26} />
             <span>CCSE</span>

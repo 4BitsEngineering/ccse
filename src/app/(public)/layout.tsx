@@ -32,6 +32,12 @@ export default function PublicLayout({
               Precio
             </Link>
             <Link
+              href="/dashboard"
+              className="text-ink-soft hover:text-ink hidden sm:inline"
+            >
+              Panel
+            </Link>
+            <Link
               href="/cuenta"
               className="text-ink-soft hover:text-ink hidden sm:inline"
             >

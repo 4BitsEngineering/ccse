@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSimulacroDinamico } from "@/lib/simulacro";
 import { SimulacroDeck } from "@/components/simulacro/SimulacroDeck";
@@ -35,13 +36,12 @@ export default async function SimulacroPage({
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-8">
-      <header className="mb-4">
-        <h1 className="text-2xl font-bold tracking-tight">Simulacro {n}</h1>
-        <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-          {preguntas.length} preguntas · 45 minutos · 15 aciertos para
-          aprobar · sin feedback hasta terminar.
-        </p>
-      </header>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta mb-3">
+        <Link href="/simulacro" className="hover:text-terracotta-deep">
+          ← Examen
+        </Link>{" "}
+        · Simulacro {n}
+      </p>
       {isFree ? (
         <SimulacroDeck preguntas={preguntas} simulacroId={n} />
       ) : (

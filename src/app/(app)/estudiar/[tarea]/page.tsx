@@ -66,10 +66,10 @@ export default async function EstudiarTareaPage({
       <TemaRenderer md={md} />
       <footer className="mt-12 flex items-center justify-between border-t border-rule pt-6 text-sm">
         <Link
-          href="/dashboard"
+          href="/estudiar"
           className="text-ink-soft hover:text-ink"
         >
-          ← Panel
+          ← Todos los temas
         </Link>
         <Link
           href={`/practicar/${t}`}
@@ -93,10 +93,10 @@ export default async function EstudiarTareaPage({
         <EstudiarTracker tarea={t} />
 
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
-          <Link href="/dashboard" className="hover:text-terracotta-deep">
-            ← Panel
+          <Link href="/estudiar" className="hover:text-terracotta-deep">
+            ← Estudiar
           </Link>{" "}
-          · Tarea {t} · apuntes
+          · Tarea {t}
         </p>
         <h1 className="mt-2 font-serif text-4xl sm:text-5xl font-medium leading-[1.05] tracking-tight text-balance">
           {TITULO_TAREA[t]}
