@@ -50,6 +50,31 @@ export function splitMdAtMidpoint(md: string): {
   };
 }
 
+/**
+ * Convierte markdown a texto plano apto para text-to-speech.
+ * Quita sintaxis (#, *, links, listas, blockquotes, tablas) y deja el
+ * contenido legible para SpeechSynthesisUtterance. Mantiene saltos de
+ * párrafo como pausas naturales.
+ */
+export function stripMarkdown(md: string): string {
+  return md
+    .replace(/```[\s\S]*?```/g, "")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\*([^*]+)\*/g, "$1")
+    .replace(/_([^_]+)_/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/^[-*+]\s+/gm, "")
+    .replace(/^\d+\.\s+/gm, "")
+    .replace(/^>\s+/gm, "")
+    .replace(/\|/g, ", ")
+    .replace(/^[-=]{3,}\s*$/gm, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 export function extractToc(md: string): TocItem[] {
   const lines = md.split("\n");
   const out: TocItem[] = [];

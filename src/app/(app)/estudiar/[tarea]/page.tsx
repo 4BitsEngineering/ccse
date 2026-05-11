@@ -3,11 +3,12 @@ import { notFound } from "next/navigation";
 import { Underline } from "@/components/ui/underline";
 import { buttonVariants } from "@/components/ui/button";
 import { loadTema, type Tarea } from "@/lib/content";
-import { extractToc } from "@/lib/markdown";
+import { extractToc, stripMarkdown } from "@/lib/markdown";
 import { TEMA_PDF } from "@/lib/pdfs";
 import { TemaRenderer } from "@/components/content/TemaRenderer";
 import { TemaToc } from "@/components/content/TemaToc";
 import { EstudiarTracker } from "@/components/content/EstudiarTracker";
+import { ReadAloudButton } from "@/components/content/ReadAloudButton";
 import { PaywallGate } from "@/components/paywall/PaywallGate";
 
 const VALID: Tarea[] = [1, 2, 3, 4, 5];
@@ -51,6 +52,9 @@ export default async function EstudiarTareaPage({
 
   const body = (
     <>
+      <div className="mb-4">
+        <ReadAloudButton text={stripMarkdown(md)} />
+      </div>
       <div className="mb-8 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-paper-warm border border-rule px-5 py-3.5 text-sm">
         <span className="text-ink-soft">
           ¿Prefieres leer offline o imprimir?

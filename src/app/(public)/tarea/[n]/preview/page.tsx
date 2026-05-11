@@ -2,9 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Underline } from "@/components/ui/underline";
 import { loadTema, type Tarea } from "@/lib/content";
-import { extractToc, splitMdAtMidpoint } from "@/lib/markdown";
+import { extractToc, splitMdAtMidpoint, stripMarkdown } from "@/lib/markdown";
 import { TemaRenderer } from "@/components/content/TemaRenderer";
 import { TemaToc } from "@/components/content/TemaToc";
+import { ReadAloudButton } from "@/components/content/ReadAloudButton";
 import { buttonVariants } from "@/components/ui/button";
 
 const VALID: Tarea[] = [1, 2, 3, 4, 5];
@@ -66,7 +67,11 @@ export default async function TareaPreviewPage({
         <h1 className="mt-2 font-serif text-4xl sm:text-5xl font-medium leading-[1.05] tracking-tight text-balance">
           {TAREA_TITULO[t]}
         </h1>
-        <Underline width={180} className="mt-1 mb-8" />
+        <Underline width={180} className="mt-1 mb-6" />
+
+        <div className="mb-6">
+          <ReadAloudButton text={stripMarkdown(first)} />
+        </div>
 
         <TemaRenderer md={first} />
 
