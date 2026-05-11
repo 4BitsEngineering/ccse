@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/ui/site-header";
+import { ProgresoSyncer } from "@/components/progreso/ProgresoSyncer";
 
 export default function AppLayout({
   children,
@@ -8,6 +9,7 @@ export default function AppLayout({
   return (
     <>
       <SiteHeader />
+      <ProgresoSyncer />
       {children}
     </>
   );

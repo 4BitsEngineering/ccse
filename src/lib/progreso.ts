@@ -93,6 +93,7 @@ export function setEstadoPregunta(estado: EstadoPregunta): void {
   const map = readEstados();
   map[estado.id] = estado;
   writeEstados(map);
+  pushEstadoToServer(estado);
 }
 
 /**
@@ -153,6 +154,7 @@ export function registrarSimulacro(r: SimulacroResultado): void {
   const all = readSimulacros();
   all.push(r);
   window.localStorage.setItem(KEY_SIMULACROS, JSON.stringify(all));
+  pushSimulacroToServer(r);
 }
 
 export function getUltimaActividad(): UltimaActividad | null {
@@ -243,4 +245,115 @@ export function getRepasoQueue(
     );
   });
   return candidatas.slice(0, max).map((x) => x.p);
+}
+
+/* ─── Sincronización con Supabase ───────────────────────────────── */
+
+/**
+ * Fire-and-forget: empuja un estado al server. Si no hay sesión, la
+ * respuesta 401 se traga silenciosamente — la cache local sigue siendo
+ * la fuente de verdad para usuarios anónimos.
+ */
+function pushEstadoToServer(estado: EstadoPregunta): void {
+  if (!isBrowser()) return;
+  fetch("/api/me/progreso/estado", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(estado),
+  }).catch(() => {});
+}
+
+function pushSimulacroToServer(r: SimulacroResultado): void {
+  if (!isBrowser()) return;
+  fetch("/api/me/progreso/simulacro", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(r),
+  }).catch(() => {});
+}
+
+interface ProgresoServerData {
+  estados: EstadoPregunta[];
+  simulacros: SimulacroResultado[];
+}
+
+function simulacroKey(s: SimulacroResultado): string {
+  return `${s.simulacroId}|${s.fechaIso}`;
+}
+
+/**
+ * Hidrata el progreso local desde Supabase y empuja al servidor lo que
+ * solo existía en local. Estrategia de merge:
+ *  - Por cada pregunta_id presente en ambos lados: gana el de
+ *    lastSeenAt más reciente. Si gana el local, se sube al servidor.
+ *  - Estados solo en server: se traen al local.
+ *  - Estados solo en local: se suben al server.
+ *  - Simulacros: unión por (simulacroId, fechaIso). Los del server
+ *    son autoritativos; los locales que no estén se suben.
+ *
+ * Si no hay sesión (401), no toca nada y devuelve false. Si hay sesión
+ * dispara "ccse:progreso-changed" para que las pantallas refresquen.
+ */
+export async function syncProgresoFromServer(): Promise<boolean> {
+  if (!isBrowser()) return false;
+  try {
+    const res = await fetch("/api/me/progreso", {
+      credentials: "same-origin",
+      cache: "no-store",
+    });
+    if (!res.ok) return false;
+    const json = (await res.json()) as ProgresoServerData;
+
+    /* Merge estados */
+    const localEstados = readEstados();
+    const merged: EstadosMap = { ...localEstados };
+    const pushBack: EstadoPregunta[] = [];
+
+    const serverIds = new Set<string>();
+    for (const s of json.estados) {
+      serverIds.add(s.id);
+      const local = localEstados[s.id];
+      if (!local) {
+        merged[s.id] = s;
+        continue;
+      }
+      const serverT = new Date(s.lastSeenAt).getTime();
+      const localT = new Date(local.lastSeenAt).getTime();
+      if (serverT >= localT) {
+        merged[s.id] = s;
+      } else {
+        pushBack.push(local);
+      }
+    }
+    for (const id in localEstados) {
+      if (!serverIds.has(id)) pushBack.push(localEstados[id]);
+    }
+    window.localStorage.setItem(KEY_ESTADOS, JSON.stringify(merged));
+    for (const e of pushBack) pushEstadoToServer(e);
+
+    /* Merge simulacros: unión por (simulacroId, fechaIso) */
+    const localSims = readSimulacros();
+    const seen = new Set<string>();
+    const allSims: SimulacroResultado[] = [];
+    for (const s of json.simulacros) {
+      seen.add(simulacroKey(s));
+      allSims.push(s);
+    }
+    const pushBackSims: SimulacroResultado[] = [];
+    for (const s of localSims) {
+      if (!seen.has(simulacroKey(s))) {
+        allSims.push(s);
+        pushBackSims.push(s);
+      }
+    }
+    window.localStorage.setItem(KEY_SIMULACROS, JSON.stringify(allSims));
+    for (const s of pushBackSims) pushSimulacroToServer(s);
+
+    window.dispatchEvent(new CustomEvent("ccse:progreso-changed"));
+    return true;
+  } catch {
+    return false;
+  }
 }

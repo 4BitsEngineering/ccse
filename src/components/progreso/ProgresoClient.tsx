@@ -28,10 +28,15 @@ export function ProgresoClient({ banco }: { banco: Pregunta[] }) {
   const [historial, setHistorial] = useState<SimulacroResultado[]>([]);
 
   useEffect(() => {
-    const estados = readEstados();
-    setStats(statsPorTarea(banco, estados));
-    setHistorial(readSimulacros());
-    setLoaded(true);
+    const refresh = () => {
+      const estados = readEstados();
+      setStats(statsPorTarea(banco, estados));
+      setHistorial(readSimulacros());
+      setLoaded(true);
+    };
+    refresh();
+    window.addEventListener("ccse:progreso-changed", refresh);
+    return () => window.removeEventListener("ccse:progreso-changed", refresh);
   }, [banco]);
 
   if (!loaded) {
