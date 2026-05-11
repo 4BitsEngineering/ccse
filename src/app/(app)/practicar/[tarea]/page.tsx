@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Seal } from "@/components/ui/seal";
 import { Underline } from "@/components/ui/underline";
 import { getPreguntasPorTarea, type Tarea } from "@/lib/content";
 import { PracticaWithFilters } from "@/components/practica/PracticaWithFilters";
@@ -45,18 +44,14 @@ export default async function PracticarTareaPage({
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-10">
-      <header className="flex items-center gap-2.5 mb-8">
-        <Seal size={28} />
-        <Link
-          href="/"
-          className="font-serif text-lg font-medium tracking-wide"
-        >
-          CCSE
-        </Link>
-      </header>
-
       <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
-        Tarea {t} · {preguntas.length} preguntas
+        <Link
+          href="/practicar"
+          className="hover:text-terracotta-deep"
+        >
+          ← Practicar
+        </Link>{" "}
+        · Tarea {t} · {preguntas.length} preguntas
       </p>
       <h1 className="mt-2 font-serif text-3xl sm:text-4xl font-medium leading-[1.1] tracking-tight text-balance">
         {TITULO_TAREA[t]}

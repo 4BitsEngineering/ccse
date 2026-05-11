@@ -1,0 +1,81 @@
+import Link from "next/link";
+import { Seal } from "@/components/ui/seal";
+import { Underline } from "@/components/ui/underline";
+import { loadBanco } from "@/lib/content";
+
+const TAREAS = [
+  { n: 1, titulo: "Gobierno, legislación y participación" },
+  { n: 2, titulo: "Derechos y deberes fundamentales" },
+  { n: 3, titulo: "Organización territorial y geografía" },
+  { n: 4, titulo: "Cultura e historia" },
+  { n: 5, titulo: "Sociedad española" },
+] as const;
+
+export const metadata = {
+  title: "Practicar — CCSE",
+};
+
+export default function PracticarIndexPage() {
+  const banco = loadBanco();
+  const conteo = TAREAS.map((t) => ({
+    ...t,
+    total: banco.preguntas.filter((p) => p.tarea === t.n).length,
+  }));
+
+  return (
+    <main className="mx-auto max-w-2xl px-6 py-10">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
+        Las 5 tareas
+      </p>
+      <h1 className="mt-2 font-serif text-4xl sm:text-5xl font-medium leading-[1.05] tracking-tight">
+        <span className="italic text-terracotta-deep">Practica</span>, pregunta
+        a pregunta.
+      </h1>
+      <Underline width={180} className="mt-1" />
+      <p className="mt-4 text-sm text-ink-soft">
+        Feedback inmediato, razonamiento al elegir y mnemotécnico al final. Las
+        preguntas que falles vuelven al repaso espaciado.
+      </p>
+
+      <ul className="mt-8 space-y-3">
+        {conteo.map((t) => (
+          <li key={t.n}>
+            <Link
+              href={`/practicar/${t.n}`}
+              className="flex items-center gap-4 rounded-2xl border border-rule bg-cream p-5 hover:border-ink/40 transition-colors group"
+            >
+              <span className="w-12 h-12 rounded-xl bg-paper-warm border border-rule grid place-items-center font-serif italic text-2xl font-medium text-ink-soft shrink-0">
+                {t.n}
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="font-serif text-xl font-medium tracking-tight leading-snug">
+                  Tarea {t.n}
+                </p>
+                <p className="text-xs text-ink-muted mt-0.5">
+                  {t.titulo} · {t.total} preguntas
+                </p>
+              </div>
+              <span
+                aria-hidden
+                className="text-ink-muted group-hover:text-terracotta transition-colors"
+              >
+                →
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      <p className="mt-8 text-sm text-ink-soft">
+        ¿Prefieres leer el tema antes? Cada tarea tiene sus{" "}
+        <Link
+          href="/dashboard"
+          className="text-ink underline decoration-terracotta underline-offset-2"
+        >
+          apuntes en el panel
+        </Link>
+        .
+      </p>
+    </main>
+  );
+}

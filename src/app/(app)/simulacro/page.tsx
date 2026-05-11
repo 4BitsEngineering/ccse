@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Seal } from "@/components/ui/seal";
 import { Underline } from "@/components/ui/underline";
 
 const SIMULACROS = [1, 2, 3, 4, 5] as const;
@@ -11,16 +10,6 @@ export const metadata = {
 export default function SimulacrosPage() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-10">
-      <header className="flex items-center gap-2.5 mb-8">
-        <Seal size={28} />
-        <Link
-          href="/"
-          className="font-serif text-lg font-medium tracking-wide"
-        >
-          CCSE
-        </Link>
-      </header>
-
       <h1 className="font-serif text-4xl sm:text-5xl font-medium leading-[1.05] tracking-tight">
         <span className="italic text-terracotta-deep">5 simulacros</span>{" "}
         reales.

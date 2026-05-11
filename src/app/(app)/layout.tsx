@@ -1,11 +1,11 @@
 import Link from "next/link";
+import { Seal } from "@/components/ui/seal";
 
-const TAREAS = [
-  { n: 1, label: "Tarea 1" },
-  { n: 2, label: "Tarea 2" },
-  { n: 3, label: "Tarea 3" },
-  { n: 4, label: "Tarea 4" },
-  { n: 5, label: "Tarea 5" },
+const NAV = [
+  { href: "/dashboard", label: "Panel" },
+  { href: "/practicar", label: "Practicar" },
+  { href: "/simulacro", label: "Examen" },
+  { href: "/progreso", label: "Progreso" },
 ];
 
 export default function AppLayout({
@@ -15,64 +15,54 @@ export default function AppLayout({
 }) {
   return (
     <>
-      <header className="border-b border-zinc-200 dark:border-zinc-800">
-        <div className="mx-auto max-w-7xl px-6 py-4 flex flex-wrap items-center gap-x-6 gap-y-2">
-          <Link href="/" className="font-semibold tracking-tight">
-            CCSE
+      <header className="border-b border-rule">
+        <div className="mx-auto max-w-6xl px-6 py-4 flex items-center gap-6">
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2.5 font-serif text-lg font-medium tracking-wide"
+          >
+            <Seal size={26} />
+            <span>CCSE</span>
           </Link>
-          <nav className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-            <Link
-              href="/dashboard"
-              className="text-zinc-700 dark:text-zinc-300 hover:underline"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/simulacro"
-              className="text-zinc-700 dark:text-zinc-300 hover:underline"
-            >
-              Simulacros
-            </Link>
-            <Link
-              href="/repaso"
-              className="text-zinc-700 dark:text-zinc-300 hover:underline"
-            >
-              Repaso
-            </Link>
-            <Link
-              href="/progreso"
-              className="text-zinc-700 dark:text-zinc-300 hover:underline"
-            >
-              Progreso
-            </Link>
-            <Link
-              href="/cuenta"
-              className="text-zinc-700 dark:text-zinc-300 hover:underline"
-            >
-              Cuenta
-            </Link>
-            <span className="text-zinc-300 dark:text-zinc-700">|</span>
-            {TAREAS.map((t) => (
+          <nav className="hidden sm:flex items-center gap-x-5 text-sm">
+            {NAV.map((item) => (
               <Link
-                key={`e${t.n}`}
-                href={`/estudiar/${t.n}`}
-                className="text-zinc-700 dark:text-zinc-300 hover:underline"
+                key={item.href}
+                href={item.href}
+                className="text-ink-soft hover:text-ink"
               >
-                Estudiar {t.n}
-              </Link>
-            ))}
-            <span className="text-zinc-300 dark:text-zinc-700">|</span>
-            {TAREAS.map((t) => (
-              <Link
-                key={`p${t.n}`}
-                href={`/practicar/${t.n}`}
-                className="text-zinc-700 dark:text-zinc-300 hover:underline"
-              >
-                Practicar {t.n}
+                {item.label}
               </Link>
             ))}
           </nav>
+          <span className="flex-1" />
+          <Link
+            href="/cuenta"
+            className="grid place-items-center w-9 h-9 rounded-full bg-terracotta-soft text-terracotta-deep font-serif italic text-sm font-medium hover:bg-terracotta hover:text-cream transition-colors"
+            aria-label="Tu cuenta"
+            title="Tu cuenta"
+          >
+            T
+          </Link>
         </div>
+        {/* Mobile nav: tab bar bajo el header */}
+        <nav
+          aria-label="Navegación principal"
+          className="sm:hidden border-t border-rule"
+        >
+          <ul className="mx-auto max-w-6xl px-2 flex">
+            {NAV.map((item) => (
+              <li key={item.href} className="flex-1">
+                <Link
+                  href={item.href}
+                  className="block py-3 text-center text-xs font-medium text-ink-soft hover:bg-paper-warm hover:text-ink"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </header>
       {children}
     </>

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Seal } from "@/components/ui/seal";
 import { Underline } from "@/components/ui/underline";
 import { buttonVariants } from "@/components/ui/button";
 import { loadTema, type Tarea } from "@/lib/content";
@@ -93,18 +92,11 @@ export default async function EstudiarTareaPage({
       <main className="flex-1 min-w-0">
         <EstudiarTracker tarea={t} />
 
-        <div className="flex items-center gap-2.5 mb-8">
-          <Seal size={28} />
-          <Link
-            href="/"
-            className="font-serif text-lg font-medium tracking-wide"
-          >
-            CCSE
-          </Link>
-        </div>
-
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
-          Tarea {t} · apuntes
+          <Link href="/dashboard" className="hover:text-terracotta-deep">
+            ← Panel
+          </Link>{" "}
+          · Tarea {t} · apuntes
         </p>
         <h1 className="mt-2 font-serif text-4xl sm:text-5xl font-medium leading-[1.05] tracking-tight text-balance">
           {TITULO_TAREA[t]}
