@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { User } from "lucide-react";
 import {
   hasActiveEntitlement,
   syncEntitlementFromServer,
@@ -86,7 +87,7 @@ export function SiteHeader() {
           <Link
             href="/cuenta"
             className={
-              "ml-2 grid place-items-center w-9 h-9 rounded-full font-serif italic text-sm font-medium transition-colors shrink-0 " +
+              "ml-2 grid place-items-center w-9 h-9 rounded-full transition-colors shrink-0 " +
               (paid
                 ? "bg-olive text-cream hover:bg-olive/90"
                 : "bg-terracotta-soft text-terracotta-deep hover:bg-terracotta hover:text-cream")
@@ -94,7 +95,7 @@ export function SiteHeader() {
             aria-label="Tu cuenta"
             title={paid ? "Tu cuenta · acceso activo" : "Tu cuenta · sin acceso"}
           >
-            T
+            <User className="h-[18px] w-[18px]" strokeWidth={1.75} aria-hidden />
           </Link>
         </nav>
       </div>
