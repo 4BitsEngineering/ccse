@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Seal } from "@/components/ui/seal";
 
 const PRODUCTO = [
   { href: "/demo", label: "Demo gratis" },
@@ -20,11 +19,7 @@ export function LandingFooter() {
     <footer className="bg-paper-warm border-t border-rule">
       <div className="mx-auto max-w-2xl px-6 py-12 grid gap-8 sm:grid-cols-[1fr_auto_auto]">
         <div>
-          <div className="flex items-center gap-2.5">
-            <Seal size={26} />
-            <p className="font-serif text-lg font-medium tracking-wide">CCSE</p>
-          </div>
-          <p className="text-sm text-ink-muted mt-2">
+          <p className="text-sm text-ink-muted">
             4Bits Engineering · Manual CCSE 2026 del Instituto Cervantes.
           </p>
         </div>

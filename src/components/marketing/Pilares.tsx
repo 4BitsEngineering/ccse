@@ -2,7 +2,7 @@ const PILARES = [
   {
     titulo: "Apuntes claros en español B1",
     cuerpo:
-      "5 temas escritos en español sencillo, con tablas y ejemplos. Léelos en web o descárgalos en PDF para repasar sin internet.",
+      "5 temas escritos en español sencillo, con tablas y ejemplos. Léelos, escúchalos a tu velocidad o descárgalos en PDF para repasar sin internet.",
   },
   {
     titulo: "Cada pregunta, razonada",
