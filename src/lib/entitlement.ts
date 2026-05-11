@@ -117,3 +117,72 @@ export function formatDateEs(iso: string): string {
     year: "numeric",
   });
 }
+
+/* ─── Sincronización con Supabase ───────────────────────────────── */
+
+interface MeResponse {
+  user: { id: string; email?: string } | null;
+  entitlement: Entitlement | null;
+}
+
+/**
+ * Trae la sesión + entitlement del servidor y actualiza la cache de
+ * localStorage. Se llama desde useEffect en los componentes que
+ * dependen del estado (CuentaClient, SiteHeader). Devuelve el user
+ * para que el caller pueda saber si hay sesión.
+ *
+ * Reglas:
+ *  - Sin sesión: limpia la cache (escribe {cleared:true}) salvo en
+ *    modo validación abierta — entonces no toca nada para preservar
+ *    el comportamiento "todo abierto" en navegadores anónimos.
+ *  - Con sesión + entitlement en BD: lo cachea localmente.
+ *  - Con sesión sin entitlement: limpia la cache (el usuario no ha
+ *    comprado todavía).
+ */
+export async function syncEntitlementFromServer(): Promise<MeResponse["user"]> {
+  if (!isBrowser()) return null;
+  try {
+    const res = await fetch("/api/me/entitlement", {
+      credentials: "same-origin",
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    const json = (await res.json()) as MeResponse;
+
+    if (json.user && json.entitlement) {
+      setEntitlement(json.entitlement);
+    } else if (json.user && !json.entitlement) {
+      clearEntitlement();
+    } else if (!json.user && !DEFAULT_OPEN_ACCESS) {
+      clearEntitlement();
+    }
+
+    window.dispatchEvent(new CustomEvent("ccse:entitlement-changed"));
+    return json.user;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Compra mock contra el servidor: escribe la fila en la tabla
+ * entitlements vía /api/comprar-mock. Requiere sesión. Si no hay
+ * sesión devuelve null y el caller puede caer al purchaseMock local.
+ */
+export async function purchaseRemoteMock(): Promise<Entitlement | null> {
+  if (!isBrowser()) return null;
+  try {
+    const res = await fetch("/api/comprar-mock", {
+      method: "POST",
+      credentials: "same-origin",
+    });
+    if (!res.ok) return null;
+    const json = (await res.json()) as { entitlement?: Entitlement };
+    if (!json.entitlement) return null;
+    setEntitlement(json.entitlement);
+    window.dispatchEvent(new CustomEvent("ccse:entitlement-changed"));
+    return json.entitlement;
+  } catch {
+    return null;
+  }
+}

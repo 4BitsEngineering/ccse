@@ -9,6 +9,8 @@ import {
   formatDateEs,
   getEntitlement,
   purchaseMock,
+  purchaseRemoteMock,
+  syncEntitlementFromServer,
   type Entitlement,
 } from "@/lib/entitlement";
 import { BuyButton } from "@/components/paywall/BuyButton";
@@ -17,10 +19,19 @@ import { cn } from "@/lib/utils";
 export function CuentaClient() {
   const [ent, setEnt] = useState<Entitlement | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [hasSession, setHasSession] = useState(false);
 
   useEffect(() => {
-    setEnt(getEntitlement());
-    setLoaded(true);
+    let alive = true;
+    syncEntitlementFromServer().then((user) => {
+      if (!alive) return;
+      setHasSession(!!user);
+      setEnt(getEntitlement());
+      setLoaded(true);
+    });
+    return () => {
+      alive = false;
+    };
   }, []);
 
   const refresh = () => {
@@ -28,12 +39,16 @@ export function CuentaClient() {
     window.dispatchEvent(new CustomEvent("ccse:entitlement-changed"));
   };
 
-  const setPaid = () => {
-    purchaseMock();
+  const setPaid = async () => {
+    const remote = await purchaseRemoteMock();
+    if (!remote) purchaseMock();
     refresh();
   };
 
   const setUnpaid = () => {
+    // Modo validación local: solo limpia la cache. La fila en Supabase
+    // queda; cuando llegue Stripe, "no pagado" se borrará vía un
+    // endpoint dedicado o se dejará caducar.
     clearEntitlement();
     refresh();
   };
@@ -57,48 +72,51 @@ export function CuentaClient() {
 
   return (
     <div className="space-y-5">
-      {/* Toggle de validación — destacado */}
-      <div className="rounded-2xl bg-paper-warm p-5">
-        <div className="flex items-baseline justify-between gap-3 mb-3">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted">
-            Modo validación
+      {/* Toggle de validación — solo en modo anónimo (sin sesión). Con
+          sesión, el estado viene de la BD y se gestiona vía compra. */}
+      {!hasSession && (
+        <div className="rounded-2xl bg-paper-warm p-5">
+          <div className="flex items-baseline justify-between gap-3 mb-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted">
+              Modo validación
+            </p>
+            <span
+              className={cn(
+                "text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full",
+                isPaid
+                  ? "bg-olive text-cream"
+                  : "bg-terracotta-soft text-terracotta-deep",
+              )}
+            >
+              {isPaid ? "Pagado" : "No pagado"}
+            </span>
+          </div>
+          <p className="text-sm text-ink-soft">
+            Alterna entre los dos estados para ver cómo se comporta la web con
+            y sin acceso. No hay pago real hasta que conectemos Stripe.
           </p>
-          <span
-            className={cn(
-              "text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full",
-              isPaid
-                ? "bg-olive text-cream"
-                : "bg-terracotta-soft text-terracotta-deep",
-            )}
-          >
-            {isPaid ? "Pagado" : "No pagado"}
-          </span>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button
+              variant={isPaid ? "ink-outline" : "terracotta"}
+              size="sm"
+              className="h-10 px-4 rounded-xl"
+              onClick={setPaid}
+              disabled={isPaid}
+            >
+              Marcar como pagado
+            </Button>
+            <Button
+              variant={!isPaid ? "ink-outline" : "ghost"}
+              size="sm"
+              className="h-10 px-4 rounded-xl"
+              onClick={setUnpaid}
+              disabled={!isPaid}
+            >
+              Marcar como no pagado
+            </Button>
+          </div>
         </div>
-        <p className="text-sm text-ink-soft">
-          Alterna entre los dos estados para ver cómo se comporta la web con
-          y sin acceso. No hay pago real hasta que conectemos Stripe.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Button
-            variant={isPaid ? "ink-outline" : "terracotta"}
-            size="sm"
-            className="h-10 px-4 rounded-xl"
-            onClick={setPaid}
-            disabled={isPaid}
-          >
-            Marcar como pagado
-          </Button>
-          <Button
-            variant={!isPaid ? "ink-outline" : "ghost"}
-            size="sm"
-            className="h-10 px-4 rounded-xl"
-            onClick={setUnpaid}
-            disabled={!isPaid}
-          >
-            Marcar como no pagado
-          </Button>
-        </div>
-      </div>
+      )}
 
       {!ent ? (
         <div className="rounded-2xl bg-cream border border-rule p-6">

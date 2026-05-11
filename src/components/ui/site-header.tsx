@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { hasActiveEntitlement } from "@/lib/entitlement";
+import {
+  hasActiveEntitlement,
+  syncEntitlementFromServer,
+} from "@/lib/entitlement";
 
 interface NavItem {
   href: string;
@@ -39,6 +42,8 @@ export function SiteHeader() {
   useEffect(() => {
     const refresh = () => setPaid(hasActiveEntitlement());
     refresh();
+    // Sincroniza desde Supabase si hay sesión; deja la cache intacta si no.
+    syncEntitlementFromServer().then(refresh);
     window.addEventListener("ccse:entitlement-changed", refresh);
     window.addEventListener("storage", refresh);
     return () => {

@@ -11,13 +11,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { purchaseMock } from "@/lib/entitlement";
+import { purchaseMock, purchaseRemoteMock } from "@/lib/entitlement";
 import { cn } from "@/lib/utils";
 
 /**
  * Botón "Comprar 9,99 €" en modo mock. Muestra un diálogo claro de
- * "esto es una simulación" antes de activar el entitlement local.
+ * "esto es una simulación" antes de activar el entitlement.
  *
+ * Si hay sesión Supabase escribe la fila en la BD (vía
+ * /api/comprar-mock); si no, sigue con el mock local en localStorage.
  * Cuando llegue Stripe real este componente se sustituye por uno
  * que llame al endpoint /api/stripe/checkout y redirija a la sesión
  * de Stripe Checkout.
@@ -32,11 +34,18 @@ export function BuyButton({
   label?: string;
 }) {
   const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
   const router = useRouter();
 
-  const confirm = () => {
-    purchaseMock();
-    window.dispatchEvent(new CustomEvent("ccse:entitlement-changed"));
+  const confirm = async () => {
+    setBusy(true);
+    const remote = await purchaseRemoteMock();
+    if (!remote) {
+      // Sin sesión: fallback al mock local de validación.
+      purchaseMock();
+      window.dispatchEvent(new CustomEvent("ccse:entitlement-changed"));
+    }
+    setBusy(false);
     setOpen(false);
     router.push("/cuenta");
     router.refresh();
@@ -75,9 +84,10 @@ export function BuyButton({
             <button
               type="button"
               onClick={confirm}
+              disabled={busy}
               className={buttonVariants()}
             >
-              Activar acceso de prueba
+              {busy ? "Activando…" : "Activar acceso de prueba"}
             </button>
           </DialogFooter>
         </DialogContent>
