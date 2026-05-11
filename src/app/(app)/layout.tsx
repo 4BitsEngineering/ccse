@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Seal } from "@/components/ui/seal";
+import { BottomTabs } from "@/components/ui/bottom-tabs";
 
-const NAV = [
+const TABS = [
   { href: "/dashboard", label: "Panel" },
   { href: "/estudiar", label: "Estudiar" },
   { href: "/practicar", label: "Practicar" },
@@ -9,6 +10,12 @@ const NAV = [
   { href: "/progreso", label: "Progreso" },
 ];
 
+/**
+ * Header arriba idéntico al de (public)/layout (Logo + avatar Cuenta)
+ * y tab bar inferior con las 5 secciones de la app. Saltar entre zonas
+ * solo cambia el contenido de las tabs de abajo; el header arriba se
+ * queda idéntico para dar sensación de continuidad.
+ */
 export default function AppLayout({
   children,
 }: {
@@ -27,54 +34,18 @@ export default function AppLayout({
             <span>CCSE</span>
           </Link>
           <span className="flex-1" />
-          <nav className="hidden sm:flex items-center gap-x-5 text-sm">
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-ink-soft hover:text-ink"
-              >
-                {item.label}
-              </Link>
-            ))}
-            <Link
-              href="/cuenta"
-              className="grid place-items-center w-9 h-9 rounded-full bg-terracotta-soft text-terracotta-deep font-serif italic text-sm font-medium hover:bg-terracotta hover:text-cream transition-colors"
-              aria-label="Tu cuenta"
-              title="Tu cuenta"
-            >
-              T
-            </Link>
-          </nav>
           <Link
             href="/cuenta"
-            className="sm:hidden grid place-items-center w-9 h-9 rounded-full bg-terracotta-soft text-terracotta-deep font-serif italic text-sm font-medium hover:bg-terracotta hover:text-cream transition-colors"
+            className="grid place-items-center w-9 h-9 rounded-full bg-terracotta-soft text-terracotta-deep font-serif italic text-sm font-medium hover:bg-terracotta hover:text-cream transition-colors"
             aria-label="Tu cuenta"
             title="Tu cuenta"
           >
             T
           </Link>
         </div>
-        {/* Mobile nav: tab bar bajo el header */}
-        <nav
-          aria-label="Navegación principal"
-          className="sm:hidden border-t border-rule"
-        >
-          <ul className="mx-auto max-w-6xl px-2 flex">
-            {NAV.map((item) => (
-              <li key={item.href} className="flex-1">
-                <Link
-                  href={item.href}
-                  className="block py-3 text-center text-xs font-medium text-ink-soft hover:bg-paper-warm hover:text-ink"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
       </header>
-      {children}
+      <div className="pb-20">{children}</div>
+      <BottomTabs items={TABS} />
     </>
   );
 }
