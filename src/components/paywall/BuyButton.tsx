@@ -36,6 +36,7 @@ export function BuyButton({
 
   const confirm = () => {
     purchaseMock();
+    window.dispatchEvent(new CustomEvent("ccse:entitlement-changed"));
     setOpen(false);
     router.push("/cuenta");
     router.refresh();

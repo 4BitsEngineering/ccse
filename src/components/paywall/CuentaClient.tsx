@@ -23,7 +23,10 @@ export function CuentaClient() {
     setLoaded(true);
   }, []);
 
-  const refresh = () => setEnt(getEntitlement());
+  const refresh = () => {
+    setEnt(getEntitlement());
+    window.dispatchEvent(new CustomEvent("ccse:entitlement-changed"));
+  };
 
   const setPaid = () => {
     purchaseMock();
