@@ -47,7 +47,7 @@ export default async function SimulacroPage({
       ) : (
         <PaywallGate
           title={`Simulacro ${n} — premium`}
-          subtitle="El Simulacro 1 está abierto como muestra. Los simulacros 2-5 forman parte del acceso completo (9,99 € por 365 días)."
+          subtitle="El Simulacro 1 está abierto como muestra. Los simulacros 2-5 forman parte del acceso completo (4,99 € por 365 días)."
         >
           <SimulacroDeck preguntas={preguntas} simulacroId={n} />
         </PaywallGate>

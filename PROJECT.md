@@ -16,7 +16,7 @@ Plataforma web de pago para preparar la prueba **CCSE** del Instituto Cervantes 
 
 ## 2. Propuesta de valor — los 5 pilares
 
-Lo que justifica pagar 9,99 € frente a la app oficial gratuita y a los blogs:
+Lo que justifica pagar 4,99 € frente a la app oficial gratuita y a los blogs:
 
 1. **Apuntes en castellano B1 estructurados** — no existen gratis.
 2. **Cada pregunta razonada**: explicación + por qué falla cada distractor + mnemotécnico + dificultad + página del manual.
@@ -30,7 +30,7 @@ La landing tiene que comunicar estos 5 puntos en los primeros 5 segundos.
 
 | Concepto | Decisión |
 |---|---|
-| Precio | **9,99 €** |
+| Precio | **4,99 €** |
 | Modalidad | **Pago único, acceso 365 días desde la compra** (no suscripción) |
 | Stripe | Checkout en modo `payment` (one-shot), price único en EUR |
 | Renovación | Email recordatorio a los 11 meses con link de re-compra. Sin renovación automática |

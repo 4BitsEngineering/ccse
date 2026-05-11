@@ -148,7 +148,7 @@ export default function DashboardPage() {
         <div className="mt-3">
           <PaywallGate
             title="Resto de descargas — premium"
-            subtitle="Las Tareas 2-5 en PDF y el manual oficial completo del Cervantes están incluidos en el acceso anual de 9,99 €."
+            subtitle="Las Tareas 2-5 en PDF y el manual oficial completo del Cervantes están incluidos en el acceso anual de 4,99 €."
           >
             <ul className="space-y-2">
               {conteoPorTarea

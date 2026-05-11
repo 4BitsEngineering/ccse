@@ -43,7 +43,7 @@ export function CuentaClient() {
           Aún no has activado tu acceso.
         </h2>
         <p className="mt-2 font-serif text-[15px] leading-relaxed text-ink-soft">
-          Con 9,99 € desbloqueas la plataforma entera durante 365 días.
+          Con 4,99 € desbloqueas la plataforma entera durante 365 días.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <BuyButton />
@@ -125,7 +125,7 @@ export function CuentaClient() {
         )}
         <div className="mt-5 flex flex-wrap gap-3">
           {expirado ? (
-            <BuyButton label="Renovar 9,99 €" />
+            <BuyButton label="Renovar 4,99 €" />
           ) : (
             <BuyButton label="Renovar otro año" />
           )}

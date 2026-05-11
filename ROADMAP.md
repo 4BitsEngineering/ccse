@@ -45,13 +45,13 @@
 **Objetivo**: monetización activa. Solo paga, accede.
 
 **Entregables**:
-- Producto y price creados en Stripe (one-shot, 9,99 €, EUR).
+- Producto y price creados en Stripe (one-shot, 4,99 €, EUR).
 - `/api/stripe/checkout/route.ts`: crea sesión de Checkout y redirige.
 - `/api/stripe/webhook/route.ts`: verifica firma, procesa `checkout.session.completed`, escribe `entitlement: { plan: "anual_2026", expiresAt: <ISO 365 días> }` en `clerkClient.users.updateUserMetadata({ publicMetadata })`.
 - `lib/entitlement.ts` con función `hasActiveEntitlement(user)`.
 - `middleware.ts` que protege `(app)/` con dos condiciones: Clerk autenticado **y** entitlement activo. Si autenticado pero sin entitlement, redirige a `/precio`.
 - `PaywallGate` para previews: `/tarea/[n]/preview` muestra primera mitad del tema y CTA. `/pregunta/[id]` (300 URLs SEO) muestra enunciado + opciones, oculta explicación.
-- `/precio` con descripción, botón "comprar 9,99 €" → Checkout.
+- `/precio` con descripción, botón "comprar 4,99 €" → Checkout.
 - `/cuenta` con "tu acceso expira en X días" y botón "renovar".
 
 **Definition of done**: pago en Stripe test → webhook → metadata → puedes entrar a `(app)/`. Sin pago, redirige a `/precio`. El test E2E manual con tarjeta de Stripe pasa.

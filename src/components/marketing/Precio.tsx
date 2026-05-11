@@ -29,7 +29,7 @@ export function Precio() {
         <div className="rounded-2xl bg-cream border border-rule p-8">
           <div className="flex items-baseline gap-3">
             <span className="font-serif text-6xl font-medium tracking-tight leading-none text-ink">
-              9,99 €
+              4,99 €
             </span>
             <span className="font-serif italic text-ink-muted text-lg">
               / 365 días

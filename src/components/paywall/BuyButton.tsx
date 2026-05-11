@@ -15,7 +15,7 @@ import { purchaseMock } from "@/lib/entitlement";
 import { cn } from "@/lib/utils";
 
 /**
- * Botón "Comprar 9,99 €" en modo mock. Muestra un diálogo claro de
+ * Botón "Comprar 4,99 €" en modo mock. Muestra un diálogo claro de
  * "esto es una simulación" antes de activar el entitlement local.
  *
  * Cuando llegue Stripe real este componente se sustituye por uno
@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
 export function BuyButton({
   size = "lg",
   className,
-  label = "Comprar 9,99 €",
+  label = "Comprar 4,99 €",
 }: {
   size?: "default" | "sm" | "lg";
   className?: string;

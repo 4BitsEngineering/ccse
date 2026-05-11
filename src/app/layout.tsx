@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    "Plataforma para preparar la prueba CCSE del Instituto Cervantes: 300 preguntas razonadas, 5 temas en español B1, simulacros con cronómetro y descargas en PDF. 9,99 € por 365 días.",
+    "Plataforma para preparar la prueba CCSE del Instituto Cervantes: 300 preguntas razonadas, 5 temas en español B1, simulacros con cronómetro y descargas en PDF. 4,99 € por 365 días.",
   applicationName: "CCSE",
   authors: [{ name: "4Bits Engineering" }],
   keywords: [
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     siteName: "CCSE",
     title: "CCSE — preparación del examen del Instituto Cervantes",
     description:
-      "300 preguntas razonadas, simulacros con cronómetro y apuntes en español B1. 9,99 € durante un año.",
+      "300 preguntas razonadas, simulacros con cronómetro y apuntes en español B1. 4,99 € durante un año.",
   },
   twitter: {
     card: "summary_large_image",
