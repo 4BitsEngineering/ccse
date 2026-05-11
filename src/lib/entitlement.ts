@@ -5,8 +5,12 @@
  * real, esta misma interfaz se reimplementa contra el backend sin
  * tocar UI.
  *
- * Las funciones devuelven null/false en SSR (typeof window === 'undefined')
- * para que sean importables desde Server Components sin romper.
+ * Modo validación abierta: mientras DEFAULT_OPEN_ACCESS = true, si no
+ * hay nada guardado en localStorage se devuelve un entitlement
+ * sintético (válido 365 días) para que todo se pueda probar sin pulsar
+ * el "Comprar mock". Si el usuario quiere ver el paywall, va a /cuenta
+ * y "Eliminar acceso"; eso escribe un flag {cleared:true} que sobrescribe
+ * el default.
  */
 
 export interface Entitlement {
@@ -22,20 +26,51 @@ const STORAGE_KEY = "ccse:v1:entitlement";
 const ANNUAL_MS = 365 * 24 * 3600 * 1000;
 const MANUAL_VERSION = "2026";
 
+/**
+ * Mientras true, sin storage = acceso activo por defecto (modo validación).
+ * Cambiar a false antes del lanzamiento real.
+ */
+const DEFAULT_OPEN_ACCESS = true;
+
 function isBrowser(): boolean {
   return typeof window !== "undefined";
 }
 
+function syntheticEntitlement(): Entitlement {
+  const now = new Date();
+  return {
+    plan: "anual",
+    purchaseAt: now.toISOString(),
+    expiresAt: new Date(now.getTime() + ANNUAL_MS).toISOString(),
+    manualVersion: MANUAL_VERSION,
+    source: "mock",
+  };
+}
+
+interface ClearedFlag {
+  cleared: true;
+}
+
+function isClearedFlag(v: unknown): v is ClearedFlag {
+  return typeof v === "object" && v !== null && (v as ClearedFlag).cleared === true;
+}
+
 export function getEntitlement(): Entitlement | null {
-  if (!isBrowser()) return null;
+  if (!isBrowser()) {
+    return DEFAULT_OPEN_ACCESS ? syntheticEntitlement() : null;
+  }
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as Entitlement;
-    if (!parsed.expiresAt) return null;
-    return parsed;
+    if (!raw) return DEFAULT_OPEN_ACCESS ? syntheticEntitlement() : null;
+    const parsed = JSON.parse(raw);
+    if (isClearedFlag(parsed)) return null;
+    const ent = parsed as Entitlement;
+    if (!ent.expiresAt) {
+      return DEFAULT_OPEN_ACCESS ? syntheticEntitlement() : null;
+    }
+    return ent;
   } catch {
-    return null;
+    return DEFAULT_OPEN_ACCESS ? syntheticEntitlement() : null;
   }
 }
 
@@ -50,9 +85,13 @@ export function setEntitlement(e: Entitlement): void {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(e));
 }
 
+/**
+ * Marca el navegador como "bloqueado" (sobrescribe el default abierto).
+ * Útil para probar el paywall durante la fase de validación.
+ */
 export function clearEntitlement(): void {
   if (!isBrowser()) return;
-  window.localStorage.removeItem(STORAGE_KEY);
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ cleared: true }));
 }
 
 /**
@@ -60,14 +99,7 @@ export function clearEntitlement(): void {
  * webhook de Stripe tras un checkout.session.completed.
  */
 export function purchaseMock(): Entitlement {
-  const now = new Date();
-  const ent: Entitlement = {
-    plan: "anual",
-    purchaseAt: now.toISOString(),
-    expiresAt: new Date(now.getTime() + ANNUAL_MS).toISOString(),
-    manualVersion: MANUAL_VERSION,
-    source: "mock",
-  };
+  const ent = syntheticEntitlement();
   setEntitlement(ent);
   return ent;
 }
