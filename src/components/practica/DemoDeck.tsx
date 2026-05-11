@@ -127,7 +127,7 @@ function DemoResults({
           5 simulacros y los apuntes.
         </h3>
         <p className="mt-3 text-sm opacity-90">
-          4,99 € una sola vez · 365 días de acceso. Sin suscripción.
+          9,99 € una sola vez · 365 días de acceso. Sin suscripción.
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
@@ -170,7 +170,7 @@ function DemoResults({
             " h-12 px-5 rounded-xl text-base"
           }
         >
-          Activar acceso 4,99 € →
+          Activar acceso 9,99 € →
         </Link>
         <Link
           href="/demo"

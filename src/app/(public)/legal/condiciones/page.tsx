@@ -45,7 +45,7 @@ export default function CondicionesPage() {
       <h2>3. Precio y modalidad</h2>
       <ul>
         <li>
-          <strong>4,99 €</strong>, IVA incluido, una vez. No es una
+          <strong>9,99 €</strong>, IVA incluido, una vez. No es una
           suscripción.
         </li>
         <li>
@@ -126,7 +126,7 @@ export default function CondicionesPage() {
         <li>
           Nuestra responsabilidad económica máxima frente a cualquier
           reclamación está limitada al importe pagado por ti
-          (4,99 €).
+          (9,99 €).
         </li>
       </ul>
 

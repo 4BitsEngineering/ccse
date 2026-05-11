@@ -91,7 +91,7 @@ export default async function TareaPreviewPage({
                   " h-11 px-4 rounded-xl text-sm"
                 }
               >
-                Activar acceso 4,99 € / 365 días
+                Activar acceso 9,99 € / 365 días
               </Link>
               <Link
                 href="/demo"

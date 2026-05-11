@@ -22,7 +22,7 @@ export function PaywallGate({
   children,
   fallback,
   title = "Contenido premium",
-  subtitle = "Activa tu acceso por 4,99 € durante 365 días para desbloquear esta sección.",
+  subtitle = "Activa tu acceso por 9,99 € durante 365 días para desbloquear esta sección.",
 }: Props) {
   const [state, setState] = useState<"loading" | "active" | "locked">(
     "loading",

@@ -108,7 +108,7 @@ export default async function EstudiarTareaPage({
         ) : (
           <PaywallGate
             title={`Tema ${t} — contenido premium`}
-            subtitle={`El Tema 1 está abierto como muestra. Para leer el resto de los temas, activar la práctica con razonamientos y descargar los PDFs, activa tu acceso por 4,99 €.`}
+            subtitle={`El Tema 1 está abierto como muestra. Para leer el resto de los temas, activar la práctica con razonamientos y descargar los PDFs, activa tu acceso por 9,99 €.`}
           >
             {body}
           </PaywallGate>

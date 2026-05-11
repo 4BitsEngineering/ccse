@@ -3,7 +3,7 @@ import { Precio } from "@/components/marketing/Precio";
 export const metadata = {
   title: "Precio — CCSE",
   description:
-    "4,99 € de pago único por 365 días de acceso completo a la plataforma de preparación CCSE. Sin suscripción ni renovación automática.",
+    "9,99 € de pago único por 365 días de acceso completo a la plataforma de preparación CCSE. Sin suscripción ni renovación automática.",
 };
 
 const REASSURANCES = [

@@ -20,7 +20,7 @@ export function Hero() {
         <p className="mt-6 font-serif text-lg leading-relaxed text-ink-soft text-pretty">
           Apuntes claros, las <em>300 preguntas</em> con explicación y
           simulacros reales. Sin trampas.{" "}
-          <strong className="font-sans font-semibold text-ink">4,99 €</strong>{" "}
+          <strong className="font-sans font-semibold text-ink">9,99 €</strong>{" "}
           un año entero.
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
