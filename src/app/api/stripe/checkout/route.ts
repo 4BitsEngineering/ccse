@@ -8,10 +8,15 @@
  * Tras pagar, Stripe redirige a /cuenta?stripe=success y dispara el
  * webhook que escribe la fila en entitlements (Edge Function de
  * Supabase, ver supabase/functions/stripe-webhook/).
+ *
+ * Forzamos payment_method_types:['card'] para evitar que Stripe
+ * intente activar métodos automáticos incompatibles con
+ * customer_creation:'always' (SEPA, link, etc.).
  */
 
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
+import Stripe from "stripe";
 import { createClient } from "@/lib/supabase/server";
 import { stripe, STRIPE_PRICE_ID } from "@/lib/stripe";
 
@@ -43,27 +48,39 @@ export async function POST() {
     .eq("user_id", user.id)
     .maybeSingle<{ stripe_customer_id: string | null }>();
 
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    line_items: [{ price: STRIPE_PRICE_ID, quantity: 1 }],
-    success_url: `${origin}/cuenta?stripe=success`,
-    cancel_url: `${origin}/cuenta?stripe=cancel`,
-    locale: "es",
-    metadata: { user_id: user.id },
-    ...(ent?.stripe_customer_id
-      ? { customer: ent.stripe_customer_id }
-      : {
-          customer_email: user.email,
-          customer_creation: "always",
-        }),
-  });
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      payment_method_types: ["card"],
+      line_items: [{ price: STRIPE_PRICE_ID, quantity: 1 }],
+      success_url: `${origin}/cuenta?stripe=success`,
+      cancel_url: `${origin}/cuenta?stripe=cancel`,
+      locale: "es",
+      metadata: { user_id: user.id },
+      ...(ent?.stripe_customer_id
+        ? { customer: ent.stripe_customer_id }
+        : {
+            customer_email: user.email,
+            customer_creation: "always",
+          }),
+    });
 
-  if (!session.url) {
+    if (!session.url) {
+      return NextResponse.json(
+        { error: "No se pudo crear la sesión de pago." },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json({ url: session.url });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    const code =
+      err instanceof Stripe.errors.StripeError ? err.code ?? null : null;
+    console.error("checkout-session error:", { msg, code });
     return NextResponse.json(
-      { error: "No se pudo crear la sesión de pago." },
+      { error: msg, code },
       { status: 500 },
     );
   }
-
-  return NextResponse.json({ url: session.url });
 }
