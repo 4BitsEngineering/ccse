@@ -54,14 +54,14 @@ export function SiteHeader() {
       <div className="mx-auto max-w-6xl px-6 py-3 flex items-center gap-6">
         <Link
           href="/"
-          className="flex items-baseline gap-2.5 shrink-0"
+          className="flex items-baseline gap-2.5 shrink-0 min-w-0"
           aria-label="CCSE — inicio"
         >
           <span className="font-serif text-xl font-medium tracking-tight">
             CCSE
           </span>
-          <span className="hidden sm:inline font-serif italic text-sm text-ink-muted">
-            Examen de nacionalidad
+          <span className="hidden md:inline font-serif italic text-sm text-ink-muted truncate">
+            Conocimientos Constitucionales y Socioculturales de España
           </span>
         </Link>
         <span className="flex-1" />

@@ -137,6 +137,9 @@
   }
   html {
     @apply font-sans;
+    /* Reserva siempre el espacio del scrollbar para que el contenido
+     * no salte al navegar entre páginas con/sin overflow. */
+    scrollbar-gutter: stable;
   }
   /* Display tipográfico: serif Newsreader para h1/h2 hero. Las
    * tipografías se aplican explícitamente con `font-serif` donde
