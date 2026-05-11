@@ -3,25 +3,39 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
-type State = "idle" | "playing" | "paused";
-
 /**
- * Lector por voz usando Web Speech API (sin backend, sin coste). La
- * calidad depende de las voces del sistema operativo del usuario —
- * suficiente para B1. Selecciona la primera voz disponible en es-ES,
- * con fallback a la primera voz "es-*".
+ * Lector por voz usando Web Speech API. Una sola utterance con el
+ * texto completo (los temas caben holgadamente en el límite ~32K
+ * caracteres de Chrome). Botones Leer / Detener + selector de
+ * velocidad. Cambiar velocidad mientras suena reinicia la lectura
+ * desde el principio (la API no permite ajustar la rate de una
+ * utterance ya en curso).
  *
- * El texto largo se trocea en frases para que el motor del navegador
- * no se atragante (Chrome mete límite ~32K caracteres por utterance
- * y a veces corta antes).
+ * No se incluye "Pausar" porque speechSynthesis.pause()/resume() es
+ * inconsistente en Chromium y Edge: a veces no pausa, a veces no
+ * reanuda. Mejor un botón Detener limpio que un pause que falla en
+ * silencio.
  */
 export function ReadAloudButton({ text }: { text: string }) {
   const [supported, setSupported] = useState(false);
-  const [state, setState] = useState<State>("idle");
+  const [playing, setPlaying] = useState(false);
   const [rate, setRate] = useState(1);
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
-  const queueRef = useRef<SpeechSynthesisUtterance[]>([]);
-  const idxRef = useRef(0);
+  const utterRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  // Cancela una utterance "limpiamente": desactiva sus handlers antes
+  // de llamar a cancel() para que su onend (que se dispara al cancelar)
+  // no machaque el state que acabamos de cambiar.
+  const detachAndCancel = () => {
+    if (utterRef.current) {
+      utterRef.current.onend = null;
+      utterRef.current.onerror = null;
+      utterRef.current = null;
+    }
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+  };
 
   useEffect(() => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
@@ -29,97 +43,59 @@ export function ReadAloudButton({ text }: { text: string }) {
 
     const pickVoice = () => {
       const voices = window.speechSynthesis.getVoices();
-      const esES = voices.find((v) => v.lang === "es-ES");
-      const esAny = voices.find((v) => v.lang.startsWith("es"));
-      voiceRef.current = esES ?? esAny ?? null;
+      voiceRef.current =
+        voices.find((v) => v.lang === "es-ES") ??
+        voices.find((v) => v.lang.startsWith("es")) ??
+        null;
     };
     pickVoice();
     window.speechSynthesis.addEventListener("voiceschanged", pickVoice);
     return () => {
       window.speechSynthesis.removeEventListener("voiceschanged", pickVoice);
-      window.speechSynthesis.cancel();
+      detachAndCancel();
     };
   }, []);
 
-  // Si el componente se desmonta o el texto cambia, parar.
-  useEffect(() => {
-    return () => {
-      if (typeof window !== "undefined" && "speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, [text]);
+  // Si cambia el texto (otra ruta), para la voz anterior.
+  useEffect(
+    () => () => {
+      detachAndCancel();
+    },
+    [text],
+  );
 
-  const buildQueue = () => {
-    // Trocea por frases (. ! ? saltos) para no exceder límites del motor.
-    const chunks = text
-      .split(/(?<=[.!?])\s+|\n\n+/g)
-      .map((s) => s.trim())
-      .filter(Boolean);
-    queueRef.current = chunks.map((chunk) => {
-      const u = new SpeechSynthesisUtterance(chunk);
-      u.lang = "es-ES";
-      if (voiceRef.current) u.voice = voiceRef.current;
-      u.rate = rate;
-      u.pitch = 1;
-      return u;
-    });
-    idxRef.current = 0;
-  };
-
-  const playFrom = (i: number) => {
-    const q = queueRef.current;
-    if (i >= q.length) {
-      setState("idle");
-      return;
-    }
-    const u = q[i];
+  const start = (currentRate: number) => {
+    detachAndCancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "es-ES";
+    if (voiceRef.current) u.voice = voiceRef.current;
+    u.rate = currentRate;
+    u.pitch = 1;
     u.onend = () => {
-      if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
-        return;
+      if (utterRef.current === u) {
+        utterRef.current = null;
+        setPlaying(false);
       }
-      idxRef.current = i + 1;
-      playFrom(i + 1);
     };
     u.onerror = () => {
-      setState("idle");
+      if (utterRef.current === u) {
+        utterRef.current = null;
+        setPlaying(false);
+      }
     };
+    utterRef.current = u;
+    setPlaying(true);
     window.speechSynthesis.speak(u);
   };
 
-  const handlePlay = () => {
-    if (state === "paused") {
-      window.speechSynthesis.resume();
-      setState("playing");
-      return;
-    }
-    window.speechSynthesis.cancel();
-    buildQueue();
-    setState("playing");
-    playFrom(0);
+  const stop = () => {
+    detachAndCancel();
+    setPlaying(false);
   };
 
-  const handlePause = () => {
-    window.speechSynthesis.pause();
-    setState("paused");
-  };
-
-  const handleStop = () => {
-    window.speechSynthesis.cancel();
-    setState("idle");
-    idxRef.current = 0;
-  };
-
-  const handleRateChange = (next: number) => {
-    setRate(next);
-    if (state !== "idle") {
-      // Reiniciar la cola con la nueva velocidad desde el chunk actual.
-      const resumeIdx = idxRef.current;
-      window.speechSynthesis.cancel();
-      buildQueue();
-      setState("playing");
-      playFrom(resumeIdx);
-    }
+  const changeRate = (r: number) => {
+    setRate(r);
+    if (playing) start(r);
   };
 
   if (!supported) return null;
@@ -132,30 +108,21 @@ export function ReadAloudButton({ text }: { text: string }) {
       >
         Escuchar
       </span>
-      {state === "playing" ? (
+      {playing ? (
         <button
           type="button"
-          onClick={handlePause}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-terracotta text-cream px-3 h-8 text-xs font-semibold hover:bg-terracotta-deep"
+          onClick={stop}
+          className="inline-flex items-center gap-1.5 rounded-lg bg-ink text-cream px-3 h-8 text-xs font-semibold hover:bg-ink-soft"
         >
-          ⏸ Pausar
+          ⏹ Detener
         </button>
       ) : (
         <button
           type="button"
-          onClick={handlePlay}
+          onClick={() => start(rate)}
           className="inline-flex items-center gap-1.5 rounded-lg bg-terracotta text-cream px-3 h-8 text-xs font-semibold hover:bg-terracotta-deep"
         >
-          ▶ {state === "paused" ? "Continuar" : "Leer tema"}
-        </button>
-      )}
-      {state !== "idle" && (
-        <button
-          type="button"
-          onClick={handleStop}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-ink text-ink px-3 h-8 text-xs font-semibold hover:bg-ink hover:text-cream"
-        >
-          ⏹ Detener
+          ▶ Leer tema
         </button>
       )}
       <span className="flex-1" />
@@ -168,7 +135,7 @@ export function ReadAloudButton({ text }: { text: string }) {
           <button
             key={r}
             type="button"
-            onClick={() => handleRateChange(r)}
+            onClick={() => changeRate(r)}
             className={cn(
               "px-2 h-7 rounded-md font-mono tabular-nums",
               rate === r
