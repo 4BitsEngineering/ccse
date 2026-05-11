@@ -1,16 +1,13 @@
 /**
  * Entitlement: capa de "¿este usuario tiene acceso premium?".
  *
- * Sprint 2 mock: vive en localStorage. Cuando llegue Supabase + Stripe
- * real, esta misma interfaz se reimplementa contra el backend sin
- * tocar UI.
+ * El estado vive en la tabla `entitlements` de Supabase, indexada por
+ * user_id. Para evitar flashes de UI mientras esperamos al servidor,
+ * localStorage funciona como cache: getEntitlement() lo lee síncrono,
+ * y syncEntitlementFromServer() lo refresca contra la BD al montar.
  *
- * Modo validación abierta: mientras DEFAULT_OPEN_ACCESS = true, si no
- * hay nada guardado en localStorage se devuelve un entitlement
- * sintético (válido 365 días) para que todo se pueda probar sin pulsar
- * el "Comprar mock". Si el usuario quiere ver el paywall, va a /cuenta
- * y "Eliminar acceso"; eso escribe un flag {cleared:true} que sobrescribe
- * el default.
+ * Sin sesión no hay acceso. La cache se borra automáticamente cuando
+ * la sesión termina (sync detecta user=null).
  */
 
 export interface Entitlement {
@@ -23,54 +20,21 @@ export interface Entitlement {
 }
 
 const STORAGE_KEY = "ccse:v1:entitlement";
-const ANNUAL_MS = 365 * 24 * 3600 * 1000;
-const MANUAL_VERSION = "2026";
-
-/**
- * Mientras true, sin storage = acceso activo por defecto (modo validación).
- * Cambiar a false antes del lanzamiento real.
- */
-const DEFAULT_OPEN_ACCESS = true;
 
 function isBrowser(): boolean {
   return typeof window !== "undefined";
 }
 
-function syntheticEntitlement(): Entitlement {
-  const now = new Date();
-  return {
-    plan: "anual",
-    purchaseAt: now.toISOString(),
-    expiresAt: new Date(now.getTime() + ANNUAL_MS).toISOString(),
-    manualVersion: MANUAL_VERSION,
-    source: "mock",
-  };
-}
-
-interface ClearedFlag {
-  cleared: true;
-}
-
-function isClearedFlag(v: unknown): v is ClearedFlag {
-  return typeof v === "object" && v !== null && (v as ClearedFlag).cleared === true;
-}
-
 export function getEntitlement(): Entitlement | null {
-  if (!isBrowser()) {
-    return DEFAULT_OPEN_ACCESS ? syntheticEntitlement() : null;
-  }
+  if (!isBrowser()) return null;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return DEFAULT_OPEN_ACCESS ? syntheticEntitlement() : null;
-    const parsed = JSON.parse(raw);
-    if (isClearedFlag(parsed)) return null;
-    const ent = parsed as Entitlement;
-    if (!ent.expiresAt) {
-      return DEFAULT_OPEN_ACCESS ? syntheticEntitlement() : null;
-    }
+    if (!raw) return null;
+    const ent = JSON.parse(raw) as Entitlement;
+    if (!ent.expiresAt) return null;
     return ent;
   } catch {
-    return DEFAULT_OPEN_ACCESS ? syntheticEntitlement() : null;
+    return null;
   }
 }
 
@@ -80,28 +44,14 @@ export function hasActiveEntitlement(): boolean {
   return new Date(e.expiresAt).getTime() > Date.now();
 }
 
-export function setEntitlement(e: Entitlement): void {
+function setEntitlement(e: Entitlement): void {
   if (!isBrowser()) return;
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(e));
 }
 
-/**
- * Marca el navegador como "bloqueado" (sobrescribe el default abierto).
- * Útil para probar el paywall durante la fase de validación.
- */
-export function clearEntitlement(): void {
+function forgetEntitlement(): void {
   if (!isBrowser()) return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ cleared: true }));
-}
-
-/**
- * Mock de la compra: simula el callback que en producción haría el
- * webhook de Stripe tras un checkout.session.completed.
- */
-export function purchaseMock(): Entitlement {
-  const ent = syntheticEntitlement();
-  setEntitlement(ent);
-  return ent;
+  window.localStorage.removeItem(STORAGE_KEY);
 }
 
 export function daysUntilExpiry(e: Entitlement): number {
@@ -130,14 +80,6 @@ interface MeResponse {
  * localStorage. Se llama desde useEffect en los componentes que
  * dependen del estado (CuentaClient, SiteHeader). Devuelve el user
  * para que el caller pueda saber si hay sesión.
- *
- * Reglas:
- *  - Sin sesión: limpia la cache (escribe {cleared:true}) salvo en
- *    modo validación abierta — entonces no toca nada para preservar
- *    el comportamiento "todo abierto" en navegadores anónimos.
- *  - Con sesión + entitlement en BD: lo cachea localmente.
- *  - Con sesión sin entitlement: limpia la cache (el usuario no ha
- *    comprado todavía).
  */
 export async function syncEntitlementFromServer(): Promise<MeResponse["user"]> {
   if (!isBrowser()) return null;
@@ -151,10 +93,8 @@ export async function syncEntitlementFromServer(): Promise<MeResponse["user"]> {
 
     if (json.user && json.entitlement) {
       setEntitlement(json.entitlement);
-    } else if (json.user && !json.entitlement) {
-      clearEntitlement();
-    } else if (!json.user && !DEFAULT_OPEN_ACCESS) {
-      clearEntitlement();
+    } else {
+      forgetEntitlement();
     }
 
     window.dispatchEvent(new CustomEvent("ccse:entitlement-changed"));
@@ -166,8 +106,9 @@ export async function syncEntitlementFromServer(): Promise<MeResponse["user"]> {
 
 /**
  * Compra mock contra el servidor: escribe la fila en la tabla
- * entitlements vía /api/comprar-mock. Requiere sesión. Si no hay
- * sesión devuelve null y el caller puede caer al purchaseMock local.
+ * entitlements vía /api/comprar-mock. Requiere sesión. Cuando llegue
+ * Stripe real, la fila la escribirá la Edge Function del webhook y
+ * esta función desaparece.
  */
 export async function purchaseRemoteMock(): Promise<Entitlement | null> {
   if (!isBrowser()) return null;

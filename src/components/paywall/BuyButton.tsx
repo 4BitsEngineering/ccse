@@ -11,18 +11,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { purchaseMock, purchaseRemoteMock } from "@/lib/entitlement";
+import { purchaseRemoteMock } from "@/lib/entitlement";
 import { cn } from "@/lib/utils";
 
 /**
- * Botón "Comprar 9,99 €" en modo mock. Muestra un diálogo claro de
- * "esto es una simulación" antes de activar el entitlement.
+ * Botón "Comprar 9,99 €". Mock hasta Stripe real: la compra escribe
+ * directamente la fila en la tabla entitlements vía /api/comprar-mock.
  *
- * Si hay sesión Supabase escribe la fila en la BD (vía
- * /api/comprar-mock); si no, sigue con el mock local en localStorage.
- * Cuando llegue Stripe real este componente se sustituye por uno
- * que llame al endpoint /api/stripe/checkout y redirija a la sesión
- * de Stripe Checkout.
+ * Requiere sesión. Si el usuario no está logueado, redirige a
+ * /registro?next=/cuenta — la fila necesita user_id sí o sí. Cuando
+ * llegue Stripe este componente se sustituye por uno que llame a
+ * /api/stripe/checkout y redirija a la sesión de Stripe Checkout.
  */
 export function BuyButton({
   size = "lg",
@@ -35,17 +34,36 @@ export function BuyButton({
 }) {
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  const onClick = async () => {
+    setError(null);
+    setBusy(true);
+    const res = await fetch("/api/me/entitlement", {
+      credentials: "same-origin",
+      cache: "no-store",
+    });
+    const json = (await res.json().catch(() => ({}))) as {
+      user?: { id: string } | null;
+    };
+    setBusy(false);
+    if (!json.user) {
+      router.push("/registro?next=/cuenta");
+      return;
+    }
+    setOpen(true);
+  };
+
   const confirm = async () => {
+    setError(null);
     setBusy(true);
     const remote = await purchaseRemoteMock();
-    if (!remote) {
-      // Sin sesión: fallback al mock local de validación.
-      purchaseMock();
-      window.dispatchEvent(new CustomEvent("ccse:entitlement-changed"));
-    }
     setBusy(false);
+    if (!remote) {
+      setError("No se pudo activar el acceso. Inténtalo en un momento.");
+      return;
+    }
     setOpen(false);
     router.push("/cuenta");
     router.refresh();
@@ -57,9 +75,10 @@ export function BuyButton({
         variant="terracotta"
         size={size}
         className={cn("h-12 px-5 text-base rounded-xl", className)}
-        onClick={() => setOpen(true)}
+        onClick={onClick}
+        disabled={busy}
       >
-        {label}
+        {busy && !open ? "…" : label}
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -68,11 +87,18 @@ export function BuyButton({
             <DialogTitle>Modo demo · sin pago real</DialogTitle>
             <DialogDescription className="text-left">
               Stripe aún no está conectado. Si confirmas, se activa un
-              acceso de prueba durante 365 días almacenado en este
-              navegador (sin pago, sin tarjeta). En producción esto será
-              una sesión real de Stripe Checkout.
+              acceso de prueba durante 365 días asociado a tu cuenta. En
+              producción esto será una sesión real de Stripe Checkout.
             </DialogDescription>
           </DialogHeader>
+          {error && (
+            <p
+              role="alert"
+              className="text-sm text-terracotta-deep bg-terracotta-soft/50 rounded-lg px-3 py-2"
+            >
+              {error}
+            </p>
+          )}
           <DialogFooter className="flex flex-row gap-2 justify-end">
             <button
               type="button"

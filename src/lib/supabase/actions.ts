@@ -51,10 +51,13 @@ export async function signUp(formData: FormData): Promise<AuthResult> {
 
   const supabase = await createClient();
   const origin = originFromHeaders(await headers());
+  // emailRedirectTo viaja como {{ .RedirectTo }} en la plantilla y
+  // termina como ?next= en /auth/confirm. /cuenta es la página natural
+  // de "estás dentro, gestiona tu acceso".
   const { error } = await supabase.auth.signUp({
     email,
     password,
-    options: { emailRedirectTo: `${origin}/auth/callback` },
+    options: { emailRedirectTo: `${origin}/cuenta` },
   });
   if (error) {
     return { ok: false, error: traducirError(error.message) };
