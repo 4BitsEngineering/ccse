@@ -26,6 +26,7 @@ export default function AppLayout({
             <Seal size={26} />
             <span>CCSE</span>
           </Link>
+          <span className="flex-1" />
           <nav className="hidden sm:flex items-center gap-x-5 text-sm">
             {NAV.map((item) => (
               <Link
@@ -36,11 +37,18 @@ export default function AppLayout({
                 {item.label}
               </Link>
             ))}
+            <Link
+              href="/cuenta"
+              className="grid place-items-center w-9 h-9 rounded-full bg-terracotta-soft text-terracotta-deep font-serif italic text-sm font-medium hover:bg-terracotta hover:text-cream transition-colors"
+              aria-label="Tu cuenta"
+              title="Tu cuenta"
+            >
+              T
+            </Link>
           </nav>
-          <span className="flex-1" />
           <Link
             href="/cuenta"
-            className="grid place-items-center w-9 h-9 rounded-full bg-terracotta-soft text-terracotta-deep font-serif italic text-sm font-medium hover:bg-terracotta hover:text-cream transition-colors"
+            className="sm:hidden grid place-items-center w-9 h-9 rounded-full bg-terracotta-soft text-terracotta-deep font-serif italic text-sm font-medium hover:bg-terracotta hover:text-cream transition-colors"
             aria-label="Tu cuenta"
             title="Tu cuenta"
           >

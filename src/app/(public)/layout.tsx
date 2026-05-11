@@ -23,16 +23,14 @@ export default function PublicLayout({
             <Seal size={26} />
             <span>CCSE</span>
           </Link>
-          <nav className="hidden sm:flex items-center gap-x-5 text-sm">
+          <span className="flex-1" />
+          <nav className="flex items-center gap-x-5 text-sm">
             <Link href="/demo" className="text-ink-soft hover:text-ink">
               Demo
             </Link>
             <Link href="/precio" className="text-ink-soft hover:text-ink">
               Precio
             </Link>
-          </nav>
-          <span className="flex-1" />
-          <div className="flex items-center gap-x-4 text-sm">
             <Link
               href="/dashboard"
               className="hidden sm:inline text-ink-soft hover:text-ink"
@@ -45,7 +43,7 @@ export default function PublicLayout({
             >
               Cuenta
             </Link>
-          </div>
+          </nav>
         </div>
       </header>
       {children}
