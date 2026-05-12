@@ -75,6 +75,47 @@ export function stripMarkdown(md: string): string {
     .trim();
 }
 
+export interface MdSection {
+  title: string;
+  text: string;
+}
+
+/**
+ * Divide el markdown en secciones por headings.
+ * Prioriza H2; si no hay H2 usa H3.
+ * Devuelve texto plano listo para TTS, sin el heading.
+ */
+export function splitByHeadings(md: string): MdSection[] {
+  const lines = md.split("\n");
+
+  // Decide qué nivel usar: H2 si existe alguno, si no H3
+  const hasH2 = lines.some((l) => /^##\s/.test(l) && !/^###/.test(l));
+  const headingRe = hasH2 ? /^##\s+(.+)/ : /^###\s+(.+)/;
+
+  const sections: MdSection[] = [];
+  let currentTitle = "";
+  let currentLines: string[] = [];
+
+  const flush = () => {
+    const text = stripMarkdown(currentLines.join("\n")).trim();
+    if (text) sections.push({ title: currentTitle, text });
+  };
+
+  for (const line of lines) {
+    const m = line.match(headingRe);
+    if (m) {
+      flush();
+      currentTitle = m[1].trim();
+      currentLines = [];
+    } else {
+      currentLines.push(line);
+    }
+  }
+  flush();
+
+  return sections;
+}
+
 export function extractToc(md: string): TocItem[] {
   const lines = md.split("\n");
   const out: TocItem[] = [];

@@ -2,30 +2,25 @@
 
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import type { MdSection } from "@/lib/markdown";
 
 /**
- * Lector por voz usando Web Speech API. Una sola utterance con el
- * texto completo (los temas caben holgadamente en el límite ~32K
- * caracteres de Chrome). Botones Leer / Detener + selector de
- * velocidad. Cambiar velocidad mientras suena reinicia la lectura
- * desde el principio (la API no permite ajustar la rate de una
- * utterance ya en curso).
+ * Lector por voz con navegación por secciones.
+ * Lee una sección a la vez y avanza automáticamente a la siguiente.
  *
- * No se incluye "Pausar" porque speechSynthesis.pause()/resume() es
- * inconsistente en Chromium y Edge: a veces no pausa, a veces no
- * reanuda. Mejor un botón Detener limpio que un pause que falla en
- * silencio.
+ * No incluye "Pausar": speechSynthesis.pause/resume es inconsistente
+ * en Chromium y Edge (a veces no pausa, a veces no reanuda).
  */
-export function ReadAloudButton({ text }: { text: string }) {
+export function ReadAloudButton({ sections }: { sections: MdSection[] }) {
   const [supported, setSupported] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [rate, setRate] = useState(1);
+  const [idx, setIdx] = useState(0);
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
   const utterRef = useRef<SpeechSynthesisUtterance | null>(null);
+  // Ref para acceder al índice actual dentro del callback de onend sin stale closure
+  const idxRef = useRef(0);
 
-  // Cancela una utterance "limpiamente": desactiva sus handlers antes
-  // de llamar a cancel() para que su onend (que se dispara al cancelar)
-  // no machaque el state que acabamos de cambiar.
   const detachAndCancel = () => {
     if (utterRef.current) {
       utterRef.current.onend = null;
@@ -56,25 +51,38 @@ export function ReadAloudButton({ text }: { text: string }) {
     };
   }, []);
 
-  // Si cambia el texto (otra ruta), para la voz anterior.
-  useEffect(
-    () => () => {
-      detachAndCancel();
-    },
-    [text],
-  );
-
-  const start = (currentRate: number) => {
+  // Si cambia el contenido (otra ruta), resetea todo
+  useEffect(() => {
     detachAndCancel();
-    const u = new SpeechSynthesisUtterance(text);
+    setPlaying(false);
+    setIdx(0);
+    idxRef.current = 0;
+  }, [sections]);
+
+  const speak = (sectionIdx: number, currentRate: number) => {
+    if (!sections[sectionIdx]) return;
+    detachAndCancel();
+
+    const u = new SpeechSynthesisUtterance(sections[sectionIdx].text);
     u.lang = "es-ES";
     if (voiceRef.current) u.voice = voiceRef.current;
     u.rate = currentRate;
     u.pitch = 1;
+
     u.onend = () => {
-      if (utterRef.current === u) {
-        utterRef.current = null;
+      if (utterRef.current !== u) return;
+      utterRef.current = null;
+      const next = idxRef.current + 1;
+      if (next < sections.length) {
+        // Avanza a la siguiente sección automáticamente
+        idxRef.current = next;
+        setIdx(next);
+        // Pequeño timeout para que el motor de voz no se solape
+        setTimeout(() => speak(next, currentRate), 300);
+      } else {
         setPlaying(false);
+        idxRef.current = 0;
+        setIdx(0);
       }
     };
     u.onerror = () => {
@@ -83,6 +91,7 @@ export function ReadAloudButton({ text }: { text: string }) {
         setPlaying(false);
       }
     };
+
     utterRef.current = u;
     setPlaying(true);
     window.speechSynthesis.speak(u);
@@ -93,60 +102,110 @@ export function ReadAloudButton({ text }: { text: string }) {
     setPlaying(false);
   };
 
-  const changeRate = (r: number) => {
-    setRate(r);
-    if (playing) start(r);
+  const goTo = (newIdx: number) => {
+    const clamped = Math.max(0, Math.min(sections.length - 1, newIdx));
+    idxRef.current = clamped;
+    setIdx(clamped);
+    if (playing) speak(clamped, rate);
   };
 
-  if (!supported) return null;
+  const changeRate = (r: number) => {
+    setRate(r);
+    if (playing) speak(idxRef.current, r);
+  };
+
+  if (!supported || sections.length === 0) return null;
+
+  const current = sections[idx];
+  const total = sections.length;
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-xl bg-paper-warm border border-rule px-3 py-2">
-      <span
-        aria-hidden
-        className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-muted pr-1"
-      >
-        Escuchar
-      </span>
-      {playing ? (
+    <div className="rounded-xl bg-paper-warm border border-rule px-3 py-2 space-y-2">
+      {/* Fila superior: etiqueta + controles de sección */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span
+          aria-hidden
+          className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-muted pr-1"
+        >
+          Escuchar
+        </span>
+
+        {/* Navegación sección */}
         <button
           type="button"
-          onClick={stop}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-ink text-cream px-3 h-8 text-xs font-semibold hover:bg-ink-soft"
+          onClick={() => goTo(idx - 1)}
+          disabled={idx === 0}
+          aria-label="Sección anterior"
+          className="h-7 w-7 rounded-md flex items-center justify-center text-ink-soft hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          ⏹ Detener
+          ◀
         </button>
-      ) : (
+
+        <span className="text-xs text-ink-soft tabular-nums">
+          {idx + 1} / {total}
+        </span>
+
         <button
           type="button"
-          onClick={() => start(rate)}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-terracotta text-cream px-3 h-8 text-xs font-semibold hover:bg-terracotta-deep"
+          onClick={() => goTo(idx + 1)}
+          disabled={idx === total - 1}
+          aria-label="Sección siguiente"
+          className="h-7 w-7 rounded-md flex items-center justify-center text-ink-soft hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          ▶ Leer tema
+          ▶
         </button>
-      )}
-      <span className="flex-1" />
-      <div
-        role="group"
-        aria-label="Velocidad de lectura"
-        className="flex items-center gap-1 text-xs"
-      >
-        {[1, 1.5, 2].map((r) => (
+
+        <span className="flex-1" />
+
+        {/* Play / Stop */}
+        {playing ? (
           <button
-            key={r}
             type="button"
-            onClick={() => changeRate(r)}
-            className={cn(
-              "px-2 h-7 rounded-md font-mono tabular-nums",
-              rate === r
-                ? "bg-ink text-cream"
-                : "text-ink-soft hover:bg-cream",
-            )}
+            onClick={stop}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-ink text-cream px-3 h-8 text-xs font-semibold hover:bg-ink-soft"
           >
-            {r}×
+            ⏹ Detener
           </button>
-        ))}
+        ) : (
+          <button
+            type="button"
+            onClick={() => speak(idx, rate)}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-terracotta text-cream px-3 h-8 text-xs font-semibold hover:bg-terracotta-deep"
+          >
+            ▶ Leer
+          </button>
+        )}
+
+        {/* Velocidad */}
+        <div
+          role="group"
+          aria-label="Velocidad de lectura"
+          className="flex items-center gap-1 text-xs"
+        >
+          {[1, 1.5, 2].map((r) => (
+            <button
+              key={r}
+              type="button"
+              onClick={() => changeRate(r)}
+              className={cn(
+                "px-2 h-7 rounded-md font-mono tabular-nums",
+                rate === r
+                  ? "bg-ink text-cream"
+                  : "text-ink-soft hover:bg-cream",
+              )}
+            >
+              {r}×
+            </button>
+          ))}
+        </div>
       </div>
+
+      {/* Título de la sección activa */}
+      {current.title && (
+        <p className="text-xs text-ink-muted truncate pl-0.5">
+          {current.title}
+        </p>
+      )}
     </div>
   );
 }

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Underline } from "@/components/ui/underline";
 import { loadTema, type Tarea } from "@/lib/content";
-import { extractToc, splitMdAtMidpoint, stripMarkdown } from "@/lib/markdown";
+import { extractToc, splitByHeadings, splitMdAtMidpoint } from "@/lib/markdown";
 import { TemaRenderer } from "@/components/content/TemaRenderer";
 import { TemaToc } from "@/components/content/TemaToc";
 import { ReadAloudButton } from "@/components/content/ReadAloudButton";
@@ -70,7 +70,7 @@ export default async function TareaPreviewPage({
         <Underline width={180} className="mt-1 mb-6" />
 
         <div className="mb-6">
-          <ReadAloudButton text={stripMarkdown(first)} />
+          <ReadAloudButton sections={splitByHeadings(first)} />
         </div>
 
         <TemaRenderer md={first} />
