@@ -4,7 +4,7 @@ export const metadata = {
     "Condiciones del servicio CCSE: qué ofrecemos, precio, política de acceso, reembolsos y responsabilidades.",
 };
 
-const FECHA = "10 de mayo de 2026";
+const FECHA = "12 de mayo de 2026";
 
 export default function CondicionesPage() {
   return (

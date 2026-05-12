@@ -4,7 +4,7 @@ export const metadata = {
     "Cómo tratamos tus datos personales en la plataforma CCSE: qué recogemos, con quién compartimos y tus derechos.",
 };
 
-const FECHA = "10 de mayo de 2026";
+const FECHA = "12 de mayo de 2026";
 
 export default function PrivacidadPage() {
   return (
@@ -28,10 +28,8 @@ export default function PrivacidadPage() {
       </p>
       <ul>
         <li>
-          <strong>Cuando hay cuenta de usuario</strong> (en el momento que
-          activemos el registro): tu correo electrónico, para identificar
-          tu cuenta y enviarte recibos y avisos relacionados con la
-          compra.
+          <strong>Correo electrónico</strong>: para identificar tu cuenta,
+          enviarte el enlace de acceso (magic link) y los recibos de compra.
         </li>
         <li>
           <strong>Cuando compras</strong>: el cobro lo procesa Stripe.
@@ -40,9 +38,10 @@ export default function PrivacidadPage() {
           acceso, para saber qué contenido tienes habilitado.
         </li>
         <li>
-          <strong>Tu progreso de estudio</strong>: en el MVP se guarda en
-          tu navegador (localStorage). Cuando habilitemos la sincronización
-          entre dispositivos, vivirá asociado a tu cuenta y nada más.
+          <strong>Tu progreso de estudio</strong>: qué preguntas has visto,
+          acertado o fallado, y los resultados de tus simulacros. Se guarda
+          en tu navegador y se sincroniza con tu cuenta cuando hay sesión
+          activa, para que puedas continuar desde cualquier dispositivo.
         </li>
         <li>
           <strong>Métricas de uso anónimas</strong>: número de páginas
@@ -59,11 +58,12 @@ export default function PrivacidadPage() {
         </li>
         <li>
           <strong>Vercel Inc.</strong> — alojamiento de la web y métricas
-          básicas (Vercel Analytics, anónimas).
+          básicas de visitas, anónimas.
         </li>
         <li>
-          <strong>Resend</strong> u otro proveedor de email transaccional
-          — para enviarte recibos y el aviso de renovación a los 11 meses.
+          <strong>Proveedor de autenticación y base de datos</strong> —
+          almacena tu cuenta, tu progreso y gestiona el envío de los emails
+          transaccionales (enlace de acceso). Servidores en la Unión Europea.
         </li>
       </ul>
       <p>
@@ -75,8 +75,8 @@ export default function PrivacidadPage() {
       <ul>
         <li>
           <strong>Datos de la cuenta</strong>: mientras tengas la cuenta
-          activa o un acceso comprado vigente. Si pides el borrado o si
-          han pasado 24 meses desde tu última compra y no renuevas, los
+          activa o un acceso comprado vigente. Si pides el borrado o han
+          pasado 24 meses desde tu última compra sin renovar, los
           eliminamos.
         </li>
         <li>

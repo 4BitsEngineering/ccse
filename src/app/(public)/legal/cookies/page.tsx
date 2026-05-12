@@ -4,7 +4,7 @@ export const metadata = {
     "Qué cookies y almacenamiento local usamos en la plataforma CCSE y para qué.",
 };
 
-const FECHA = "10 de mayo de 2026";
+const FECHA = "12 de mayo de 2026";
 
 export default function CookiesPage() {
   return (
@@ -28,13 +28,13 @@ export default function CookiesPage() {
       </p>
       <ul>
         <li>
-          <strong>Sesión Vercel</strong>: identifica la solicitud para
-          servirte la página correcta y proteger contra abuso.
+          <strong>Sesión de autenticación</strong>: identifica tu cuenta
+          activa entre páginas. Se borra al cerrar sesión.
         </li>
         <li>
-          <strong>Sesión Stripe</strong> (solo durante el pago): mantiene
-          tu sesión de pago segura entre la web y la pantalla de Stripe
-          Checkout.
+          <strong>Sesión de pago</strong> (solo durante el proceso de
+          compra): mantiene tu sesión segura mientras completas el pago
+          con Stripe Checkout.
         </li>
       </ul>
 
@@ -48,10 +48,6 @@ export default function CookiesPage() {
           <strong>Vercel Analytics</strong>: cuenta visitas sin cookies
           de tracking ni huella digital.
         </li>
-        <li>
-          <strong>Plausible</strong>: alternativa cookie-less europea
-          (instalación pendiente).
-        </li>
       </ul>
 
       <h2>localStorage de tu navegador</h2>
@@ -61,8 +57,9 @@ export default function CookiesPage() {
       </p>
       <ul>
         <li>
-          <code>ccse:v1:entitlement</code> — recordar que tienes acceso
-          activo y hasta cuándo.
+          <code>ccse:v1:entitlement</code> — caché local del estado de tu
+          acceso (activo / expirado) para evitar parpadeos de interfaz.
+          Se sincroniza con el servidor al iniciar sesión.
         </li>
         <li>
           <code>ccse:v1:progreso:estados</code> — qué preguntas has
@@ -74,13 +71,13 @@ export default function CookiesPage() {
         </li>
         <li>
           <code>ccse:v1:progreso:last</code> — la última actividad para
-          el "Continuar donde lo dejaste" del dashboard.
+          el "Continuar donde lo dejaste" del panel.
         </li>
       </ul>
       <p>
-        Estos datos no salen de tu navegador. Cuando habilitemos el
-        registro de cuenta, podrás sincronizarlos con tu perfil para
-        usarlo en otro dispositivo.
+        Cuando tienes sesión activa, este progreso se sincroniza
+        automáticamente con tu cuenta para que puedas continuar desde
+        otro dispositivo. Sin sesión, solo vive en este navegador.
       </p>
 
       <h2>Cookies de terceros publicitarios</h2>
