@@ -1,7 +1,9 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { slugify } from "@/lib/markdown";
+import type { MdSection } from "@/lib/markdown";
 import { cn } from "@/lib/utils";
+import { InlineTtsButton } from "./InlineTtsButton";
 
 /**
  * Renderiza el markdown de un tema con prose Direction B:
@@ -9,14 +11,37 @@ import { cn } from "@/lib/utils";
  * - headings serif color ink, sin uppercase
  * - blockquotes como callouts paper-warm con borde terracota
  * - tablas con bordes rule, headers DM Sans uppercase
+ *
+ * Si se pasa `sections`, inserta un InlineTtsButton debajo de cada heading.
  */
 export function TemaRenderer({
   md,
+  sections,
   className,
 }: {
   md: string;
+  sections?: MdSection[];
   className?: string;
 }) {
+  const sectionMap = new Map(sections?.map((s) => [s.title, s.text]) ?? []);
+
+  const HeadingWithTts = ({
+    Tag,
+    children,
+    ...props
+  }: { Tag: "h2" | "h3"; children: React.ReactNode } & React.HTMLAttributes<HTMLHeadingElement>) => {
+    const title = String(children).trim();
+    const sectionText = sectionMap.get(title);
+    return (
+      <>
+        <Tag id={slugify(title)} {...props}>
+          {children}
+        </Tag>
+        {sectionText && <InlineTtsButton text={sectionText} />}
+      </>
+    );
+  };
+
   return (
     <article
       className={cn(
@@ -41,14 +66,10 @@ export function TemaRenderer({
         remarkPlugins={[remarkGfm]}
         components={{
           h2: ({ children, ...props }) => (
-            <h2 id={slugify(String(children))} {...props}>
-              {children}
-            </h2>
+            <HeadingWithTts Tag="h2" {...props}>{children}</HeadingWithTts>
           ),
           h3: ({ children, ...props }) => (
-            <h3 id={slugify(String(children))} {...props}>
-              {children}
-            </h3>
+            <HeadingWithTts Tag="h3" {...props}>{children}</HeadingWithTts>
           ),
         }}
       >

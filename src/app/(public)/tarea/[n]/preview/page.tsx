@@ -5,7 +5,6 @@ import { loadTema, type Tarea } from "@/lib/content";
 import { extractToc, splitByHeadings, splitMdAtMidpoint } from "@/lib/markdown";
 import { TemaRenderer } from "@/components/content/TemaRenderer";
 import { TemaToc } from "@/components/content/TemaToc";
-import { ReadAloudButton } from "@/components/content/ReadAloudButton";
 import { buttonVariants } from "@/components/ui/button";
 
 const VALID: Tarea[] = [1, 2, 3, 4, 5];
@@ -69,11 +68,7 @@ export default async function TareaPreviewPage({
         </h1>
         <Underline width={180} className="mt-1 mb-6" />
 
-        <div className="mb-6">
-          <ReadAloudButton sections={splitByHeadings(first)} />
-        </div>
-
-        <TemaRenderer md={first} />
+        <TemaRenderer md={first} sections={splitByHeadings(first)} />
 
         {hayContinuacion && (
           <div className="mt-12 rounded-2xl bg-terracotta/[0.07] border border-terracotta/30 p-6">

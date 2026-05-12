@@ -8,7 +8,6 @@ import { TEMA_PDF } from "@/lib/pdfs";
 import { TemaRenderer } from "@/components/content/TemaRenderer";
 import { TemaToc } from "@/components/content/TemaToc";
 import { EstudiarTracker } from "@/components/content/EstudiarTracker";
-import { ReadAloudButton } from "@/components/content/ReadAloudButton";
 import { PaywallGate } from "@/components/paywall/PaywallGate";
 
 const VALID: Tarea[] = [1, 2, 3, 4, 5];
@@ -50,11 +49,10 @@ export default async function EstudiarTareaPage({
   const toc = extractToc(md);
   const isFree = t === 1;
 
+  const sections = splitByHeadings(md);
+
   const body = (
     <>
-      <div className="mb-4">
-        <ReadAloudButton sections={splitByHeadings(md)} />
-      </div>
       <div className="mb-8 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-paper-warm border border-rule px-5 py-3.5 text-sm">
         <span className="text-ink-soft">
           ¿Prefieres leer offline o imprimir?
@@ -67,7 +65,7 @@ export default async function EstudiarTareaPage({
           Descargar este tema en PDF ↓
         </a>
       </div>
-      <TemaRenderer md={md} />
+      <TemaRenderer md={md} sections={sections} />
       <footer className="mt-12 flex items-center justify-between border-t border-rule pt-6 text-sm">
         <Link
           href="/estudiar"
