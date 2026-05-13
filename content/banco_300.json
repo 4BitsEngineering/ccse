@@ -768,9 +768,9 @@
       "tarea_titulo": "Gobierno, legislación y participación ciudadana",
       "enunciado": "¿Cuántas comunidades autónomas hay en España?",
       "opciones": {
-        "a": "8.",
-        "b": "17.",
-        "c": "25."
+        "a": "8",
+        "b": "17",
+        "c": "25"
       },
       "correcta": "b",
       "fuente_manual_pagina": 20,
@@ -2592,9 +2592,9 @@
       "tarea_titulo": "Gobierno, legislación y participación ciudadana",
       "enunciado": "¿Cuál es el número de teléfono de información de la Administración General del Estado?",
       "opciones": {
-        "a": "010.",
-        "b": "060.",
-        "c": "091."
+        "a": "010",
+        "b": "060",
+        "c": "091"
       },
       "correcta": "b",
       "fuente_manual_pagina": 24,
@@ -2762,9 +2762,9 @@
       "tarea_titulo": "Gobierno, legislación y participación ciudadana",
       "enunciado": "¿Cuántas provincias hay en España?",
       "opciones": {
-        "a": "45.",
-        "b": "50.",
-        "c": "55."
+        "a": "45",
+        "b": "50",
+        "c": "55"
       },
       "correcta": "b",
       "fuente_manual_pagina": 25,
@@ -3302,9 +3302,9 @@
       "tarea_titulo": "Gobierno, legislación y participación ciudadana",
       "enunciado": "¿Cuántos miembros tiene el Congreso de los Diputados?",
       "opciones": {
-        "a": "300.",
-        "b": "350.",
-        "c": "400."
+        "a": "300",
+        "b": "350",
+        "c": "400"
       },
       "correcta": "b",
       "fuente_manual_pagina": 26,
@@ -6432,9 +6432,9 @@
       "tarea_titulo": "Sociedad española",
       "enunciado": "¿Cuál es la tasa máxima de alcohol en sangre permitida a los conductores, en gramos por litro (g/l)?",
       "opciones": {
-        "a": "0,5.",
-        "b": "0,7.",
-        "c": "0,9."
+        "a": "0,5",
+        "b": "0,7",
+        "c": "0,9"
       },
       "correcta": "a",
       "fuente_manual_pagina": 93,
@@ -7635,9 +7635,9 @@
       "tarea_titulo": "Sociedad española",
       "enunciado": "¿Cuál es el número de teléfono único para cualquier emergencia?",
       "opciones": {
-        "a": "060.",
-        "b": "112.",
-        "c": "911."
+        "a": "060",
+        "b": "112",
+        "c": "911"
       },
       "correcta": "b",
       "fuente_manual_pagina": 96,
@@ -7836,9 +7836,9 @@
       "tarea_titulo": "Sociedad española",
       "enunciado": "El teléfono gratuito para las víctimas de violencia de género es el…",
       "opciones": {
-        "a": "091.",
-        "b": "112.",
-        "c": "016."
+        "a": "091",
+        "b": "112",
+        "c": "016"
       },
       "correcta": "c",
       "fuente_manual_pagina": 96,
