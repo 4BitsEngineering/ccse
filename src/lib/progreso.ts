@@ -80,9 +80,31 @@ export function readEstados(): EstadosMap {
   }
 }
 
+/**
+ * Variante de readEstados que devuelve la MISMA referencia si la fuente
+ * no ha cambiado. Necesaria para `useSyncExternalStore` (que entraría en
+ * loop si el snapshot se reconstruyera en cada render).
+ */
+const EMPTY_ESTADOS: EstadosMap = Object.freeze({}) as EstadosMap;
+let estadosSnapshot: EstadosMap = EMPTY_ESTADOS;
+let estadosSnapshotRaw: string | null = null;
+export function snapshotEstados(): EstadosMap {
+  if (!isBrowser()) return EMPTY_ESTADOS;
+  try {
+    const raw = window.localStorage.getItem(KEY_ESTADOS);
+    if (raw === estadosSnapshotRaw) return estadosSnapshot;
+    estadosSnapshotRaw = raw;
+    estadosSnapshot = raw ? (JSON.parse(raw) as EstadosMap) : EMPTY_ESTADOS;
+    return estadosSnapshot;
+  } catch {
+    return EMPTY_ESTADOS;
+  }
+}
+
 function writeEstados(map: EstadosMap): void {
   if (!isBrowser()) return;
   window.localStorage.setItem(KEY_ESTADOS, JSON.stringify(map));
+  window.dispatchEvent(new CustomEvent("ccse:progreso-changed"));
 }
 
 export function getEstadoPregunta(id: string): EstadoPregunta | null {
@@ -167,12 +189,28 @@ export function getUltimaActividad(): UltimaActividad | null {
   }
 }
 
+let actividadSnapshot: UltimaActividad | null = null;
+let actividadSnapshotRaw: string | null = null;
+export function snapshotUltimaActividad(): UltimaActividad | null {
+  if (!isBrowser()) return null;
+  try {
+    const raw = window.localStorage.getItem(KEY_LAST);
+    if (raw === actividadSnapshotRaw) return actividadSnapshot;
+    actividadSnapshotRaw = raw;
+    actividadSnapshot = raw ? (JSON.parse(raw) as UltimaActividad) : null;
+    return actividadSnapshot;
+  } catch {
+    return null;
+  }
+}
+
 export function setUltimaActividad(
   a: Omit<UltimaActividad, "cuandoIso">,
 ): void {
   if (!isBrowser()) return;
   const full: UltimaActividad = { ...a, cuandoIso: new Date().toISOString() };
   window.localStorage.setItem(KEY_LAST, JSON.stringify(full));
+  window.dispatchEvent(new CustomEvent("ccse:progreso-changed"));
 }
 
 /* ─── Stats ─────────────────────────────────────────────────────── */

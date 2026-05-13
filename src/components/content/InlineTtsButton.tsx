@@ -1,10 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
 
+const noop = () => () => {};
+const ttsSupported = () =>
+  typeof window !== "undefined" && "speechSynthesis" in window;
+
 export function InlineTtsButton({ text }: { text: string }) {
-  const [supported, setSupported] = useState(false);
+  const supported = useSyncExternalStore(noop, ttsSupported, () => false);
   const [playing, setPlaying] = useState(false);
   const [rate, setRate] = useState(1);
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
@@ -22,8 +26,7 @@ export function InlineTtsButton({ text }: { text: string }) {
   };
 
   useEffect(() => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    setSupported(true);
+    if (!supported) return;
     const pickVoice = () => {
       const voices = window.speechSynthesis.getVoices();
       voiceRef.current =
@@ -37,7 +40,7 @@ export function InlineTtsButton({ text }: { text: string }) {
       window.speechSynthesis.removeEventListener("voiceschanged", pickVoice);
       detachAndCancel();
     };
-  }, []);
+  }, [supported]);
 
   useEffect(() => () => { detachAndCancel(); }, [text]);
 

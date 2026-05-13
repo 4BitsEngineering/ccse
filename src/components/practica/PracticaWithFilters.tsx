@@ -1,11 +1,23 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PracticaDeck } from "@/components/practica/PracticaDeck";
-import { readEstados, type EstadoPregunta } from "@/lib/progreso";
+import { snapshotEstados, type EstadoPregunta } from "@/lib/progreso";
 import type { Pregunta } from "@/lib/content";
+
+const subscribeProgreso = (cb: () => void) => {
+  if (typeof window === "undefined") return () => {};
+  window.addEventListener("storage", cb);
+  window.addEventListener("ccse:progreso-changed", cb);
+  return () => {
+    window.removeEventListener("storage", cb);
+    window.removeEventListener("ccse:progreso-changed", cb);
+  };
+};
+const EMPTY_ESTADOS: Record<string, EstadoPregunta> = {};
+const getServerEstados = () => EMPTY_ESTADOS;
 
 type Dificultad = "todas" | "facil" | "media" | "dificil";
 
@@ -26,11 +38,11 @@ export function PracticaWithFilters({
   const [search, setSearch] = useState("");
   const [dificultad, setDificultad] = useState<Dificultad>("todas");
   const [soloFalladas, setSoloFalladas] = useState(false);
-  const [estados, setEstados] = useState<Record<string, EstadoPregunta>>({});
-
-  useEffect(() => {
-    setEstados(readEstados());
-  }, []);
+  const estados = useSyncExternalStore(
+    subscribeProgreso,
+    snapshotEstados,
+    getServerEstados,
+  );
 
   const filtradas = useMemo(() => {
     let out = preguntas;

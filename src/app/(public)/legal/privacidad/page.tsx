@@ -157,7 +157,7 @@ export default function PrivacidadPage() {
         </li>
         <li>
           <strong>Supresión</strong>: solicitar la eliminación de tus datos
-          ("derecho al olvido").
+          («derecho al olvido»).
         </li>
         <li>
           <strong>Oposición</strong>: oponerte al tratamiento basado en

@@ -1,41 +1,55 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Underline } from "@/components/ui/underline";
 import { PreguntaCard } from "@/components/content/PreguntaCard";
 import {
   getRepasoQueue,
-  readEstados,
   recordAnswer,
   setUltimaActividad,
+  snapshotEstados,
 } from "@/lib/progreso";
 import type { Pregunta } from "@/lib/content";
 
 const MAX_REPASO = 20;
 
+const onClientNoop = () => () => {};
+
 export function RepasoClient({ banco }: { banco: Pregunta[] }) {
-  const [loaded, setLoaded] = useState(false);
-  const [queue, setQueue] = useState<Pregunta[]>([]);
+  // mounted bascula a true en el cliente sin tocar setState en effect.
+  const mounted = useSyncExternalStore(
+    onClientNoop,
+    () => true,
+    () => false,
+  );
+
+  // La cola Leitner se congela en el primer render del cliente: cada
+  // respuesta muta los estados, no queremos reordenar la cola en vuelo.
+  // Si cambia el `banco` (otra ruta), regeneramos.
+  const [queue, setQueue] = useState<Pregunta[] | null>(null);
+  const [queueBanco, setQueueBanco] = useState<Pregunta[] | null>(null);
+  if (mounted && (queue === null || queueBanco !== banco)) {
+    setQueueBanco(banco);
+    setQueue(getRepasoQueue(banco, snapshotEstados(), MAX_REPASO));
+  }
+
   const [idx, setIdx] = useState(0);
   const [stats, setStats] = useState({ aciertos: 0, fallos: 0 });
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    const estados = readEstados();
-    const q = getRepasoQueue(banco, estados, MAX_REPASO);
-    setQueue(q);
-    setLoaded(true);
+    if (!mounted) return;
     setUltimaActividad({
       tipo: "repaso",
       id: "global",
       titulo: "Repaso espaciado",
       href: "/repaso",
     });
-  }, [banco]);
+  }, [mounted]);
 
-  if (!loaded) {
+  if (!mounted || queue === null) {
     return (
       <div
         className="rounded-2xl border border-rule bg-paper-warm p-6 animate-pulse"

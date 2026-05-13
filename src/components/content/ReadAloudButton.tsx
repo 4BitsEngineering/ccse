@@ -1,8 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
 import type { MdSection } from "@/lib/markdown";
+
+const noop = () => () => {};
+const ttsSupported = () =>
+  typeof window !== "undefined" && "speechSynthesis" in window;
 
 /**
  * Lector por voz con navegación por secciones.
@@ -12,7 +16,7 @@ import type { MdSection } from "@/lib/markdown";
  * en Chromium y Edge (a veces no pausa, a veces no reanuda).
  */
 export function ReadAloudButton({ sections }: { sections: MdSection[] }) {
-  const [supported, setSupported] = useState(false);
+  const supported = useSyncExternalStore(noop, ttsSupported, () => false);
   const [playing, setPlaying] = useState(false);
   const [rate, setRate] = useState(1);
   const [idx, setIdx] = useState(0);
@@ -20,6 +24,16 @@ export function ReadAloudButton({ sections }: { sections: MdSection[] }) {
   const utterRef = useRef<SpeechSynthesisUtterance | null>(null);
   // Ref para acceder al índice actual dentro del callback de onend sin stale closure
   const idxRef = useRef(0);
+
+  // Reset al cambiar la prop `sections` (otra ruta). Patrón React 19:
+  // ajustar state en render con `useState` comparando contra la prop
+  // anterior (cumple react-hooks/set-state-in-effect y react-hooks/refs).
+  const [prevSections, setPrevSections] = useState(sections);
+  if (prevSections !== sections) {
+    setPrevSections(sections);
+    setPlaying(false);
+    setIdx(0);
+  }
 
   const detachAndCancel = () => {
     if (utterRef.current) {
@@ -33,9 +47,7 @@ export function ReadAloudButton({ sections }: { sections: MdSection[] }) {
   };
 
   useEffect(() => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-    setSupported(true);
-
+    if (!supported) return;
     const pickVoice = () => {
       const voices = window.speechSynthesis.getVoices();
       voiceRef.current =
@@ -49,14 +61,13 @@ export function ReadAloudButton({ sections }: { sections: MdSection[] }) {
       window.speechSynthesis.removeEventListener("voiceschanged", pickVoice);
       detachAndCancel();
     };
-  }, []);
+  }, [supported]);
 
-  // Si cambia el contenido (otra ruta), resetea todo
+  // Cancela cualquier utterance pendiente al cambiar de contenido y
+  // resetea el cursor de sección a 0.
   useEffect(() => {
-    detachAndCancel();
-    setPlaying(false);
-    setIdx(0);
     idxRef.current = 0;
+    return () => detachAndCancel();
   }, [sections]);
 
   const speak = (sectionIdx: number, currentRate: number) => {

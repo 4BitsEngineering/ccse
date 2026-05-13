@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Seal } from "@/components/ui/seal";
 import { Underline } from "@/components/ui/underline";
 import { loadBanco } from "@/lib/content";
 

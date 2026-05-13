@@ -71,7 +71,7 @@ export default function CookiesPage() {
         </li>
         <li>
           <code>ccse:v1:progreso:last</code> — la última actividad para
-          el "Continuar donde lo dejaste" del panel.
+          el «Continuar donde lo dejaste» del panel.
         </li>
       </ul>
       <p>

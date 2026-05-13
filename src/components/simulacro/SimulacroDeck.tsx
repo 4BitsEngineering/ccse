@@ -29,7 +29,8 @@ export function SimulacroDeck({
   const [answers, setAnswers] = useState<Map<string, string>>(new Map());
   const [done, setDone] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(SIMULACRO_DURACION_S);
-  const startedAt = useRef(Date.now());
+  // Date.now() es impuro; lo inicializamos en el primer effect.
+  const startedAt = useRef<number | null>(null);
   const recorded = useRef(false);
 
   useEffect(() => {
@@ -43,8 +44,10 @@ export function SimulacroDeck({
 
   useEffect(() => {
     if (done) return;
+    if (startedAt.current === null) startedAt.current = Date.now();
     const timer = setInterval(() => {
-      const elapsed = Math.floor((Date.now() - startedAt.current) / 1000);
+      const start = startedAt.current ?? Date.now();
+      const elapsed = Math.floor((Date.now() - start) / 1000);
       const left = SIMULACRO_DURACION_S - elapsed;
       if (left <= 0) {
         setSecondsLeft(0);
@@ -86,20 +89,14 @@ export function SimulacroDeck({
       porTarea,
       duracionSegundos: Math.min(
         SIMULACRO_DURACION_S,
-        Math.floor((Date.now() - startedAt.current) / 1000),
+        Math.floor((Date.now() - (startedAt.current ?? Date.now())) / 1000),
       ),
       preguntasFalladas: falladas,
     });
   }, [done, answers, preguntas, simulacroId]);
 
   if (done) {
-    return (
-      <SimulacroResults
-        preguntas={preguntas}
-        answers={answers}
-        simulacroId={simulacroId}
-      />
-    );
+    return <SimulacroResults preguntas={preguntas} answers={answers} />;
   }
 
   const p = preguntas[idx];
@@ -212,11 +209,9 @@ const TAREA_LABEL: Record<number, string> = {
 function SimulacroResults({
   preguntas,
   answers,
-  simulacroId,
 }: {
   preguntas: Pregunta[];
   answers: Map<string, string>;
-  simulacroId: number;
 }) {
   const aciertos = preguntas.filter(
     (p) => answers.get(p.id) === p.correcta,

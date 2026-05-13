@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { formatDateEs } from "@/lib/entitlement";
-import { getUltimaActividad, type UltimaActividad } from "@/lib/progreso";
+import {
+  snapshotUltimaActividad,
+  type UltimaActividad,
+} from "@/lib/progreso";
 
 const TIPO_LABEL: Record<UltimaActividad["tipo"], string> = {
   practicar: "Práctica",
@@ -12,16 +15,26 @@ const TIPO_LABEL: Record<UltimaActividad["tipo"], string> = {
   repaso: "Repaso",
 };
 
+const subscribeProgreso = (cb: () => void) => {
+  if (typeof window === "undefined") return () => {};
+  window.addEventListener("storage", cb);
+  window.addEventListener("ccse:progreso-changed", cb);
+  return () => {
+    window.removeEventListener("storage", cb);
+    window.removeEventListener("ccse:progreso-changed", cb);
+  };
+};
+const getServerActividad = () => null;
+
 export function DashboardContinuar() {
-  const [act, setAct] = useState<UltimaActividad | null>(null);
-  const [loaded, setLoaded] = useState(false);
+  // null tanto en SSR como mientras no haya actividad → no renderiza nada.
+  const act = useSyncExternalStore(
+    subscribeProgreso,
+    snapshotUltimaActividad,
+    getServerActividad,
+  );
 
-  useEffect(() => {
-    setAct(getUltimaActividad());
-    setLoaded(true);
-  }, []);
-
-  if (!loaded || !act) return null;
+  if (!act) return null;
 
   return (
     <div className="mb-8">

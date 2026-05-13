@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { hasActiveEntitlement } from "@/lib/entitlement";
@@ -13,10 +13,23 @@ interface Props {
   subtitle?: string;
 }
 
+const subscribeEntitlement = (cb: () => void) => {
+  if (typeof window === "undefined") return () => {};
+  window.addEventListener("storage", cb);
+  window.addEventListener("ccse:entitlement-changed", cb);
+  return () => {
+    window.removeEventListener("storage", cb);
+    window.removeEventListener("ccse:entitlement-changed", cb);
+  };
+};
+const getEntitlementState = () =>
+  hasActiveEntitlement() ? "active" : "locked";
+const getEntitlementServerState = () => "loading" as const;
+
 /**
  * Gate visual: muestra `children` si hay entitlement activo, si no
- * muestra `fallback` o el CTA por defecto. Hasta que monte en
- * cliente devuelve un placeholder neutro para evitar flash.
+ * muestra `fallback` o el CTA por defecto. En SSR devuelve un
+ * placeholder neutro para evitar flash.
  */
 export function PaywallGate({
   children,
@@ -24,13 +37,11 @@ export function PaywallGate({
   title = "Contenido premium",
   subtitle = "Activa tu acceso por 9,99 € durante 365 días para desbloquear esta sección.",
 }: Props) {
-  const [state, setState] = useState<"loading" | "active" | "locked">(
-    "loading",
+  const state = useSyncExternalStore(
+    subscribeEntitlement,
+    getEntitlementState,
+    getEntitlementServerState,
   );
-
-  useEffect(() => {
-    setState(hasActiveEntitlement() ? "active" : "locked");
-  }, []);
 
   if (state === "loading") {
     return (
