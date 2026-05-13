@@ -37,7 +37,7 @@ export default async function PreguntaPage({ params }: RouteParams) {
   );
   const correcta = opciones[p.correcta];
 
-  const jsonLd = {
+  const questionJsonLd = {
     "@context": "https://schema.org",
     "@type": "Question",
     name: p.enunciado,
@@ -45,18 +45,47 @@ export default async function PreguntaPage({ params }: RouteParams) {
     answerCount: opcionesArr.length,
     acceptedAnswer: {
       "@type": "Answer",
-      text: correcta,
+      text: `${correcta}. ${p.explicacion}`,
     },
     suggestedAnswer: opcionesArr
       .filter(([k]) => k !== p.correcta)
       .map(([, txt]) => ({ "@type": "Answer", text: txt })),
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Inicio",
+        item: "https://www.preparacionccse.es/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: `Tema ${p.tarea}`,
+        item: `https://www.preparacionccse.es/tarea/${p.tarea}/preview`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: `Pregunta ${p.id_oficial}`,
+        item: `https://www.preparacionccse.es/pregunta/${p.id_oficial}`,
+      },
+    ],
+  };
+
   return (
     <main className="mx-auto max-w-2xl px-6 py-12">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(questionJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta mb-3">
@@ -121,53 +150,66 @@ export default async function PreguntaPage({ params }: RouteParams) {
 
       <section className="mt-8">
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
-          La razón completa
+          La razón
         </p>
         <h2 className="mt-1 font-serif text-xl font-medium leading-snug">
           Por qué esta es la correcta
         </h2>
-        <div className="mt-3">
-          <PaywallGate
-            title="Explicación razonada — premium"
-            subtitle="La razón detrás de la respuesta, por qué fallan las otras opciones y la pista mnemotécnica forman parte del acceso completo."
-          >
-            <div className="rounded-2xl bg-paper-warm p-5 space-y-3 text-sm">
-              <p className="font-serif text-[16px] leading-relaxed text-ink text-pretty">
-                {p.explicacion}
-              </p>
-              {p.mnemotecnico && (
-                <div className="rounded-xl bg-cream p-3 flex gap-2 items-start">
-                  <span className="font-serif italic text-2xl text-terracotta leading-none">
-                    “
-                  </span>
-                  <span className="font-serif italic text-sm text-ink-soft flex-1 pt-1">
-                    {p.mnemotecnico}
-                  </span>
-                </div>
-              )}
-              {p.explicacion_distractores && (
-                <div>
-                  <p className="text-xs font-medium uppercase tracking-wide text-ink-muted mt-2">
-                    Por qué fallan las otras opciones
-                  </p>
-                  <ul className="mt-2 space-y-1.5 text-sm text-ink-soft">
-                    {Object.entries(p.explicacion_distractores).map(
-                      ([k, txt]) => (
-                        <li key={k}>
-                          <strong className="font-sans text-ink">
-                            {k})
-                          </strong>{" "}
-                          {txt as string}
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </PaywallGate>
+        <div className="mt-3 rounded-2xl bg-paper-warm p-5">
+          <p className="font-serif text-[16px] leading-relaxed text-ink text-pretty">
+            {p.explicacion}
+          </p>
         </div>
       </section>
+
+      {(p.mnemotecnico || p.explicacion_distractores) && (
+        <section className="mt-8">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
+            Acceso completo
+          </p>
+          <h2 className="mt-1 font-serif text-xl font-medium leading-snug">
+            Pista mnemotécnica y por qué fallan las otras
+          </h2>
+          <div className="mt-3">
+            <PaywallGate
+              title="Pistas y distractores — premium"
+              subtitle="La mnemotécnica para acordarte y la explicación de por qué fallan cada una de las opciones incorrectas forman parte del acceso completo."
+            >
+              <div className="rounded-2xl bg-paper-warm p-5 space-y-3 text-sm">
+                {p.mnemotecnico && (
+                  <div className="rounded-xl bg-cream p-3 flex gap-2 items-start">
+                    <span className="font-serif italic text-2xl text-terracotta leading-none">
+                      “
+                    </span>
+                    <span className="font-serif italic text-sm text-ink-soft flex-1 pt-1">
+                      {p.mnemotecnico}
+                    </span>
+                  </div>
+                )}
+                {p.explicacion_distractores && (
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-ink-muted mt-2">
+                      Por qué fallan las otras opciones
+                    </p>
+                    <ul className="mt-2 space-y-1.5 text-sm text-ink-soft">
+                      {Object.entries(p.explicacion_distractores).map(
+                        ([k, txt]) => (
+                          <li key={k}>
+                            <strong className="font-sans text-ink">
+                              {k})
+                            </strong>{" "}
+                            {txt as string}
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </PaywallGate>
+          </div>
+        </section>
+      )}
 
       <footer className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-rule pt-6 text-sm">
         <Link
