@@ -45,7 +45,7 @@ const FAQ_JSON_LD = {
 
 export function Faq() {
   return (
-    <section className="border-b border-rule">
+    <section id="faq" className="border-b border-rule scroll-mt-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }}
