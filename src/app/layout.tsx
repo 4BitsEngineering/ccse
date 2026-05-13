@@ -25,8 +25,10 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+// trim() + strip de barras finales: defensivo contra env vars
+// guardadas con saltos de línea u otros whitespace.
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "") ||
   "https://www.preparacionccse.es";
 
 export const metadata: Metadata = {

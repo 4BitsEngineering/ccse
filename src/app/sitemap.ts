@@ -1,8 +1,10 @@
 import type { MetadataRoute } from "next";
 import { loadBanco } from "@/lib/content";
 
+// trim() + strip de barras finales: defensivo contra env vars
+// guardadas con saltos de línea u otros whitespace.
 const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "") ||
   "https://www.preparacionccse.es";
 
 const TAREAS = [1, 2, 3, 4, 5] as const;
