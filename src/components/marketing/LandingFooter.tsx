@@ -7,7 +7,10 @@ const PRODUCTO = [
   { href: "/cuenta", label: "Tu cuenta" },
 ];
 
-const GUIAS = [{ href: "/examen-ccse-2026", label: "Examen CCSE 2026" }];
+const GUIAS = [
+  { href: "/examen-ccse-2026", label: "Examen CCSE 2026" },
+  { href: "/manual-ccse-2026", label: "Manual CCSE 2026" },
+];
 
 const LEGAL = [
   { href: "/cambios", label: "Cambios" },

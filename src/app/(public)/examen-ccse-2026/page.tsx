@@ -444,8 +444,30 @@ export default function ExamenCcse2026Page() {
         </div>
       </section>
 
-      {/* Footer-link to FAQ on landing */}
-      <p className="mt-12 text-sm text-ink-muted text-center">
+      {/* Lecturas relacionadas */}
+      <section className="mt-12 border-t border-rule pt-8">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-muted mb-3">
+          Sigue leyendo
+        </p>
+        <Link
+          href="/manual-ccse-2026"
+          className="group block rounded-2xl bg-paper-warm border border-rule p-5 hover:bg-cream transition-colors"
+        >
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-terracotta">
+            Guía
+          </p>
+          <h3 className="mt-1 font-serif text-[19px] font-medium text-ink group-hover:text-terracotta-deep transition-colors">
+            Manual CCSE 2026 del Instituto Cervantes{" "}
+            <span className="text-terracotta-soft">→</span>
+          </h3>
+          <p className="mt-1.5 font-serif text-[15px] leading-relaxed text-ink-soft">
+            Qué contiene exactamente el manual oficial, dónde descargarlo
+            gratis y cómo usarlo para no perder tiempo.
+          </p>
+        </Link>
+      </section>
+
+      <p className="mt-10 text-sm text-ink-muted text-center">
         ¿Te queda alguna duda concreta? Mira las{" "}
         <Link
           href="/#faq"
@@ -453,14 +475,7 @@ export default function ExamenCcse2026Page() {
         >
           preguntas frecuentes
         </Link>{" "}
-        de la portada o escribe a{" "}
-        <a
-          href="mailto:hola@preparacionccse.es"
-          className="underline underline-offset-4 decoration-rule hover:text-ink"
-        >
-          hola@preparacionccse.es
-        </a>
-        .
+        de la portada.
       </p>
     </main>
   );
