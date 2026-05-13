@@ -2,7 +2,8 @@ import type { MetadataRoute } from "next";
 import { loadBanco } from "@/lib/content";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://ccse";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  "https://www.preparacionccse.es";
 
 const TAREAS = [1, 2, 3, 4, 5] as const;
 
