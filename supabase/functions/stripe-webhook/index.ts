@@ -2,7 +2,7 @@
  * Edge Function: stripe-webhook
  *
  * Procesa eventos de Stripe Checkout y mantiene sincronizada la tabla
- * public.entitlements. Verifica la firma con STRIPE_WEBHOOK_SECRET y
+ * ccse.entitlements. Verifica la firma con STRIPE_WEBHOOK_SECRET y
  * escribe con SUPABASE_SERVICE_ROLE_KEY (bypassa la RLS de escritura).
  *
  * Runtime: Deno + npm:stripe + npm:@supabase/supabase-js.
@@ -35,7 +35,10 @@ const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-  { auth: { autoRefreshToken: false, persistSession: false } },
+  {
+    db: { schema: "ccse" },
+    auth: { autoRefreshToken: false, persistSession: false },
+  },
 );
 
 const ANNUAL_MS = 365 * 24 * 3600 * 1000;
