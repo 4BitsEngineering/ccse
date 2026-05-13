@@ -132,7 +132,7 @@ export function CuentaClient() {
             {expirado ? (
               <BuyButton label="Renovar 9,99 €" />
             ) : (
-              <BuyButton label="Renovar otro año" />
+              <BuyButton label="Renovar" disabled />
             )}
             <Link
               href="/dashboard"
@@ -144,6 +144,11 @@ export function CuentaClient() {
             </Link>
             {ent.hasStripeCustomer && <ReciboButton />}
           </div>
+          {!expirado && (
+            <p className="mt-3 text-xs text-ink-muted">
+              Podrás renovar cuando expire tu acceso actual.
+            </p>
+          )}
         </div>
       )}
     </div>

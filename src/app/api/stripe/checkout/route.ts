@@ -42,11 +42,25 @@ export async function POST() {
   const origin = originFromHeaders(await headers());
 
   // Reutiliza el customer si la fila ya tiene uno (caso renovación).
+  // También bloqueamos la compra si el acceso actual no ha expirado:
+  // pagar mientras está activo solo serviría para tirar dinero (no acumula
+  // tiempo, sobrescribe la fila). El frontend ya deshabilita el botón;
+  // este check es defensa en profundidad.
   const { data: ent } = await supabase
     .from("entitlements")
-    .select("stripe_customer_id")
+    .select("stripe_customer_id, expires_at")
     .eq("user_id", user.id)
-    .maybeSingle<{ stripe_customer_id: string | null }>();
+    .maybeSingle<{ stripe_customer_id: string | null; expires_at: string | null }>();
+
+  if (ent?.expires_at && new Date(ent.expires_at).getTime() > Date.now()) {
+    return NextResponse.json(
+      {
+        error:
+          "Ya tienes acceso vigente. Podrás renovar cuando expire tu acceso actual.",
+      },
+      { status: 409 },
+    );
+  }
 
   try {
     const session = await stripe.checkout.sessions.create({

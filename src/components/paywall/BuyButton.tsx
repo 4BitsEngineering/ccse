@@ -16,10 +16,12 @@ export function BuyButton({
   size = "lg",
   className,
   label = "Comprar 9,99 €",
+  disabled = false,
 }: {
   size?: "default" | "sm" | "lg";
   className?: string;
   label?: string;
+  disabled?: boolean;
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +60,7 @@ export function BuyButton({
         size={size}
         className={cn("h-12 px-5 text-base rounded-xl", className)}
         onClick={onClick}
-        disabled={busy}
+        disabled={busy || disabled}
       >
         {busy ? "Redirigiendo…" : label}
       </Button>
