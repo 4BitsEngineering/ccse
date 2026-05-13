@@ -33,9 +33,23 @@ const FAQS = [
   },
 ];
 
+const FAQ_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+} as const;
+
 export function Faq() {
   return (
     <section className="border-b border-rule">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }}
+      />
       <div className="mx-auto max-w-2xl px-6 py-16 sm:py-20">
         <header className="mb-8">
           <h2 className="font-serif text-3xl sm:text-4xl font-medium leading-[1.15] tracking-tight">

@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
 import { Underline } from "@/components/ui/underline";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Cambios — CCSE",
   description:
     "Registro público de cambios en la plataforma: actualizaciones del banco, correcciones de erratas, mejoras y nuevas funcionalidades.",
+  alternates: { canonical: "/cambios" },
 };
 
 interface Cambio {

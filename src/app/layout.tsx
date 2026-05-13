@@ -69,6 +69,17 @@ export const metadata: Metadata = {
   },
 };
 
+const ORGANIZATION_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "CCSE",
+  legalName: "4Bits Engineering",
+  url: SITE_URL,
+  logo: `${SITE_URL}/favicon.ico`,
+  description:
+    "Plataforma para preparar la prueba CCSE del Instituto Cervantes.",
+} as const;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -80,6 +91,12 @@ export default function RootLayout({
       className={`${newsreader.variable} ${dmSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-ink">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(ORGANIZATION_JSON_LD),
+          }}
+        />
         {children}
         <Analytics />
         <SpeedInsights />

@@ -1,10 +1,30 @@
+import type { Metadata } from "next";
 import { Precio } from "@/components/marketing/Precio";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Precio — CCSE",
   description:
     "9,99 € de pago único por 365 días de acceso completo a la plataforma de preparación CCSE. Sin suscripción ni renovación automática.",
+  alternates: { canonical: "/precio" },
 };
+
+const PRODUCT_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "Acceso anual CCSE — preparación del examen del Instituto Cervantes",
+  description:
+    "Plataforma online para preparar la prueba CCSE: 300 preguntas oficiales razonadas, 5 temas en español B1, simulacros con cronómetro y repaso espaciado. Acceso de 365 días.",
+  brand: { "@type": "Brand", name: "CCSE" },
+  category: "Educación",
+  offers: {
+    "@type": "Offer",
+    price: "9.99",
+    priceCurrency: "EUR",
+    availability: "https://schema.org/InStock",
+    url: "https://www.preparacionccse.es/precio",
+    priceValidUntil: "2026-12-31",
+  },
+} as const;
 
 const REASSURANCES = [
   {
@@ -32,7 +52,11 @@ const REASSURANCES = [
 export default function PrecioPage() {
   return (
     <>
-      <Precio />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(PRODUCT_JSON_LD) }}
+      />
+      <Precio heading="h1" />
 
       <section className="border-b border-rule">
         <div className="mx-auto max-w-2xl px-6 py-12">

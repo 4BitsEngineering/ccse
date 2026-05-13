@@ -11,7 +11,13 @@ const INCLUYE = [
   "Acceso completo durante 365 días, desde el día que pagas",
 ];
 
-export function Precio() {
+/**
+ * En la landing reutilizamos este bloque como sección secundaria, así
+ * que el encabezado es h2 por defecto. En /precio (donde es la página
+ * principal) lo pasamos a h1 con `heading="h1"`.
+ */
+export function Precio({ heading = "h2" }: { heading?: "h1" | "h2" } = {}) {
+  const Heading = heading;
   return (
     <section id="precio" className="bg-paper-warm border-b border-rule">
       <div className="mx-auto max-w-2xl px-6 py-16 sm:py-20">
@@ -19,11 +25,12 @@ export function Precio() {
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-terracotta">
             Pago único
           </p>
-          <h2 className="mt-2 font-serif text-3xl sm:text-4xl font-medium leading-[1.1] tracking-tight">
+          <Heading className="mt-2 font-serif text-3xl sm:text-4xl font-medium leading-[1.1] tracking-tight">
             Un solo pago,
             <br />
-            <span className="italic text-terracotta-deep">un año entero</span>.
-          </h2>
+            <span className="italic text-terracotta-deep">un año entero</span>{" "}
+            para preparar el examen CCSE.
+          </Heading>
         </header>
 
         <div className="rounded-2xl bg-cream border border-rule p-8">

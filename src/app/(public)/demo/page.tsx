@@ -1,13 +1,15 @@
+import type { Metadata } from "next";
 import { Underline } from "@/components/ui/underline";
 import { getDemoPreguntas } from "@/lib/content";
 import { DemoDeck } from "@/components/practica/DemoDeck";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Demo gratis — CCSE",
   description:
     "10 preguntas aleatorias del banco oficial CCSE 2026. Sin registro. Recibe la explicación razonada de cada respuesta al final.",
+  alternates: { canonical: "/demo" },
 };
 
 export default function DemoPage() {
