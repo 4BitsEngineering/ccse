@@ -147,7 +147,7 @@ a) Por imposición legal.
 b) Por referéndum.
 c) Por el Tribunal Constitucional.
 
-### 23. (Tarea 5) ¿Cuál de estos periódicos se publica a nivel nacional?
+### 23. (Tarea 5) ¿Cuál de estos periódicos se pública a nivel nacional?
 
 a) El Diario Vasco.
 b) El País.
@@ -216,7 +216,7 @@ c) Al libro de familia.
 ### 2 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1096.
-**Fundamento**: El delegado del Gobierno representa al Estado en cada comunidad autonoma. Coordina la Administracion del Estado en ese territorio.
+**Fundamento**: El delegado del Gobierno representa al Estado en cada comunidad autónoma. Coordina la Administración del Estado en ese territorio.
 **Pista mnemotécnica**: Delegado del Gobierno = Estado en la comunidad.
 
 ### 3 — Respuesta: a
@@ -228,14 +228,14 @@ c) Al libro de familia.
 ### 4 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1055.
-**Fundamento**: El ICEX, el Instituto de las Mujeres y la DGT son organismos publicos que dependen de ministerios del Gobierno de Espana.
+**Fundamento**: El ICEX, el Instituto de las Mujeres y la DGT son organismos públicos que dependen de ministerios del Gobierno de España.
 **Pista mnemotécnica**: ICEX, IM, DGT -> dependen de ministerios.
 
 ### 5 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1110.
-**Fundamento**: El idioma espanol tambien se llama castellano. Es la lengua oficial del Estado.
-**Pista mnemotécnica**: Espanol = castellano.
+**Fundamento**: El idioma español también se llama castellano. Es la lengua oficial del Estado.
+**Pista mnemotécnica**: Español = castellano.
 
 ### 6 — Respuesta: a
 **Tarea**: 5 (Sociedad).
@@ -264,7 +264,7 @@ c) Al libro de familia.
 ### 10 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1057.
-**Fundamento**: El Tribunal de Cuentas depende de las Cortes Generales: les rinde cuentas y controla las finanzas publicas y la contabilidad de los partidos.
+**Fundamento**: El Tribunal de Cuentas depende de las Cortes Generales: les rinde cuentas y controla las finanzas públicas y la contabilidad de los partidos.
 **Pista mnemotécnica**: Tribunal de Cuentas -> Cortes Generales.
 
 ### 11 — Respuesta: a
@@ -282,7 +282,7 @@ c) Al libro de familia.
 ### 13 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1033.
-**Fundamento**: Todos los espanoles tienen el deber de conocer la lengua oficial del Estado: el castellano (art. 3 CE).
+**Fundamento**: Todos los españoles tienen el deber de conocer la lengua oficial del Estado: el castellano (art. 3 CE).
 **Pista mnemotécnica**: Deber = conocer el castellano.
 
 ### 14 — Respuesta: b
@@ -300,7 +300,7 @@ c) Al libro de familia.
 ### 16 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1001.
-**Fundamento**: La Constitucion de 1978 (art. 1.3) establece que la forma politica del Estado espanol es la Monarquia parlamentaria. Hay un rey como jefe del Estado, pero no gobierna; gobierna un Gobierno elegido a partir del Parlamento.
+**Fundamento**: La Constitución de 1978 (art. 1.3) establece que la forma política del Estado español es la Monarquía parlamentaria. Hay un rey como jefe del Estado, pero no gobierna; gobierna un Gobierno elegido a partir del Parlamento.
 **Pista mnemotécnica**: Mona-Parla -> MOnarquia PARLAmentaria.
 
 ### 17 — Respuesta: b
@@ -330,14 +330,14 @@ c) Al libro de familia.
 ### 21 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1085.
-**Fundamento**: En Espana, votar es un derecho (no es obligatorio). El sufragio es universal, libre, igual, directo y secreto.
-**Pista mnemotécnica**: Voto = derecho, no obligacion.
+**Fundamento**: En España, votar es un derecho (no es obligatorio). El sufragio es universal, libre, igual, directo y secreto.
+**Pista mnemotécnica**: Voto = derecho, no obligación.
 
 ### 22 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1018.
-**Fundamento**: La Constitucion se aprobo por referendum el 6 de diciembre de 1978: la votaron los espanoles, no fue una imposicion.
-**Pista mnemotécnica**: 6-12-1978: referendum constitucional.
+**Fundamento**: La Constitución se aprobo por referéndum el 6 de diciembre de 1978: la votaron los españoles, no fue una imposicion.
+**Pista mnemotécnica**: 6-12-1978: referéndum constitucional.
 
 ### 23 — Respuesta: b
 **Tarea**: 5 (Sociedad).

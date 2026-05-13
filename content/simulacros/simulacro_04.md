@@ -258,7 +258,7 @@ c) los ayuntamientos.
 ### 9 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1095.
-**Fundamento**: El rey tiene el mando supremo de las Fuerzas Armadas (art. 62.h CE), aunque la direccion ordinaria la lleva el Ministerio de Defensa.
+**Fundamento**: El rey tiene el mando supremo de las Fuerzas Armadas (art. 62.h CE), aunque la dirección ordinaria la lleva el Ministerio de Defensa.
 **Pista mnemotécnica**: Rey = mando supremo de las FAS.
 
 ### 10 — Respuesta: a
@@ -282,13 +282,13 @@ c) los ayuntamientos.
 ### 13 — Respuesta: c
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1048.
-**Fundamento**: El Defensor del Pueblo atiende las quejas de los ciudadanos por mal funcionamiento de las administraciones publicas. Cualquier persona puede dirigirse a el gratis.
-**Pista mnemotécnica**: Defensor del Pueblo = quejas a la Administracion.
+**Fundamento**: El Defensor del Pueblo atiende las quejas de los ciudadanos por mal funcionamiento de las administraciones públicas. Cualquier persona puede dirigirse a el gratis.
+**Pista mnemotécnica**: Defensor del Pueblo = quejas a la Administración.
 
 ### 14 — Respuesta: c
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1093.
-**Fundamento**: Espana es un sistema pluripartidista: hay muchos partidos politicos. Esto refleja el pluralismo politico (valor superior).
+**Fundamento**: España es un sistema pluripartidista: hay muchos partidos políticos. Esto refleja el pluralismo político (valor superior).
 **Pista mnemotécnica**: Pluripartidismo = muchos partidos.
 
 ### 15 — Respuesta: b
@@ -306,7 +306,7 @@ c) los ayuntamientos.
 ### 17 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1097.
-**Fundamento**: Espana tiene 50 provincias, mas las dos ciudades autonomas (Ceuta y Melilla).
+**Fundamento**: España tiene 50 provincias, más las dos ciudades autónomas (Ceuta y Melilla).
 **Pista mnemotécnica**: 50 provincias.
 
 ### 18 — Respuesta: a
@@ -318,7 +318,7 @@ c) los ayuntamientos.
 ### 19 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1107.
-**Fundamento**: El ayuntamiento es el organo de gobierno del municipio. Esta formado por alcalde y concejales.
+**Fundamento**: El ayuntamiento es el órgano de gobierno del municipio. Esta formado por alcalde y concejales.
 **Pista mnemotécnica**: Municipio -> ayuntamiento.
 
 ### 20 — Respuesta: b
@@ -342,7 +342,7 @@ c) los ayuntamientos.
 ### 23 — Respuesta: c
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1058.
-**Fundamento**: El presidente del Congreso de los Diputados es la tercera autoridad del Estado, despues del rey y del presidente del Gobierno.
+**Fundamento**: El presidente del Congreso de los Diputados es la tercera autoridad del Estado, después del rey y del presidente del Gobierno.
 **Pista mnemotécnica**: 1) Rey, 2) Presidente Gobierno, 3) Presidente Congreso.
 
 ### 24 — Respuesta: b

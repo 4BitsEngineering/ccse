@@ -228,20 +228,20 @@ c) A los concejales.
 ### 4 — Respuesta: c
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1111.
-**Fundamento**: En las elecciones europeas se elige a los eurodiputados (representantes en el Parlamento Europeo). Cada cinco anos.
+**Fundamento**: En las elecciones europeas se elige a los eurodiputados (representantes en el Parlamento Europeo). Cada cinco años.
 **Pista mnemotécnica**: Europeas -> eurodiputados.
 
 ### 5 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1063.
-**Fundamento**: El Consejo de Estado es el organo consultivo supremo del Gobierno: lo asesora en cuestiones juridicas.
+**Fundamento**: El Consejo de Estado es el órgano consultivo supremo del Gobierno: lo asesora en cuestiones juridicas.
 **Pista mnemotécnica**: Consejo de Estado = consejero del Gobierno.
 
 ### 6 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1110.
-**Fundamento**: El idioma espanol tambien se llama castellano. Es la lengua oficial del Estado.
-**Pista mnemotécnica**: Espanol = castellano.
+**Fundamento**: El idioma español también se llama castellano. Es la lengua oficial del Estado.
+**Pista mnemotécnica**: Español = castellano.
 
 ### 7 — Respuesta: c
 **Tarea**: 5 (Sociedad).
@@ -252,7 +252,7 @@ c) A los concejales.
 ### 8 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1071.
-**Fundamento**: Las Cortes Generales aprueban los Presupuestos Generales del Estado, despues de que el Gobierno los presente.
+**Fundamento**: Las Cortes Generales aprueban los Presupuestos Generales del Estado, después de que el Gobierno los presente.
 **Pista mnemotécnica**: Cortes aprueban presupuesto.
 
 ### 9 — Respuesta: a
@@ -282,7 +282,7 @@ c) A los concejales.
 ### 13 — Respuesta: c
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1108.
-**Fundamento**: El organo de gobierno general de las provincias se llama Diputacion (en la mayoria de provincias peninsulares).
+**Fundamento**: El órgano de gobierno general de las provincias se llama Diputacion (en la mayoria de provincias peninsulares).
 **Pista mnemotécnica**: Provincia = diputacion.
 
 ### 14 — Respuesta: a
@@ -306,7 +306,7 @@ c) A los concejales.
 ### 17 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1057.
-**Fundamento**: El Tribunal de Cuentas depende de las Cortes Generales: les rinde cuentas y controla las finanzas publicas y la contabilidad de los partidos.
+**Fundamento**: El Tribunal de Cuentas depende de las Cortes Generales: les rinde cuentas y controla las finanzas públicas y la contabilidad de los partidos.
 **Pista mnemotécnica**: Tribunal de Cuentas -> Cortes Generales.
 
 ### 18 — Respuesta: a

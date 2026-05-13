@@ -222,8 +222,8 @@ c) es obligatoria.
 ### 3 — Respuesta: c
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1037.
-**Fundamento**: El Instituto Cervantes promueve la ensenanza del espanol y difunde la cultura en espanol en todo el mundo.
-**Pista mnemotécnica**: Cervantes = espanol en el mundo.
+**Fundamento**: El Instituto Cervantes promueve la enseñanza del español y difunde la cultura en español en todo el mundo.
+**Pista mnemotécnica**: Cervantes = español en el mundo.
 
 ### 4 — Respuesta: c
 **Tarea**: 3 (Geografía).
@@ -246,13 +246,13 @@ c) es obligatoria.
 ### 7 — Respuesta: c
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1114.
-**Fundamento**: El Tribunal de Cuentas controla la gestion economica y financiera del Estado, asi como la contabilidad de los partidos.
-**Pista mnemotécnica**: Cuentas publicas = Tribunal de Cuentas.
+**Fundamento**: El Tribunal de Cuentas controla la gestión económica y financiera del Estado, así como la contabilidad de los partidos.
+**Pista mnemotécnica**: Cuentas públicas = Tribunal de Cuentas.
 
 ### 8 — Respuesta: c
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1093.
-**Fundamento**: Espana es un sistema pluripartidista: hay muchos partidos politicos. Esto refleja el pluralismo politico (valor superior).
+**Fundamento**: España es un sistema pluripartidista: hay muchos partidos políticos. Esto refleja el pluralismo político (valor superior).
 **Pista mnemotécnica**: Pluripartidismo = muchos partidos.
 
 ### 9 — Respuesta: b
@@ -270,14 +270,14 @@ c) es obligatoria.
 ### 11 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1020.
-**Fundamento**: Las instalaciones culturales y deportivas publicas son competencia del Ayuntamiento, como parte de los servicios municipales a los vecinos.
+**Fundamento**: Las instalaciones culturales y deportivas públicas son competencia del Ayuntamiento, como parte de los servicios municipales a los vecinos.
 **Pista mnemotécnica**: Polideportivo de tu pueblo = ayuntamiento.
 
 ### 12 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1103.
-**Fundamento**: Hasta 2026 ninguna mujer ha sido presidenta del Gobierno en Espana (segun el manual oficial CCSE 2026).
-**Pista mnemotécnica**: Ninguna mujer presidenta (todavia).
+**Fundamento**: Hasta 2026 ninguna mujer ha sido presidenta del Gobierno en España (según el manual oficial CCSE 2026).
+**Pista mnemotécnica**: Ninguna mujer presidenta (todavía).
 
 ### 13 — Respuesta: b
 **Tarea**: 2 (Derechos (Verdadero/Falso)).
@@ -300,13 +300,13 @@ c) es obligatoria.
 ### 16 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1034.
-**Fundamento**: El aranes se habla en el Valle de Aran, un pequeno territorio de Cataluna, donde tiene caracter cooficial.
-**Pista mnemotécnica**: Aran -> Cataluna (Valle de Aran).
+**Fundamento**: El aranés se habla en el Valle de Arán, un pequeño territorio de Cataluña, donde tiene carácter cooficial.
+**Pista mnemotécnica**: Arán -> Cataluña (Valle de Arán).
 
 ### 17 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1035.
-**Fundamento**: Las instituciones de cada comunidad autonoma son tres: la asamblea legislativa (parlamento), el consejo de gobierno (ejecutivo) y el presidente.
+**Fundamento**: Las instituciones de cada comunidad autónoma son tres: la asamblea legislativa (parlamento), el consejo de gobierno (ejecutivo) y el presidente.
 **Pista mnemotécnica**: Comunidad: asamblea + consejo + presidente.
 
 ### 18 — Respuesta: b
@@ -324,7 +324,7 @@ c) es obligatoria.
 ### 20 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1043.
-**Fundamento**: PP (Partido Popular) son las siglas de un partido politico espanol.
+**Fundamento**: PP (Partido Popular) son las siglas de un partido político español.
 **Pista mnemotécnica**: PP = Partido Popular.
 
 ### 21 — Respuesta: a

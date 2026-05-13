@@ -210,20 +210,20 @@ c) El Servicio Público de Empleo Estatal.
 ### 1 — Respuesta: c
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1088.
-**Fundamento**: Las leyes nacionales se publican en el BOE (Boletin Oficial del Estado), donde tambien aparecen decretos y nombramientos.
+**Fundamento**: Las leyes nacionales se publican en el BOE (Boletín Oficial del Estado), donde también aparecen decretos y nombramientos.
 **Pista mnemotécnica**: Leyes -> BOE.
 
 ### 2 — Respuesta: c
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1076.
-**Fundamento**: El Ejercito espanol participa en misiones de paz de la ONU desde 1989.
+**Fundamento**: El Ejército español participa en misiones de paz de la ONU desde 1989.
 **Pista mnemotécnica**: Cascos azules = ONU.
 
 ### 3 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1034.
-**Fundamento**: El aranes se habla en el Valle de Aran, un pequeno territorio de Cataluna, donde tiene caracter cooficial.
-**Pista mnemotécnica**: Aran -> Cataluna (Valle de Aran).
+**Fundamento**: El aranés se habla en el Valle de Arán, un pequeño territorio de Cataluña, donde tiene carácter cooficial.
+**Pista mnemotécnica**: Arán -> Cataluña (Valle de Arán).
 
 ### 4 — Respuesta: b
 **Tarea**: 1 (Gobierno).
@@ -252,8 +252,8 @@ c) El Servicio Público de Empleo Estatal.
 ### 8 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1008.
-**Fundamento**: El Cuerpo Nacional de Policia es de ambito nacional: actua en todo el territorio espanol. Junto con la Guardia Civil, son los cuerpos de seguridad estatales.
-**Pista mnemotécnica**: Nacional = en toda Espana.
+**Fundamento**: El Cuerpo Nacional de Policía es de ambito nacional: actúa en todo el territorio español. Junto con la Guardia Civil, son los cuerpos de seguridad estatales.
+**Pista mnemotécnica**: Nacional = en toda España.
 
 ### 9 — Respuesta: b
 **Tarea**: 5 (Sociedad).
@@ -276,13 +276,13 @@ c) El Servicio Público de Empleo Estatal.
 ### 12 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1060.
-**Fundamento**: La Constitucion establece cuatro valores superiores: libertad, justicia, igualdad y pluralismo politico (art. 1.1).
+**Fundamento**: La Constitución establece cuatro valores superiores: libertad, justicia, igualdad y pluralismo político (art. 1.1).
 **Pista mnemotécnica**: LIJP -> Libertad, Igualdad, Justicia, Pluralismo.
 
 ### 13 — Respuesta: b
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1075.
-**Fundamento**: La defensa de la integridad territorial corresponde a las Fuerzas Armadas (Ejercito de Tierra, Aire y Armada).
+**Fundamento**: La defensa de la integridad territorial corresponde a las Fuerzas Armadas (Ejército de Tierra, Aire y Armada).
 **Pista mnemotécnica**: Defensa territorial = Fuerzas Armadas.
 
 ### 14 — Respuesta: a
@@ -330,13 +330,13 @@ c) El Servicio Público de Empleo Estatal.
 ### 21 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1109.
-**Fundamento**: El Gobierno es el organo superior del poder ejecutivo: dirige la politica y la administracion.
+**Fundamento**: El Gobierno es el órgano superior del poder ejecutivo: dirige la política y la administración.
 **Pista mnemotécnica**: Gobierno = jefe del ejecutivo.
 
 ### 22 — Respuesta: a
 **Tarea**: 1 (Gobierno).
 **ID oficial**: 1089.
-**Fundamento**: En Canarias, el organo de gobierno de cada isla se llama cabildo. Es la singularidad canaria.
+**Fundamento**: En Canarias, el órgano de gobierno de cada isla se llama cabildo. Es la singularidad canaria.
 **Pista mnemotécnica**: Canarias = cabildos.
 
 ### 23 — Respuesta: b
