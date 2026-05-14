@@ -22,6 +22,15 @@ function originFromHeaders(h: Headers): string {
   return `${proto}://${host}`;
 }
 
+// El enlace de confirmación debe apuntar SIEMPRE al dominio canónico.
+// Si tomamos el origin de las cabeceras, en Vercel sale el dominio de
+// deploy (ccse-khaki.vercel.app) en vez de preparacionccse.es. En local,
+// sin NEXT_PUBLIC_SITE_URL, caemos al origin real de la petición.
+function siteUrl(h: Headers): string {
+  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "");
+  return fromEnv || originFromHeaders(h);
+}
+
 export async function signIn(formData: FormData): Promise<AuthResult> {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
@@ -50,7 +59,7 @@ export async function signUp(formData: FormData): Promise<AuthResult> {
   }
 
   const supabase = await createClient();
-  const origin = originFromHeaders(await headers());
+  const origin = siteUrl(await headers());
   // emailRedirectTo viaja como {{ .RedirectTo }} en la plantilla y
   // termina como ?next= en /auth/confirm. /cuenta es la página natural
   // de "estás dentro, gestiona tu acceso".

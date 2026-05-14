@@ -27,6 +27,16 @@ function originFromHeaders(h: Headers): string {
   return `${proto}://${host}`;
 }
 
+// success_url / cancel_url deben apuntar al dominio canónico. Con el
+// origin de las cabeceras, en Vercel sale el dominio de deploy
+// (ccse-khaki.vercel.app); ese alias ya no resuelve y devuelve un 404
+// DEPLOYMENT_NOT_FOUND: el usuario paga y al volver se topa con un error.
+// En local, sin la env var, caemos al origin real de la petición.
+function siteUrl(h: Headers): string {
+  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "");
+  return fromEnv || originFromHeaders(h);
+}
+
 export async function POST() {
   const supabase = await createClient();
   const {
@@ -39,7 +49,7 @@ export async function POST() {
     );
   }
 
-  const origin = originFromHeaders(await headers());
+  const origin = siteUrl(await headers());
 
   // Reutiliza el customer si la fila ya tiene uno (caso renovación).
   // También bloqueamos la compra si el acceso actual no ha expirado:

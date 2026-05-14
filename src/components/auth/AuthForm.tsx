@@ -48,6 +48,10 @@ export function AuthForm({ mode }: { mode: Mode }) {
           Te hemos mandado un enlace de confirmación. Pulsa el botón del email
           para activar tu cuenta y volver a CCSE.
         </p>
+        <p className="mt-3 text-sm text-ink-soft leading-relaxed">
+          ¿No lo encuentras? Revisa la carpeta de spam o correo no deseado:
+          a veces el mensaje acaba ahí.
+        </p>
       </div>
     );
   }

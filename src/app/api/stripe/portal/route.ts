@@ -19,6 +19,15 @@ function originFromHeaders(h: Headers): string {
   return `${proto}://${host}`;
 }
 
+// return_url debe apuntar al dominio canónico: con el origin de las
+// cabeceras, en Vercel sale el dominio de deploy (ccse-khaki.vercel.app),
+// un alias que ya no resuelve (404 DEPLOYMENT_NOT_FOUND). En local, sin
+// la env var, caemos al origin real de la petición.
+function siteUrl(h: Headers): string {
+  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "");
+  return fromEnv || originFromHeaders(h);
+}
+
 export async function POST() {
   const supabase = await createClient();
   const {
@@ -41,7 +50,7 @@ export async function POST() {
     );
   }
 
-  const origin = originFromHeaders(await headers());
+  const origin = siteUrl(await headers());
   const session = await stripe.billingPortal.sessions.create({
     customer: ent.stripe_customer_id,
     return_url: `${origin}/cuenta`,
