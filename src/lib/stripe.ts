@@ -9,9 +9,18 @@
 import "server-only";
 import Stripe from "stripe";
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+// Saneamos por si la env var llega con BOM (U+FEFF) o whitespace por
+// un mal copy-paste en Vercel: un carácter no-ASCII en la cabecera
+// Authorization hace que node:https rechace el request y el SDK lo
+// reporta como StripeConnectionError (code: null), sin pista clara.
+// Mismo patrón aplicado a NEXT_PUBLIC_SITE_URL en a7e49c0.
+function clean(v: string | undefined): string {
+  return (v ?? "").replace(/^﻿/, "").trim();
+}
+
+export const stripe = new Stripe(clean(process.env.STRIPE_SECRET_KEY), {
   apiVersion: "2026-04-22.dahlia",
   typescript: true,
 });
 
-export const STRIPE_PRICE_ID = process.env.STRIPE_PRICE_ID!;
+export const STRIPE_PRICE_ID = clean(process.env.STRIPE_PRICE_ID);
