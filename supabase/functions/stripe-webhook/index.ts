@@ -128,6 +128,10 @@ Deno.serve(async (req) => {
     return new Response(`Webhook signature error: ${msg}`, { status: 400 });
   }
 
+  // Log de event.type para trazabilidad. Sin esto, al ver dos POSTs 200
+  // en los logs HTTP no se distingue cuál activó y cuál revocó.
+  console.log(`event:${event.type} id:${event.id}`);
+
   try {
     switch (event.type) {
       case "checkout.session.completed": {
