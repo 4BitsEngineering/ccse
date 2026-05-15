@@ -10,13 +10,28 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "");
+
+// `next` puede llegar absoluto (cuando emailRedirectTo es URL completa)
+// o relativo. Si concatenamos `${origin}${next}` con next absoluto sale
+// `${origin}https://...` y la URL se rompe.
+function resolveNext(next: string, base: string): string {
+  if (next.startsWith("/")) return `${base}${next}`;
+  try {
+    const url = new URL(next);
+    if (url.host === new URL(base).host) return url.toString();
+  } catch {}
+  return `${base}/cuenta`;
+}
+
 export async function GET(request: NextRequest) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams, origin: reqOrigin } = new URL(request.url);
+  const base = SITE_URL || reqOrigin;
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/cuenta";
 
   if (!code) {
-    return NextResponse.redirect(`${origin}/login?error=missing_code`);
+    return NextResponse.redirect(`${base}/login?error=missing_code`);
   }
 
   const supabase = await createClient();
@@ -24,9 +39,9 @@ export async function GET(request: NextRequest) {
 
   if (error) {
     return NextResponse.redirect(
-      `${origin}/login?error=${encodeURIComponent(error.message)}`,
+      `${base}/login?error=${encodeURIComponent(error.message)}`,
     );
   }
 
-  return NextResponse.redirect(`${origin}${next}`);
+  return NextResponse.redirect(resolveNext(next, base));
 }
